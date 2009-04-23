@@ -16,6 +16,11 @@ GL2SceneCallback::~GL2SceneCallback()
 
 void GL2SceneCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 {
+	static int i = 0;
+	if ( i == 0)
+		std::cout << "GL2SceneCallback::operator()\n";
+	i++;
+
 	osg::Group *group = dynamic_cast< osg::Group* >( node );
 	if ( group )
 	{

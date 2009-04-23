@@ -1,6 +1,7 @@
 #include "GL2Scene.h"
 
 #include "GL2SceneCallback.h"
+#include "GL2SceneUniformCallback.h"
 
 #include <osg/Geode>
 #include <osg/Node>
@@ -14,7 +15,8 @@ GL2Scene::GL2Scene()
 {
 	_rootNode = buildScene();
 
-	_rootNode->setUpdateCallback( new GL2SceneCallback );
+	//установка callback'a для узла
+	///_rootNode->setUpdateCallback( new GL2SceneCallback );
 
 	AddShader();
 }
@@ -78,12 +80,19 @@ void GL2Scene::AddShader()
 	program->addShader( VertObj );
 	program->addShader( FragObj );
 
-	LoadShaderSource( VertObj , "shaders/Simple/C3E1v.vert" );
-	LoadShaderSource( FragObj , "shaders/Simple/C2E2f.frag" );
+	LoadShaderSource( VertObj , "glsl/C3E1v.vert" );
+	LoadShaderSource( FragObj , "glsl/C2E2f.frag" );
 	
 	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
 
-	ss->addUniform( new osg::Uniform("_ZZ3SconstantColor", osg::Vec3(1.0f, 0.0f, 1.0f)) );
+	//создание параметра для передачи в шейдер
+	osg::Uniform *_color = new osg::Uniform("_ZZ3SconstantColor", osg::Vec3(1.0f, 0.0f, 1.0f));
+
+	//задание callback'a для динамического изменения параметра
+	_color->setUpdateCallback( new GL2SceneUniformCallback );
+
+	//добавление в состояние сцены
+	ss->addUniform( _color );
 }  
 
 void GL2Scene::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
