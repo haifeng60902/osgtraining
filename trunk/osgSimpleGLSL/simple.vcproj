@@ -119,6 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="D:\Work\osg\OpenSceneGraph-2.8.0\include\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -137,7 +138,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OpenThreads.lib osg.lib osgDB.lib osgUtil.lib osgGA.lib osgViewer.lib osgText.lib"
+				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="D:\Work\osg\OpenSceneGraph-2.8.0\lib\"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -192,6 +196,14 @@
 			</File>
 			<File
 				RelativePath=".\GL2SceneCallback.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GL2SceneUniformCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GL2SceneUniformCallback.h"
 				>
 			</File>
 			<File
