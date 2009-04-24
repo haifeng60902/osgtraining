@@ -8,6 +8,8 @@
 #include <osg/Geometry>
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
+#include <osg/Texture2D>
+#include <osg/Image>
 
 static osg::ref_ptr<osg::Group> rootNode;
 
@@ -18,7 +20,11 @@ GL2Scene::GL2Scene()
 	//установка callback'a для узла
 	///_rootNode->setUpdateCallback( new GL2SceneCallback );
 
+	//добавить шейдер
 	AddShader();
+
+	//добавить текстуру
+	AddTexture();
 }
 
 GL2Scene::~GL2Scene()
@@ -34,19 +40,21 @@ osg::ref_ptr<osg::Group> GL2Scene::buildScene()
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
 
 	// Create an array of four vertices.
-	osg::ref_ptr< osg::Vec3Array > v = new osg::Vec3Array;
+	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	geom->setVertexArray( v.get() );
-	v->push_back( osg::Vec3( -1.8f , 0.f , 0.8f ) );
-	v->push_back( osg::Vec3( 1.8f , 0.f , 0.8f ) );
-	v->push_back( osg::Vec3( 0.0f , 0.f , -0.8f ) );
+	v->push_back( osg::Vec3( -1.f, 0.f, -1.f ) );
+	v->push_back( osg::Vec3( 1.f, 0.f, -1.f ) );
+	v->push_back( osg::Vec3( 1.f, 0.f, 1.f ) );
+	v->push_back( osg::Vec3( -1.f, 0.f, 1.f ) );
 
 	// Create an array of four colors.
-	osg::ref_ptr< osg::Vec4Array > c = new osg::Vec4Array;
+	osg::ref_ptr<osg::Vec4Array> c = new osg::Vec4Array;
 	geom->setColorArray( c.get() );
 	geom->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
 	c->push_back( osg::Vec4( 1.f, 0.f, 0.f, 1.f ) );
 	c->push_back( osg::Vec4( 0.f, 1.f, 0.f, 1.f ) );
 	c->push_back( osg::Vec4( 0.f, 0.f, 1.f, 1.f ) );
+	c->push_back( osg::Vec4( 1.f, 1.f, 1.f, 1.f ) );
 
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -54,7 +62,16 @@ osg::ref_ptr<osg::Group> GL2Scene::buildScene()
 	geom->setNormalBinding( osg::Geometry::BIND_OVERALL );
 	n->push_back( osg::Vec3( 0.f, -1.f, 0.f ) );
 
-	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::TRIANGLES, 0, 3 ) );
+	// Create a Vec2Array of texture coordinates for texture unit 0
+	// and attach it to the geom.
+	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
+	geom->setTexCoordArray( 0, tc.get() );
+	tc->push_back( osg::Vec2( 0.f, 0.f ) );
+	tc->push_back( osg::Vec2( 1.f, 0.f ) );
+	tc->push_back( osg::Vec2( 1.f, 1.f ) );
+	tc->push_back( osg::Vec2( 0.f, 1.f ) );
+
+	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS, 0, 4 ) );
 
 	// Add the Geometry (Drawable) to a Geode and
 	// return the Geode.
@@ -93,6 +110,10 @@ void GL2Scene::AddShader()
 
 	//добавление в состояние сцены
 	ss->addUniform( _color );
+
+	//добавление uniform'ов для работы с текстурными модулями
+	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+	ss->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
 }  
 
 void GL2Scene::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -107,4 +128,34 @@ void GL2Scene::LoadShaderSource( osg::Shader* shader, const std::string& fileNam
 	{
 		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
 	}
+}
+
+void GL2Scene::AddTexture()
+{
+	//добавить текстуру
+	osg::StateSet* state = _rootNode->getOrCreateStateSet();
+
+	// Load the texture image
+	osg::ref_ptr<osg::Image> image0 =
+		osgDB::readImageFile( "pic/btn_null.bmp" );
+
+	// Attach the image in a Texture2D object
+	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
+	tex0->setImage( image0.get() );
+
+	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
+	// both on texture unit 0.
+	state->setTextureAttributeAndModes( 0, tex0.get() , osg::StateAttribute::ON );
+
+	// Load the texture image
+	osg::ref_ptr<osg::Image> image1 =
+		osgDB::readImageFile( "pic/btn_null_invert.bmp" );
+
+	// Attach the image in a Texture2D object
+	osg::ref_ptr<osg::Texture2D> tex1 = new osg::Texture2D;
+	tex1->setImage( image1.get() );
+
+	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
+	// both on texture unit 1.
+	state->setTextureAttributeAndModes( 1, tex1.get() , osg::StateAttribute::ON );
 }

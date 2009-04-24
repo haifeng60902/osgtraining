@@ -10,6 +10,9 @@ public:
 	~GL2SceneUniformCallback();
 
 	virtual void operator() ( osg::Uniform* uniform, osg::NodeVisitor* nv );
+
+private:
+	float m_fLoop;
 };
 
 #endif	//_GL_2_SCENE_UNIFORM_CALLBACK_H_
