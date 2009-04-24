@@ -24,6 +24,9 @@ private:	/*data*/
 	//добавить шейдер в сцену
 	void AddShader();
 
+	//добавить текстуру
+	void AddTexture();
+
 	// load source from a file.
 	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
 
