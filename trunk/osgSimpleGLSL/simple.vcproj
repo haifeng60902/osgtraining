@@ -217,6 +217,22 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<Filter
+			Name="glsl"
+			>
+			<File
+				RelativePath=".\glsl\C2E1v.vert"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\C2E2f.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\C3E1v.vert"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
