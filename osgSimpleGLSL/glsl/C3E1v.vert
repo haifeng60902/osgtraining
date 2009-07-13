@@ -1,16 +1,14 @@
 uniform sampler2D u_texture0;
-uniform sampler2D u_texture1;
 uniform vec3 _ZZ3SconstantColor;
 
  // main procedure, the original name was C3E1v_anycolor
 void main()
 {
     gl_TexCoord[0]=gl_MultiTexCoord0;
-    gl_TexCoord[1]=gl_MultiTexCoord0;
     
-    vec4 tex0 = texture2D(u_texture1, gl_TexCoord[0].xy);
+    vec4 tex0 = texture2D(u_texture0, gl_MultiTexCoord0.xy);
     vec4 tempVertex = gl_Vertex;
-    tempVertex.y = -tex0.y;
+    tempVertex.z = tex0.r * 10.0;
     
     gl_Position = gl_ModelViewProjectionMatrix * tempVertex;
     
