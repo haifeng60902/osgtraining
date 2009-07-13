@@ -137,7 +137,7 @@ void GL2Scene::AddTexture()
 
 	// Load the texture image
 	osg::ref_ptr<osg::Image> image0 =
-		osgDB::readImageFile( "pic/btn_null.bmp" );
+		osgDB::readImageFile( "Images/osg128.png" );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
@@ -149,7 +149,7 @@ void GL2Scene::AddTexture()
 
 	// Load the texture image
 	osg::ref_ptr<osg::Image> image1 =
-		osgDB::readImageFile( "pic/btn_null_invert.bmp" );
+		osgDB::readImageFile( "Images/blueFlowers.png" );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex1 = new osg::Texture2D;
