@@ -15,16 +15,23 @@ static osg::ref_ptr<osg::Group> rootNode;
 
 GL2Scene::GL2Scene()
 {
-	_rootNode = buildScene();
+	// the root of our scenegraph.
+	_rootNode = new osg::Group;
 
-	//установка callback'a для узла
-	///_rootNode->setUpdateCallback( new GL2SceneCallback );
+	//добавить узел с вспомогательной геометрией
+	_rootNode->addChild( buildHelp().get() );
 
-	//добавить шейдер
-	AddShader();
+	//добавить узел с шейдером
+	_rootNode->addChild( buildScene().get() );
 
-	//добавить текстуру
-	AddTexture();
+	if ( rootNode.valid() )
+	{
+		//добавить шейдер
+		AddShader();
+
+		//добавить текстуру
+		AddTexture();
+	}
 }
 
 GL2Scene::~GL2Scene()
@@ -48,16 +55,16 @@ osg::ref_ptr<osg::Group> GL2Scene::buildScene()
 	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
 	geom->setTexCoordArray( 0, tc.get() );
 
-	for ( int i = 0; i < 8 ; ++i )
+	for ( int i = 0; i < 16 ; ++i )
 	{
 		v->push_back( osg::Vec3( i, 0.f, 0 ) );
 		v->push_back( osg::Vec3( i, 0.f, 0 ) );
 
-		tc->push_back( osg::Vec2( 0.125f * 0.5, 0.125f * 0.5 ) );
-		tc->push_back( osg::Vec2( 0.125f * 0.5 + i / 8.0f ,0.125f * 0.5 ) );
+		tc->push_back( osg::Vec2( 0 + i / 16.0f , 0 ) );
+		tc->push_back( osg::Vec2( 0 + i / 16.0f , 1.0 ) );
 	}
 
-	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::LINES, 0, 16 ) );
+	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::LINES, 0, 32 ) );
 
 	// Add the Geometry (Drawable) to a Geode and
 	// return the Geode.
@@ -66,13 +73,49 @@ osg::ref_ptr<osg::Group> GL2Scene::buildScene()
 
 	rootNode->addChild( geode.get() );
 
-	return rootNode;
+	return rootNode.get();
+}
+
+osg::ref_ptr<osg::Group> GL2Scene::buildHelp()
+{
+	//построение вспомогательной геометрии
+	osg::ref_ptr<osg::Group> rootHelp = new osg::Group;
+
+	// Create an object to store geometry in.
+	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
+
+	// Create an array of four vertices.
+	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
+	geom->setVertexArray( v.get() );
+
+	v->push_back( osg::Vec3( 0.0, 0.f, 0.0 ) );
+	v->push_back( osg::Vec3( 7.0, 0.f, 0.0 ) );
+	v->push_back( osg::Vec3( 7.0, 0.f, 128.0 / 255.0 * 10.0 ) );
+	v->push_back( osg::Vec3( 0.0, 0.f, 128.0 / 255.0 * 10.0 ) );
+
+
+	// Create an array of four vertices.
+	osg::ref_ptr<osg::Vec4Array> c = new osg::Vec4Array;
+	geom->setColorArray( c.get() );
+	geom->setColorBinding( osg::Geometry::BIND_OVERALL );
+	c->push_back( osg::Vec4( 1.0 , 1.0 , 1.0 , 1.0 ) );
+
+	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS, 0, 4 ) );
+
+	// Add the Geometry (Drawable) to a Geode and
+	// return the Geode.
+	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
+	geode->addDrawable( geom.get() );
+
+	rootHelp->addChild( geode.get() );
+
+	return rootHelp.get();
 }
 
 void GL2Scene::AddShader()
 {
 	//добавить шейдер в сцену
-	osg::StateSet* ss = _rootNode->getOrCreateStateSet();
+	osg::StateSet* ss = rootNode->getOrCreateStateSet();
 
 	//создать экземпляр программы
 	osg::Program* program = new osg::Program;
@@ -89,7 +132,7 @@ void GL2Scene::AddShader()
 	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
 
 	//создание параметра для передачи в шейдер
-	osg::Uniform *_color = new osg::Uniform("_ZZ3SconstantColor", osg::Vec3(1.0f, 0.0f, 1.0f));
+	osg::Uniform *_color = new osg::Uniform("_ZZ3SconstantColor", osg::Vec3( 1.0f, 0.0f, 1.0f));
 
 	//задание callback'a для динамического изменения параметра
 	_color->setUpdateCallback( new GL2SceneUniformCallback );
@@ -118,7 +161,7 @@ void GL2Scene::LoadShaderSource( osg::Shader* shader, const std::string& fileNam
 void GL2Scene::AddTexture()
 {
 	//добавить текстуру
-	osg::StateSet* state = _rootNode->getOrCreateStateSet();
+	osg::StateSet* state = rootNode->getOrCreateStateSet();
 
 	// Load the texture image
 	osg::ref_ptr<osg::Image> image0 =
