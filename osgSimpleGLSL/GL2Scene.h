@@ -20,6 +20,9 @@ protected:
 private:	/*methods*/
 	osg::ref_ptr<osg::Group> buildScene();
 
+	//построение вспомогательной геометрии
+	osg::ref_ptr<osg::Group> buildHelp();
+
 private:	/*data*/
 	//добавить шейдер в сцену
 	void AddShader();
