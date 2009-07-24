@@ -40,6 +40,21 @@ osg::ref_ptr< osg::Node > Lighting::LoadModel()
 	//загрузить модель
 	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile( "Flt/mi17/MI_17_lod.flt" );
 
+	osg::ref_ptr<osg::Material> mat = new osg::Material;
+
+	mat->setAmbient( osg::Material::FRONT,
+		osg::Vec4( 0.0f, 1.0f, 0.0f, 1.f ) );
+	mat->setDiffuse( osg::Material::FRONT,
+		osg::Vec4( 0.f, 1.f, 0.f, 1.f ) );
+	mat->setSpecular( osg::Material::FRONT,
+		osg::Vec4( 1.f, 1.f, 1.f, 1.f ) );
+	mat->setShininess( osg::Material::FRONT, 128.f );
+
+	//добавить текстуру
+	osg::StateSet* state = model->getOrCreateStateSet();
+
+	state->setAttribute( mat.get() );
+
 	return model.get();
 }
 
@@ -172,6 +187,7 @@ osg::ref_ptr< osg::Node > Lighting::CreatePlane()
 	mat->setSpecular( osg::Material::FRONT,
 		osg::Vec4( 1.f, 1.f, 1.f, 1.f ) );
 	mat->setShininess( osg::Material::FRONT, 128.f );
+	//mat->setEmission( osg::Material::FRONT , osg::Vec4( 1, 1, 1, 1) );
 	state->setAttribute( mat.get() );
 
 	osg::LightModel* lightModel = new osg::LightModel;
