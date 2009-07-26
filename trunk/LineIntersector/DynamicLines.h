@@ -17,6 +17,9 @@ private:
 	//инициировать корневой узел данными
 	void InitRootNode();
 
+	//добавить модель
+	void AddModel();
+
 	//получить случайное число
 	float GetRand( float fScale );
 

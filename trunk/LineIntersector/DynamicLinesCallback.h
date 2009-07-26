@@ -12,6 +12,9 @@ public:
 	virtual void operator()( osg::Node* node, osg::NodeVisitor* nv );
 
 private:
+	
+	//динамическое обновление положения линий
+	void DinamicUpdateLines( osg::Node* node );
 
 	//получить случайное число
 	float GetRand( float fScale );
