@@ -6,13 +6,20 @@
 
 #include <osg/Geometry>
 #include <osg/Geode>
+#include <osgDB/ReadFile>
 
 #include <iostream>
 
 DynamicLines::DynamicLines()
 {
+	// the root of our scenegraph.
+	m_rootNode = new osg::Group;
+
 	//инициировать корневой узел данными
 	InitRootNode();
+
+	//добавить модель
+	AddModel();
 }
 
 DynamicLines::~DynamicLines()
@@ -23,9 +30,7 @@ DynamicLines::~DynamicLines()
 void DynamicLines::InitRootNode()
 {
 	//инициировать корневой узел данными
-
-	// the root of our scenegraph.
-	m_rootNode = new osg::Group;
+	osg::ref_ptr< osg::Group > groupLines = new  osg::Group;
 
 	// Create an object to store geometry in.
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
@@ -62,25 +67,35 @@ void DynamicLines::InitRootNode()
 	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
 	geode->addDrawable( geom.get() );
 
-	m_rootNode->addChild( geode.get() );
+	groupLines->addChild( geode.get() );
 
 	//динамически меняемый узел
-	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
+	groupLines->setDataVariance( osg::Object::DYNAMIC );
 
 	// Disable lighting in the root node's StateSet. Make
 	//   it PROTECTED to prevent osgviewer from enabling it.
-	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
+	osg::StateSet* state = groupLines->getOrCreateStateSet();
 	state->setMode( GL_LIGHTING,
 		osg::StateAttribute::OFF |
 		osg::StateAttribute::PROTECTED );
 
 	//задать класс обратного вызова
-	m_rootNode->setUpdateCallback( new DynamicLinesCallback );	
+	groupLines->setUpdateCallback( new DynamicLinesCallback );
+
+	m_rootNode->addChild( groupLines.get() );
+}
+
+void DynamicLines::AddModel()
+{
+	//добавить модель
+	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile( "Flt/mi17/MI_17_lod.flt" );
+
+	m_rootNode->addChild( root.get() );
 }
 
 float DynamicLines::GetRand( float fScale )
 {
 	//получить случайное число
-	return (float)rand() / (float)RAND_MAX * fScale;
+	return (float)rand() / (float)RAND_MAX * fScale - fScale * 0.5;
 
 }
