@@ -35,10 +35,6 @@ void DynamicLines::InitRootNode()
 	// Create an object to store geometry in.
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
 
-	// Don't throw away single-vertex primitives.
-	osg::BoundingBox bbox( -.1f, -.1f, -.1f, .1f, .1f, .1f );
-	geom->setInitialBound( bbox );
-
 	// Create an array of four vertices.
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	geom->setVertexArray( v.get() );
