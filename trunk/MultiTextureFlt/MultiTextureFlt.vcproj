@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="LineIntersector"
-	ProjectGUID="{5E723B3B-4CFA-428F-9523-D7DCBAC1F342}"
-	RootNamespace="LineIntersector"
+	Name="MultiTextureFlt"
+	ProjectGUID="{485619ED-E702-43F0-9633-BD80AC80868A}"
+	RootNamespace="MultiTextureFlt"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="osgd.lib osgViewerd.lib osgDBd.lib osgUtild.lib"
+				AdditionalDependencies="osgd.lib osgViewerd.lib osgDBd.lib"
 				OutputFile="$(ProjectName)d.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OSG_LIB_PATH)"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="osg.lib osgViewer.lib osgDB.lib osgUtil.lib"
+				AdditionalDependencies="osg.lib osgViewer.lib osgDB.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(OSG_LIB_PATH)"
@@ -183,27 +183,35 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\constant.h"
+				RelativePath=".\Flt2Scene.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\DynamicLines.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicLines.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicLinesCallback.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicLinesCallback.h"
+				RelativePath=".\Flt2Scene.h"
 				>
 			</File>
 			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="flt"
+			>
+			<File
+				RelativePath=".\flt\platest.flt"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="glsl"
+			>
+			<File
+				RelativePath=".\glsl\simple.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\simple.vert"
 				>
 			</File>
 		</Filter>

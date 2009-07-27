@@ -16,6 +16,9 @@ private:
 	//динамическое обновление положения линий
 	void DinamicUpdateLines( osg::Node* node );
 
+	//определение колизий
+	void ColisionDetection();
+
 	//получить случайное число
 	float GetRand( float fScale );
 };
