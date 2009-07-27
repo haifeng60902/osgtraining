@@ -7,6 +7,7 @@
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osgUtil/LineSegmentIntersector>
+#include <osgUtil/IntersectionVisitor>
 #include <osg/Point>
 
 #include <iostream>
@@ -67,39 +68,55 @@ void DynamicLinesCallback::InitPointsNode()
 
 void DynamicLinesCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 {
-	//динамическое обновление положения линий
-	DinamicUpdateLines( node );
-
-	osg::ref_ptr<osgUtil::LineSegmentIntersector> intersector = 
-		new osgUtil::LineSegmentIntersector( osg::Vec3(-100,-100,-100) , osg::Vec3(100,100,100) );
-
-	osgUtil::IntersectionVisitor iv( intersector.get() );
-
-	node->accept( iv );
-
-	if (intersector->containsIntersections())
+	//при первом вызове добавить группу точек
+	static bool bFirstTime = true;
+	if ( bFirstTime )
 	{
-		std::cout << "yes ";
+		osg::ref_ptr< osg::Group > group = GetLinesGroup( node );
+
+		//найти массив вершин
+		FindVertexArray( group.get() );
+
+		//запоминаем узел
+		m_pNode = node;
+
+		//добавить к линиям точки
+		group->addChild( m_PointsGroup.get() );
+
+		bFirstTime = false;
 	}
+
+	//динамическое обновление положения линий
+	DinamicUpdateLines();
 }
 
-void DynamicLinesCallback::DinamicUpdateLines( osg::Node* node )
+void DynamicLinesCallback::DinamicUpdateLines()
 {
-	//динамическое обновление положения линий
 	static int count = 0;
 
-	osg::ref_ptr< osg::Group > group = dynamic_cast< osg::Group* >( node );
-
-	if ( group.valid() )
+	if ( count > 60 * 10 )
 	{
-		//при первом вызове добавить группу точек
-		static bool bFirstTime = true;
-		if ( bFirstTime )
+		for ( int i = 0 ; i < m_LinesVertexs->size() ; ++i )
 		{
-			group->addChild( m_PointsGroup.get() );
-			bFirstTime = false;
+			( *m_LinesVertexs )[ i ] = osg::Vec3( GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) );
 		}
 
+		count = 0;
+	}
+
+	if ( count == 0 )
+		//определение колизий
+		ColisionDetection();
+
+	++count;
+}
+
+//найти массив вершин
+void DynamicLinesCallback::FindVertexArray( osg::ref_ptr< osg::Group > group )
+{
+	//динамическое обновление положения линий
+	if ( group.valid() )
+	{
 		osg::ref_ptr< osg::Geode > geode = dynamic_cast< osg::Geode* >( group->getChild( 0 ) );
 
 		if ( geode.valid() )
@@ -109,26 +126,10 @@ void DynamicLinesCallback::DinamicUpdateLines( osg::Node* node )
 			if ( geom.valid() )
 			{
 				// Create an array of four vertices.
-				osg::Vec3Array* v = static_cast< osg::Vec3Array* >( geom->getVertexArray() );
-
-				if ( count > 60 * 5 )
-				{
-					for ( int i = 0 ; i < v->size() ; ++i )
-					{
-						( *v )[ i ] = osg::Vec3( GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) );
-					}
-
-					count = 0;
-				}
-
-				//определение колизий
-				ColisionDetection( v , node );
+				m_LinesVertexs = static_cast< osg::Vec3Array* >( geom->getVertexArray() );
 			}
 		}
 	}
-
-
-	++count;
 }
 
 float DynamicLinesCallback::GetRand( float fScale )
@@ -137,39 +138,78 @@ float DynamicLinesCallback::GetRand( float fScale )
 	return (float)rand() / (float)RAND_MAX * fScale - fScale * 0.5;
 }
 
-void DynamicLinesCallback::ColisionDetection( osg::Vec3Array* v , osg::Node* node )
+void DynamicLinesCallback::ColisionDetection()
 {
 	//определение колизий
 
-	for ( int i = 0 ; i < v->size() / 2 ; ++i )
+	//вектор с результатом координат точек пересечения
+	std::vector< osg::Vec3d > res;
+
+	for ( int i = 0 ; i < m_LinesVertexs->size() / 2 ; ++i )
 	{
 		osg::ref_ptr< osgUtil::LineSegmentIntersector > intersector = 
-			new osgUtil::LineSegmentIntersector( ( *v )[ 2 * i ] , ( *v )[ 2 * i + 1 ] );
+			new osgUtil::LineSegmentIntersector( ( *m_LinesVertexs )[ 2 * i ] , 
+			( *m_LinesVertexs )[ 2 * i + 1 ] );
 
 		osgUtil::IntersectionVisitor iv( intersector.get() );
 
-		node->accept( iv );
+		m_pNode->accept( iv );
 
-		if (intersector->containsIntersections())
+		if ( intersector->containsIntersections() )
 		{
-			std::cout << "yes ";
+			osgUtil::LineSegmentIntersector::Intersections& intersections = intersector->getIntersections();
+			for(osgUtil::LineSegmentIntersector::Intersections::iterator itr = intersections.begin();
+				itr != intersections.end();
+				++itr)
+			{
+				const osgUtil::LineSegmentIntersector::Intersection& intersection = *itr;
+				res.push_back( intersection.getWorldIntersectPoint() );
+			}
 		}
 	}
 
-//////////////////////////////////////////////////////////////////////////
-	/*
+	//заполнить узел новыми координатами точек
+	FillPointsNode( res );
+}
+
+//найти группу линий
+osg::ref_ptr< osg::Group > DynamicLinesCallback::GetLinesGroup( osg::Node* node )
+{
+	osg::ref_ptr< osg::Group > group = dynamic_cast< osg::Group* >( node );
+
+	if ( group.valid() )
+	{
+		//получить количество потомков
+		unsigned int num = group->getNumChildren();
+
+		for ( unsigned int i = 0 ; i < num ; ++i )
+		{
+			osg::ref_ptr< osg::Group > grp = dynamic_cast< osg::Group* >( group->getChild( i ) );
+			if ( ( grp.valid() ) && 
+				( grp->getName() == std::string( "groupLines" ) ) )
+			{
+				return grp.get();
+			}
+		}
+	}
+
+	return group.get();
+}
+
+void DynamicLinesCallback::FillPointsNode( const std::vector< osg::Vec3d > &res )
+{
+	//заполнить узел новыми координатами точек
 	m_V->clear();
 	m_C->clear();
 
-	m_V->resize( v->size() / 2 );
-	m_C->resize( v->size() / 2 );
+	m_V->resize( res.size() );
+	m_C->resize( res.size() );
 
-	for ( int i = 0 ; i < v->size() / 2 ; ++i )
+	for ( int i = 0 ; i < res.size() ; ++i )
 	{
-		( *m_V )[ i ] = osg::Vec3( GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) );
+		( *m_V )[ i ] = res[ i ];//osg::Vec3( res[ i ][ 0 ] , GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) );
 		( *m_C )[ i ] = osg::Vec4( GetRand( 1.0 ) + 0.5 , GetRand( 1.0 ) + 0.5 , GetRand( 1.0 ) + 0.5 , 1.0 );
 	}
 
-	m_DA->setCount( v->size() / 2 );
-	*/
+	m_DA->setCount( res.size() );
 }

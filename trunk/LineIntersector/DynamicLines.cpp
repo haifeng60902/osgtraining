@@ -20,6 +20,9 @@ DynamicLines::DynamicLines()
 
 	//добавить модель
 	AddModel();
+
+	//задать класс обратного вызова
+	m_rootNode->setUpdateCallback( new DynamicLinesCallback );
 }
 
 DynamicLines::~DynamicLines()
@@ -75,8 +78,8 @@ void DynamicLines::InitRootNode()
 		osg::StateAttribute::OFF |
 		osg::StateAttribute::PROTECTED );
 
-	//задать класс обратного вызова
-	groupLines->setUpdateCallback( new DynamicLinesCallback );
+	//назначить имя группе
+	groupLines->setName( "groupLines" );
 
 	m_rootNode->addChild( groupLines.get() );
 }
