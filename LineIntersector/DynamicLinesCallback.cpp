@@ -63,6 +63,8 @@ void DynamicLinesCallback::DinamicUpdateLines( osg::Node* node )
 					{
 						( *v )[ i ] = osg::Vec3( GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) , GetRand( MAX_SIZE ) );
 					}
+
+
 				}
 			}
 		}
