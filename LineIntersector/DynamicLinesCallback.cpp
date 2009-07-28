@@ -9,6 +9,7 @@
 #include <osgUtil/LineSegmentIntersector>
 #include <osgUtil/IntersectionVisitor>
 #include <osg/Point>
+#include <osg/Timer>
 
 #include <iostream>
 
@@ -16,11 +17,13 @@ DynamicLinesCallback::DynamicLinesCallback()
 {
 	//инициализация узла, содержащего точки
 	InitPointsNode();
+
+	m_out.open( "fps.log" , std::ios::out | std::ios::binary);
 }
 
 DynamicLinesCallback::~DynamicLinesCallback()
 {
-
+	m_out.close();
 }
 
 void DynamicLinesCallback::InitPointsNode()
@@ -61,6 +64,9 @@ void DynamicLinesCallback::InitPointsNode()
 	state->setMode( GL_LIGHTING, osg::StateAttribute::OFF |
 		osg::StateAttribute::PROTECTED );
 
+	//включить режим сглажевания линий
+	state->setMode( GL_POINT_SMOOTH , osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED );
+
 	osg::ref_ptr< osg::Point > pt = new osg::Point;
 	pt->setSize( 10.f );
 	state->setAttribute( pt.get() );
@@ -94,7 +100,7 @@ void DynamicLinesCallback::DinamicUpdateLines()
 {
 	static int count = 0;
 
-	if ( count > 60 * 10 )
+	if ( count > 60 * 1 )
 	{
 		for ( int i = 0 ; i < m_LinesVertexs->size() ; ++i )
 		{
@@ -142,6 +148,8 @@ void DynamicLinesCallback::ColisionDetection()
 {
 	//определение колизий
 
+	osg::Timer_t start_tick = osg::Timer::instance()->tick();
+
 	//вектор с результатом координат точек пересечения
 	std::vector< osg::Vec3d > res;
 
@@ -167,6 +175,10 @@ void DynamicLinesCallback::ColisionDetection()
 			}
 		}
 	}
+
+	double delta = (double)res.size() / osg::Timer::instance()->delta_s( start_tick , osg::Timer::instance()->tick() );
+	std::cout << delta << "p/s ";
+	m_out << delta << "\n";
 
 	//заполнить узел новыми координатами точек
 	FillPointsNode( res );
@@ -199,8 +211,8 @@ osg::ref_ptr< osg::Group > DynamicLinesCallback::GetLinesGroup( osg::Node* node 
 void DynamicLinesCallback::FillPointsNode( const std::vector< osg::Vec3d > &res )
 {
 	//заполнить узел новыми координатами точек
-	m_V->clear();
-	m_C->clear();
+	//m_V->clear();
+	//m_C->clear();
 
 	m_V->resize( res.size() );
 	m_C->resize( res.size() );

@@ -7,6 +7,7 @@
 #include <osg/PrimitiveSet>
 
 #include <vector>
+#include <fstream>
 
 class DynamicLinesCallback : public osg::NodeCallback
 {
@@ -52,6 +53,9 @@ private:
 	osg::ref_ptr< osg::DrawArrays > m_DA;
 
 	osg::Node *m_pNode;
+
+	// поток для записи файла
+	std::ofstream m_out;
 };
 
 #endif	//_DYNAMIC_LINES_CALLBACK_H_
