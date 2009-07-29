@@ -13,6 +13,11 @@ Billboards::Billboards()
 
 	//формирование сцены
 	buildScene();
+
+#ifdef USE_SHADER
+	//добавить шейдер в сцену
+	AddShader();
+#endif
 }
 
 Billboards::~Billboards()
@@ -38,7 +43,7 @@ void Billboards::buildScene()
 
 	// Create a Vec2Array of texture coordinates for texture unit 0
 	// and attach it to the geom.
-	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
+	osg::ref_ptr<osg::Vec4Array> tc = new osg::Vec4Array;
 	geom->setTexCoordArray( 0, tc.get() );
 
 	for ( int i = 0; i < NUM_QUADS ; ++i )
@@ -46,21 +51,28 @@ void Billboards::buildScene()
 		//формирование случайной позиции
 		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) );
 
+#ifdef USE_SHADER
+		//4 координаты для osg::PrimitiveSet::QUADS
+		v->push_back( pos );
+		v->push_back( pos );
+		v->push_back( pos );
+		v->push_back( pos );
+#else
 		//4 координаты для osg::PrimitiveSet::QUADS
 		v->push_back( pos + osg::Vec3( -MAX_SIZE , 0 , -MAX_SIZE ) );
 		v->push_back( pos + osg::Vec3( MAX_SIZE , 0 , -MAX_SIZE ) );
 		v->push_back( pos + osg::Vec3( MAX_SIZE , 0 , MAX_SIZE ) );
 		v->push_back( pos + osg::Vec3( -MAX_SIZE , 0 , MAX_SIZE ) );
+#endif
 
 		//одна нормаль,общая на весь полигон
 		n->push_back( osg::Vec3( 0, -1 , 0 ) );
 	
 		//текстурные координаты
-		tc->push_back( osg::Vec2( 0 , 0 ) );
-		tc->push_back( osg::Vec2( 1 , 0 ) );
-		tc->push_back( osg::Vec2( 1 , 1 ) );
-		tc->push_back( osg::Vec2( 0 , 1 ) );
-
+		tc->push_back( osg::Vec4( 0 , 0 , -MAX_SIZE , -MAX_SIZE ) );
+		tc->push_back( osg::Vec4( 1 , 0 , MAX_SIZE , -MAX_SIZE ) );
+		tc->push_back( osg::Vec4( 1 , 1 , MAX_SIZE , MAX_SIZE ) );
+		tc->push_back( osg::Vec4( 0 , 1 , -MAX_SIZE , MAX_SIZE ) );
 	}
 	
 	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS, 0, v->size() ) );
@@ -93,16 +105,10 @@ void Billboards::AddShader()
 	program->addShader( VertObj );
 	program->addShader( FragObj );
 
-	LoadShaderSource( VertObj , "glsl/C3E1v.vert" );
-	LoadShaderSource( FragObj , "glsl/C2E2f.frag" );
+	LoadShaderSource( VertObj , "glsl/billboard.vert" );
+	LoadShaderSource( FragObj , "glsl/billboard.frag" );
 
 	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
-
-	//создание параметра для передачи в шейдер
-	osg::Uniform *_color = new osg::Uniform("_ZZ3SconstantColor", osg::Vec3( 1.0f, 0.0f, 1.0f));
-
-	//добавление в состояние сцены
-	ss->addUniform( _color );
 
 	//добавление uniform'ов для работы с текстурными модулями
 	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );

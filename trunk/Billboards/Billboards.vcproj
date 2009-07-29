@@ -199,6 +199,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="glsl"
+			>
+			<File
+				RelativePath=".\glsl\billboard.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\billboard.vert"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
