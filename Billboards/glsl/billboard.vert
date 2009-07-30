@@ -2,7 +2,7 @@ void main()
 {
 	gl_Position = gl_ModelViewMatrix * gl_Vertex;
 	
-	gl_Position.xy += gl_MultiTexCoord0.zw * 2.0;
+	gl_Position.xy += gl_MultiTexCoord0.zw;
 	
 	gl_Position = gl_ProjectionMatrix * gl_Position;
 	
