@@ -26,6 +26,9 @@ Billboards::Billboards()
 
 	//формирование сцены
 	//buildScene();
+
+	//добавить плоскость
+	AddPlane();
 }
 
 Billboards::~Billboards()
@@ -72,7 +75,7 @@ void Billboards::buildSceneShader()
 	for ( int i = 0; i < NUM_QUADS ; ++i )
 	{
 		//формирование случайной позиции
-		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) );
+		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , 0 );
 
 		//4 координаты для osg::PrimitiveSet::QUADS
 		v->push_back( pos );
@@ -151,7 +154,7 @@ void Billboards::buildScene()
 	for ( int i = 0; i < NUM_QUADS ; ++i )
 	{
 		//формирование случайной позиции
-		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) );
+		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , 0 );
 
 		//4 координаты для osg::PrimitiveSet::QUADS
 		v->push_back( pos + osg::Vec3( -MAX_SIZE , 0 , -MAX_SIZE ) );
@@ -220,4 +223,40 @@ void Billboards::LoadShaderSource( osg::Shader* shader, const std::string& fileN
 	{
 		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
 	}
+}
+
+void Billboards::AddPlane()
+{
+	//добавить плоскость
+
+	// Create an object to store geometry in.
+	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
+
+	// Create an array of four vertices.
+	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
+	geom->setVertexArray( v.get() );
+
+	// Create an array for the single normal.
+	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
+	geom->setNormalArray( n.get() );
+	geom->setNormalBinding( osg::Geometry::BIND_PER_PRIMITIVE );
+
+	//4 координаты для osg::PrimitiveSet::QUADS
+	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5 , -MAX_VOLUME * 0.5, -MAX_SIZE ) );
+	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, -MAX_VOLUME * 0.5, -MAX_SIZE ) );
+	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, MAX_VOLUME * 0.5,- MAX_SIZE ) );
+	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5, MAX_VOLUME * 0.5, -MAX_SIZE ) );
+
+	//одна нормаль,общая на весь полигон
+	n->push_back( osg::Vec3( 0, -1 , 0 ) );
+
+	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS, 0, 4 ) );
+
+	// Add the Geometry (Drawable) to a Geode and
+	// return the Geode.
+	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
+
+	geode->addDrawable( geom.get() );
+
+	m_rootGroup->addChild( geode.get() );
 }
