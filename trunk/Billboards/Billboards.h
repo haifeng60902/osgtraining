@@ -26,6 +26,9 @@ private:
 	//формирование сцены
 	void buildScene();
 
+	//добавить плоскость
+	void AddPlane();
+
 	//настройка состояния
 	void SetupStateSet( osg::StateSet* ss );
 
