@@ -195,6 +195,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FakeTree.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FakeTree.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LightSource.cpp"
 				>
 			</File>

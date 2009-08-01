@@ -25,9 +25,6 @@ private:
 	//формирование сцены с шейдером
 	void buildSceneShader();
 
-	//формирование сцены
-	void buildScene();
-
 	//добавить плоскость
 	void AddPlane();
 
@@ -45,6 +42,10 @@ private:
 
 	//корневая группа, содержащая геометрию
 	osg::ref_ptr< osg::Group > m_rootGroup;
+
+	//корневая группа, содержащая геометрию деревьев
+	osg::ref_ptr< osg::Group > m_Group;
+
 
 	//общая текстура
 	osg::ref_ptr<osg::Texture2D> m_Tex0;
