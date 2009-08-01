@@ -2,6 +2,8 @@
 
 #include "constant.h"
 
+#include "FakeTree.h"
+
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osgDB/FileUtils>
@@ -14,6 +16,10 @@ Billboards::Billboards()
 	//выделить память под корневую круппу
 	m_rootGroup = new osg::Group;
 
+	m_Group = new osg::Group;
+
+	m_rootGroup->addChild( m_Group );
+
 	//загрузить текстуру
 	LoadTexture();
 
@@ -22,16 +28,16 @@ Billboards::Billboards()
 	//формирование сцены с шейдером
 	buildSceneShader();
 
-	srand( 1 );
-
-	//формирование сцены
-	//buildScene();
-
 	//добавить плоскость
 	AddPlane();
 
 	//добавить в сцену источник света
 	m_rootGroup->addChild( m_LightSource.getRootNode().get() );
+
+	osg::StateSet* ss = m_Group->getOrCreateStateSet();
+
+	//настройка состояния
+	SetupStateSet( ss );
 }
 
 Billboards::~Billboards()
@@ -58,58 +64,13 @@ void Billboards::buildSceneShader()
 {
 	//формирование сцены с шейдером
 
-	// Create an object to store geometry in.
-	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
+	for ( int i = -2 ; i < 3 ; ++i )
+		for ( int j = -2 ; j < 3 ; ++j )
+		{
+			osg::ref_ptr< FakeTree > tree = new FakeTree( osg::Vec3( i * 10 , j * 10 , 10 ) );
 
-	// Create an array of four vertices.
-	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
-	geom->setVertexArray( v.get() );
-
-	// Create an array for the single normal.
-	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
-	geom->setNormalArray( n.get() );
-	geom->setNormalBinding( osg::Geometry::BIND_PER_PRIMITIVE );
-
-	// Create a Vec2Array of texture coordinates for texture unit 0
-	// and attach it to the geom.
-	osg::ref_ptr<osg::Vec4Array> tc = new osg::Vec4Array;
-	geom->setTexCoordArray( 0, tc.get() );
-
-	for ( int i = 0; i < NUM_QUADS ; ++i )
-	{
-		//формирование случайной позиции
-		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) );
-
-		//4 координаты для osg::PrimitiveSet::QUADS
-		v->push_back( pos );
-		v->push_back( pos );
-		v->push_back( pos );
-		v->push_back( pos );
-
-		//одна нормаль,общая на весь полигон
-		n->push_back( osg::Vec3( 0, -1 , 0 ) );
-	
-		//текстурные координаты
-		tc->push_back( osg::Vec4( 0 , 0 , -MAX_SIZE , -MAX_SIZE ) );
-		tc->push_back( osg::Vec4( 1 , 0 , MAX_SIZE , -MAX_SIZE ) );
-		tc->push_back( osg::Vec4( 1 , 1 , MAX_SIZE , MAX_SIZE ) );
-		tc->push_back( osg::Vec4( 0 , 1 , -MAX_SIZE , MAX_SIZE ) );
-	}
-	
-	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS, 0, v->size() ) );
-
-	// Add the Geometry (Drawable) to a Geode and
-	// return the Geode.
-	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
-
-	osg::StateSet* ss = geode->getOrCreateStateSet();
-	
-	//настройка состояния
-	SetupStateSet( ss );
-
-	geode->addDrawable( geom.get() );
-
-	m_rootGroup->addChild( geode.get() );
+			m_Group->addChild( tree->getRootTransform().get()  );
+		}
 }
 
 void Billboards::SetupStateSet( osg::StateSet* ss )
@@ -131,59 +92,6 @@ void Billboards::SetupStateSet( osg::StateSet* ss )
 		osg::AlphaFunc::GREATER, 0.34 );
 	
 	ss->setAttributeAndModes( af );
-}
-
-void Billboards::buildScene()
-{
-	//формирование сцены с шейдером
-
-	// Create an object to store geometry in.
-	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
-
-	// Create an array of four vertices.
-	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
-	geom->setVertexArray( v.get() );
-
-	// Create an array for the single normal.
-	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
-	geom->setNormalArray( n.get() );
-	geom->setNormalBinding( osg::Geometry::BIND_PER_PRIMITIVE );
-
-	// Create a Vec2Array of texture coordinates for texture unit 0
-	// and attach it to the geom.
-	osg::ref_ptr<osg::Vec4Array> tc = new osg::Vec4Array;
-	geom->setTexCoordArray( 0, tc.get() );
-
-	for ( int i = 0; i < NUM_QUADS ; ++i )
-	{
-		//формирование случайной позиции
-		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , 0 );
-
-		//4 координаты для osg::PrimitiveSet::QUADS
-		v->push_back( pos + osg::Vec3( -MAX_SIZE , 0 , -MAX_SIZE ) );
-		v->push_back( pos + osg::Vec3( MAX_SIZE , 0 , -MAX_SIZE ) );
-		v->push_back( pos + osg::Vec3( MAX_SIZE , 0 , MAX_SIZE ) );
-		v->push_back( pos + osg::Vec3( -MAX_SIZE , 0 , MAX_SIZE ) );
-
-		//одна нормаль,общая на весь полигон
-		n->push_back( osg::Vec3( 0, -1 , 0 ) );
-
-		//текстурные координаты
-		tc->push_back( osg::Vec4( 0 , 0 , -MAX_SIZE , -MAX_SIZE ) );
-		tc->push_back( osg::Vec4( 1 , 0 , MAX_SIZE , -MAX_SIZE ) );
-		tc->push_back( osg::Vec4( 1 , 1 , MAX_SIZE , MAX_SIZE ) );
-		tc->push_back( osg::Vec4( 0 , 1 , -MAX_SIZE , MAX_SIZE ) );
-	}
-
-	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS, 0, v->size() ) );
-
-	// Add the Geometry (Drawable) to a Geode and
-	// return the Geode.
-	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
-
-	geode->addDrawable( geom.get() );
-
-	m_rootGroup->addChild( geode.get() );
 }
 
 float Billboards::GetRand( float fScale )
@@ -252,10 +160,10 @@ void Billboards::AddPlane()
 	geom->setNormalBinding( osg::Geometry::BIND_PER_PRIMITIVE );
 
 	//4 координаты для osg::PrimitiveSet::QUADS
-	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5 , -MAX_VOLUME * 0.5, 0 ) );
-	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, -MAX_VOLUME * 0.5, 0 ) );
-	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, MAX_VOLUME * 0.5, 0 ) );
-	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5, MAX_VOLUME * 0.5, 0 ) );
+	v->push_back( osg::Vec3( -MAX_VOLUME * 5 , -MAX_VOLUME * 5, 0 ) );
+	v->push_back( osg::Vec3( MAX_VOLUME * 5, -MAX_VOLUME * 5, 0 ) );
+	v->push_back( osg::Vec3( MAX_VOLUME * 5, MAX_VOLUME * 5, 0 ) );
+	v->push_back( osg::Vec3( -MAX_VOLUME * 5, MAX_VOLUME * 5, 0 ) );
 
 	//одна нормаль,общая на весь полигон
 	n->push_back( osg::Vec3( 0, 0 , 1 ) );
