@@ -29,6 +29,9 @@ Billboards::Billboards()
 
 	//добавить плоскость
 	AddPlane();
+
+	//добавить в сцену источник света
+	m_rootGroup->addChild( m_LightSource.getRootNode().get() );
 }
 
 Billboards::~Billboards()
@@ -75,7 +78,7 @@ void Billboards::buildSceneShader()
 	for ( int i = 0; i < NUM_QUADS ; ++i )
 	{
 		//формирование случайной позиции
-		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , 0 );
+		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) );
 
 		//4 координаты для osg::PrimitiveSet::QUADS
 		v->push_back( pos );
@@ -209,6 +212,13 @@ void Billboards::AddShader( osg::StateSet* ss )
 
 	//добавление uniform'ов для работы с текстурными модулями
 	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+
+	//динамическое положение источника света
+	osg::Uniform *lightPos = new osg::Uniform( "lightPos" , osg::Vec3(0,0,0) );
+	ss->addUniform( lightPos );
+
+	//передать Uniform
+	m_LightSource.SetUniform( lightPos );
 }  
 
 void Billboards::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -242,13 +252,13 @@ void Billboards::AddPlane()
 	geom->setNormalBinding( osg::Geometry::BIND_PER_PRIMITIVE );
 
 	//4 координаты для osg::PrimitiveSet::QUADS
-	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5 , -MAX_VOLUME * 0.5, -MAX_SIZE ) );
-	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, -MAX_VOLUME * 0.5, -MAX_SIZE ) );
-	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, MAX_VOLUME * 0.5,- MAX_SIZE ) );
-	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5, MAX_VOLUME * 0.5, -MAX_SIZE ) );
+	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5 , -MAX_VOLUME * 0.5, 0 ) );
+	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, -MAX_VOLUME * 0.5, 0 ) );
+	v->push_back( osg::Vec3( MAX_VOLUME * 0.5, MAX_VOLUME * 0.5, 0 ) );
+	v->push_back( osg::Vec3( -MAX_VOLUME * 0.5, MAX_VOLUME * 0.5, 0 ) );
 
 	//одна нормаль,общая на весь полигон
-	n->push_back( osg::Vec3( 0, -1 , 0 ) );
+	n->push_back( osg::Vec3( 0, 0 , 1 ) );
 
 	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS, 0, 4 ) );
 
