@@ -1,6 +1,8 @@
 #ifndef _BILLBOARDS_H_
 #define _BILLBOARDS_H_
 
+#include "LightSource.h"
+
 #include <osg/Referenced>
 #include <osg/Group>
 #include <osg/ref_ptr>
@@ -46,6 +48,9 @@ private:
 
 	//общая текстура
 	osg::ref_ptr<osg::Texture2D> m_Tex0;
+
+	//источник света
+	LightSource m_LightSource;
 };
 
 #endif	//_BILLBOARDS_H_
