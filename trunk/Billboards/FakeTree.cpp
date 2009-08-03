@@ -20,7 +20,7 @@ FakeTree::FakeTree( osg::Vec3 pos )
 	m.makeTranslate( pos );
 	m_rootTransform->setMatrix( m );
 
-	//динамически меняемый узел
+	//статический узел
 	m_rootTransform->setDataVariance( osg::Object::STATIC );
 }
 
@@ -53,7 +53,7 @@ void FakeTree::buildSceneShader()
 	for ( int i = 0; i < NUM_QUADS ; ++i )
 	{
 		//формирование случайной позиции
-		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) );
+		osg::Vec3 pos = osg::Vec3( GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) , GetRand( MAX_VOLUME ) + ALT_OFFSET );
 
 		//4 координаты для osg::PrimitiveSet::QUADS
 		v->push_back( pos );

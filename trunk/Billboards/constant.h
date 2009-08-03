@@ -4,6 +4,6 @@
 #define MAX_SIZE 1.0f
 #define MAX_VOLUME 5.0f
 #define NUM_QUADS 100
-#define USE_SHADER
+#define ALT_OFFSET 10.f
 
 #endif	_CONSTANT_H_
