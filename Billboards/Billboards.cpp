@@ -67,7 +67,7 @@ void Billboards::buildSceneShader()
 	for ( int i = -2 ; i < 3 ; ++i )
 		for ( int j = -2 ; j < 3 ; ++j )
 		{
-			osg::ref_ptr< FakeTree > tree = new FakeTree( osg::Vec3( i * 10 , j * 10 , 10 ) );
+			osg::ref_ptr< FakeTree > tree = new FakeTree( osg::Vec3( i * 10 , j * 10 , 0 ) );
 
 			m_Group->addChild( tree->getRootTransform().get()  );
 		}
@@ -123,7 +123,12 @@ void Billboards::AddShader( osg::StateSet* ss )
 
 	//динамическое положение источника света
 	osg::Uniform *lightPos = new osg::Uniform( "lightPos" , osg::Vec3(0,0,0) );
+
+	//центр листвы + радиус
+	osg::Uniform *centerPos = new osg::Uniform( "centerPos" , osg::Vec4( 0 , 0 , ALT_OFFSET , 5.0f ) );
+
 	ss->addUniform( lightPos );
+	ss->addUniform( centerPos );
 
 	//передать Uniform
 	m_LightSource.SetUniform( lightPos );

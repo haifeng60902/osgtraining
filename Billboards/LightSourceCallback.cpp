@@ -22,7 +22,7 @@ void LightSourceCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 		float dX = cos( x ) * 15.0f;
 		float dY = -sin( x ) * 15.0f;
 
-		m.makeTranslate( osg::Vec3( dX , dY , 0) );
+		m.makeTranslate( osg::Vec3( dX , dY , 0 ) );
 		mt->setMatrix( m );
 
 		if ( m_LightPos )
