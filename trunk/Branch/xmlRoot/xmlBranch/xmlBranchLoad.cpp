@@ -232,16 +232,61 @@ void xmlBranchLoad::DecodeStrip( TiXmlElement* root )
 {
 	//декодировать полоски
 
-	//извлечение информации из узла XML
-	TiXmlNode* node = root->FirstChild( m_BranchNames.m_sStrip.c_str() );
-
-	if ( node )
+	int ind = 0;
+	//перебор всех категорий
+	for ( TiXmlElement *pElem = root->FirstChildElement() ; pElem ; pElem = pElem->NextSiblingElement() )
 	{
-		TiXmlElement* pStrip= node->ToElement();
-
 		//извлечь имя элемента
-		const char *_name = pStrip->Value();
-		std::string _sElem( _name );
+		const char *_name = pElem->Value();
+		std::string _sAttr( _name );
 
+		if ( _sAttr == m_BranchNames.m_sStrip )
+		{
+			//декодировать индексы
+			DecodeInd( pElem , ind );
+			
+			++ind;
+		}
 	}
+}
+
+void xmlBranchLoad::DecodeInd( TiXmlElement* root , int ind )
+{
+//декодировать индексы
+	for ( TiXmlElement *pElem = root->FirstChildElement() ; pElem ; pElem = pElem->NextSiblingElement() )
+	{
+		//извлечь имя элемента
+		const char *_name = pElem->Value();
+		std::string _sAttr( _name );
+
+		if ( _sAttr == m_BranchNames.m_sInd )
+		{
+			//получить указатель на первый атрибут элемента
+			TiXmlAttribute* _attr = pElem->FirstAttribute();
+
+			//извлечь очередной индекс
+			int i = DecodeAttrInd( _attr );
+			m_pDataBranch->m_Strips[ ind ].push_back( i );
+		}
+	}
+}
+
+int xmlBranchLoad::DecodeAttrInd( TiXmlAttribute* _attr )
+{
+	//извлечь очередной индекс
+	int ind = 0;
+	while ( _attr )
+	{
+		//имя атрибута
+		const char *_name = _attr->Name();
+		std::string _sAttr( _name );
+
+		//извлекаем значения
+		if ( _sAttr == m_BranchNames.m_sVal )
+			_attr->QueryIntValue( &ind );
+
+		//переходим к следующему атрибуту
+		_attr = _attr->Next();
+	}
+	return ind;
 }
