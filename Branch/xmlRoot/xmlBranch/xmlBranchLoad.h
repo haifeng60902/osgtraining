@@ -40,6 +40,12 @@ private:
 	//декодировать полоски
 	void DecodeStrip( TiXmlElement* root );
 
+	//декодировать индексы
+	void DecodeInd( TiXmlElement* root , int ind );
+
+	//извлечь очередной индекс
+	int DecodeAttrInd( TiXmlAttribute* _attr );
+
 	dataBranch *m_pDataBranch;
 
 };
