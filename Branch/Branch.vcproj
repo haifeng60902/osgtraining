@@ -191,6 +191,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BranchXMLCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BranchXMLCallback.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>

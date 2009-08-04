@@ -1,5 +1,6 @@
 #include "BranchXML.h"
 
+#include "BranchXMLCallback.h"
 #include "xmlRoot/xmlRoot.h"
 
 #include <osg/Geometry>
@@ -22,7 +23,10 @@ BranchXML::BranchXML()
 	AddTexture();
 
 	//настроить альфа канал
-	SetupAlfaFunc();
+	//SetupAlfaFunc();
+
+	//динамически меняемый узел
+	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
 }
 
 BranchXML::~BranchXML()
@@ -44,6 +48,7 @@ void BranchXML::InitRootNode()
 	// Create an array of four normals.
 	osg::ref_ptr<osg::Vec4Array> n = new osg::Vec4Array;
 	geom->setNormalArray( n.get() );
+	geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
 
 	// Create a Vec2Array of texture coordinates for texture unit 0
 	// and attach it to the geom.
@@ -79,10 +84,13 @@ void BranchXML::InitRootNode()
 			osg::PrimitiveSet::TRIANGLE_STRIP, _data.m_Strips[ i ].size() , &_data.m_Strips[ i ][ 0 ] ) );
 	}
 
+	geom->setUseDisplayList( false );
+
 	//настроить очередной LOD
 	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
-
 	geode->addDrawable( geom.get() );
+
+	geode->setUpdateCallback( new BranchXMLCallback );
 
 	m_rootNode->addChild( geode.get() );
 }
