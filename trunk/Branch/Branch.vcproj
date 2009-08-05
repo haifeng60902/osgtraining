@@ -199,6 +199,30 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BranchXMLWindCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BranchXMLWindCallback.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSourceCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSourceCallback.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -279,6 +303,18 @@
 				>
 				<File
 					RelativePath=".\binData\dataBranch.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="glsl"
+				>
+				<File
+					RelativePath=".\glsl\branch.frag"
+					>
+				</File>
+				<File
+					RelativePath=".\glsl\branch.vert"
 					>
 				</File>
 			</Filter>
