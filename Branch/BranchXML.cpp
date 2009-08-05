@@ -1,6 +1,7 @@
 #include "BranchXML.h"
 
 #include "BranchXMLCallback.h"
+#include "BranchXMLWindCallback.h"
 #include "xmlRoot/xmlRoot.h"
 
 #include <osg/Geometry>
@@ -10,11 +11,17 @@
 #include <osgDB/FileUtils>
 #include <osg/Texture2D>
 #include <osg/AlphaFunc>
+#include <osg/CullFace>
 
-BranchXML::BranchXML()
+BranchXML::BranchXML() : m_wRot( NULL )
 {
 	// the root of our scenegraph.
 	m_rootNode = new osg::Group;
+
+	m_MatrNode = new osg::MatrixTransform;
+
+	//добавить 
+	m_rootNode->addChild( m_MatrNode );
 
 	//инициировать корневой узел данными
 	InitRootNode();
@@ -23,10 +30,22 @@ BranchXML::BranchXML()
 	AddTexture();
 
 	//настроить альфа канал
-	//SetupAlfaFunc();
+	SetupAlfaFunc();
+
+	//формирование сцены с шейдером
+	buildSceneShader();
+
+	//добавить динамическую текстуру
+	AddDynamicTexture();
 
 	//динамически мен€емый узел
-	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
+	m_MatrNode->setDataVariance( osg::Object::DYNAMIC );
+
+	//класс обновлени€ матриц ветра
+	m_MatrNode->setUpdateCallback( new BranchXMLWindCallback( m_wRot , image0.get() ) );
+
+	//передать узел света
+	m_rootNode->addChild( m_LightSource.getRootNode().get() );
 }
 
 BranchXML::~BranchXML()
@@ -42,11 +61,11 @@ void BranchXML::InitRootNode()
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
 
 	// Create an array of four vertices.
-	osg::ref_ptr<osg::Vec4Array> v = new osg::Vec4Array;
+	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	geom->setVertexArray( v.get() );
 
 	// Create an array of four normals.
-	osg::ref_ptr<osg::Vec4Array> n = new osg::Vec4Array;
+	osg::ref_ptr<osg::Vec3Array> n = new osg::Vec3Array;
 	geom->setNormalArray( n.get() );
 	geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
 
@@ -61,16 +80,16 @@ void BranchXML::InitRootNode()
 	//копируем координаты
 	for ( int i = 0 ; i < _data.m_vCoords.size() / 4 ; ++i )
 	{
-		osg::Vec4 coord( _data.m_vCoords[ i * 4 ] , 
+		osg::Vec3 coord( _data.m_vCoords[ i * 4 ] , 
 			_data.m_vCoords[ i * 4 + 1 ] ,
-			_data.m_vCoords[ i * 4 + 2 ] ,
-			1 ); //_data.m_vCoords[ i * 4 + 3 ] );
+			_data.m_vCoords[ i * 4 + 2 ]
+			); //_data.m_vCoords[ i * 4 + 3 ] );
 		v->push_back( coord );
 
-		osg::Vec4 normal( _data.m_vNormals[ i * 4 ] , 
+		osg::Vec3 normal( _data.m_vNormals[ i * 4 ] , 
 			_data.m_vNormals[ i * 4 + 1 ] ,
-			_data.m_vNormals[ i * 4 + 2 ] ,
-			1 ); //_data.m_vNormals[ i * 4 + 3 ] );
+			_data.m_vNormals[ i * 4 + 2 ]
+			); //_data.m_vNormals[ i * 4 + 3 ] );
 		n->push_back( normal );
 
 		osg::Vec2 tex0( _data.m_vTexCoords0[ i * 2 ] ,
@@ -90,15 +109,15 @@ void BranchXML::InitRootNode()
 	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
 	geode->addDrawable( geom.get() );
 
-	geode->setUpdateCallback( new BranchXMLCallback );
+	//geode->setUpdateCallback( new BranchXMLCallback );
 
-	m_rootNode->addChild( geode.get() );
+	m_MatrNode->addChild( geode.get() );
 }
 
 void BranchXML::AddTexture()
 {
 	//добавить текстуру
-	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
+	osg::StateSet* state = m_MatrNode->getOrCreateStateSet();
 
 	//получить ссылку на данные веток
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
@@ -118,23 +137,107 @@ void BranchXML::AddTexture()
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 0.
 	state->setTextureAttributeAndModes( 0, tex0.get() );
+
+	//включаем отсечение нелицевых граней
+	//osg::CullFace* cf = new osg::CullFace( osg::CullFace::BACK );
+	//state->setAttributeAndModes( cf );
 }
 
 void BranchXML::SetupAlfaFunc()
 {
 	//настроить альфа канал
 
-	//настройка атрибутов состо€ни€ LOD ствола
-	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
-
-	//помечаем объект как имеющий прозрачность
-	state->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
-
 	//получить ссылку на данные веток
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
 
-	// Turn on alpha testing
-	osg::AlphaFunc* af = new osg::AlphaFunc(
-		osg::AlphaFunc::GREATER, _data.m_fAlphaTestValue );
-	state->setAttributeAndModes( af );
+	if ( _data.m_fAlphaTestValue > 0.0f)
+	{
+		//настройка атрибутов состо€ни€ LOD ствола
+		osg::StateSet* state = m_MatrNode->getOrCreateStateSet();
+
+		//помечаем объект как имеющий прозрачность
+		state->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
+
+		// Turn on alpha testing
+		osg::AlphaFunc* af = new osg::AlphaFunc(
+			osg::AlphaFunc::GREATER, _data.m_fAlphaTestValue );
+		state->setAttributeAndModes( af );
+	}
+}
+
+void BranchXML::buildSceneShader()
+{
+	//формирование сцены с шейдером
+	osg::StateSet* state = m_MatrNode->getOrCreateStateSet();
+
+	//добавить шейдер в сцену
+	AddShader( state );
+}
+
+void BranchXML::AddShader( osg::StateSet* ss )
+{
+	//добавить шейдер в сцену
+
+	//создать экземпл€р программы
+	osg::Program* program = new osg::Program;
+	program->setName( "microshader" );
+
+	osg::Shader *VertObj = new osg::Shader( osg::Shader::VERTEX );
+	osg::Shader *FragObj = new osg::Shader( osg::Shader::FRAGMENT );
+	program->addShader( VertObj );
+	program->addShader( FragObj );
+
+	LoadShaderSource( VertObj , "glsl/branch.vert" );
+	LoadShaderSource( FragObj , "glsl/branch.frag" );
+
+	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
+
+	//добавление uniform'ов дл€ работы с текстурными модул€ми
+	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+
+	//динамическое положение источника света
+	osg::Uniform *lightPos = new osg::Uniform( "lightPos" , osg::Vec3(0,0,0) );
+
+	ss->addUniform( lightPos );
+
+	//передать Uniform
+	m_LightSource.SetUniform( lightPos );
+
+	//матрица трансформации ствола
+	osg::Matrix m;
+	m_wRot = new osg::Uniform( "wRot" , m );
+	ss->addUniform( m_wRot );
+}  
+
+void BranchXML::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
+{
+	// load source from a file.
+	std::string fqFileName = osgDB::findDataFile(fileName);
+	if( fqFileName.length() != 0 )
+	{
+		shader->loadShaderSourceFromFile( fqFileName.c_str() );
+	}
+	else
+	{
+		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
+	}
+}
+
+void BranchXML::AddDynamicTexture()
+{
+	//добавить динамическую текстуру
+
+	//добавить текстуру
+	osg::StateSet* state = m_MatrNode->getOrCreateStateSet();
+
+	image0 = new osg::Image;
+	image0->allocateImage( 16, 4, 1, GL_RGBA, GL_UNSIGNED_BYTE);
+
+	// Attach the image in a Texture2D object
+	osg::ref_ptr<osg::Texture2D> tex1 = new osg::Texture2D;
+	tex1->setImage( image0.get() );
+
+	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
+	// both on texture unit 0.
+	state->setTextureAttributeAndModes( 1, tex1.get() , osg::StateAttribute::ON );
 }
