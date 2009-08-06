@@ -48,26 +48,26 @@ void xmlBranchSave::FillVertex( const dataBranch &_data  , TiXmlElement* root )
 	pVertexs = new TiXmlElement( m_BranchNames.m_sVertexs.c_str() );
 
 	//количество вершин
-	pVertexs->SetAttribute( m_BranchNames.m_sNum.c_str() , _data.m_vCoords.size() / 4 );
+	pVertexs->SetAttribute( m_BranchNames.m_sNum.c_str() , _data.m_vCoords.size() / 3 );
 
-	for ( int i = 0; i < _data.m_vCoords.size() / 4; ++i )
+	for ( int i = 0; i < _data.m_vCoords.size() / 3; ++i )
 	{
 		//формирем узел очередной точки
 		TiXmlElement *pPoint = new TiXmlElement( m_BranchNames.m_sPoint.c_str() );
 
 		//атрибуты точки
-		pPoint->SetDoubleAttribute( m_BranchNames.m_sX.c_str() , _data.m_vCoords[ i * 4 ] );
-		pPoint->SetDoubleAttribute( m_BranchNames.m_sY.c_str() , _data.m_vCoords[ i * 4 + 1 ] );
-		pPoint->SetDoubleAttribute( m_BranchNames.m_sZ.c_str() , _data.m_vCoords[ i * 4 + 2 ] );
-		pPoint->SetDoubleAttribute( m_BranchNames.m_sW.c_str() , _data.m_vCoords[ i * 4 + 3 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_sX.c_str() , _data.m_vCoords[ i * 3 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_sY.c_str() , _data.m_vCoords[ i * 3 + 1 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_sZ.c_str() , _data.m_vCoords[ i * 3 + 2 ] );
 
-		pPoint->SetDoubleAttribute( m_BranchNames.m_snX.c_str() , _data.m_vNormals[ i * 4 ] );
-		pPoint->SetDoubleAttribute( m_BranchNames.m_snY.c_str() , _data.m_vNormals[ i * 4 + 1 ] );
-		pPoint->SetDoubleAttribute( m_BranchNames.m_snZ.c_str() , _data.m_vNormals[ i * 4 + 2 ] );
-		pPoint->SetDoubleAttribute( m_BranchNames.m_snW.c_str() , _data.m_vNormals[ i * 4 + 3 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_snX.c_str() , _data.m_vNormals[ i * 3 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_snY.c_str() , _data.m_vNormals[ i * 3 + 1 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_snZ.c_str() , _data.m_vNormals[ i * 3 + 2 ] );
 
-		pPoint->SetDoubleAttribute( m_BranchNames.m_sS.c_str() , _data.m_vTexCoords0[ i * 2 ] );
-		pPoint->SetDoubleAttribute( m_BranchNames.m_sQ.c_str() , _data.m_vTexCoords0[ i * 2 + 1 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_sS.c_str() , _data.m_vTexCoords0[ i * 4 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_sT.c_str() , _data.m_vTexCoords0[ i * 4 + 1 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_sP.c_str() , _data.m_vTexCoords0[ i * 4 + 2 ] );
+		pPoint->SetDoubleAttribute( m_BranchNames.m_sQ.c_str() , _data.m_vTexCoords0[ i * 4 + 3 ] );
 
 		pVertexs->LinkEndChild( pPoint );
 	}

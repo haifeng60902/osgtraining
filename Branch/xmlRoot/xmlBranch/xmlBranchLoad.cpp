@@ -120,9 +120,9 @@ void xmlBranchLoad::DecodePoints( TiXmlElement* root )
 void xmlBranchLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 {
 	//декодировать параметр точки
-	double x , y , z , w;
-	double nx , ny , nz , nw;
-	double s , q;
+	double x , y , z;
+	double nx , ny , nz;
+	double s , t , p , q;
 
 	while ( _attr )
 	{
@@ -140,8 +140,8 @@ void xmlBranchLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 				if ( _sAttr == m_BranchNames.m_sZ )
 					_attr->QueryDoubleValue( &z );
 				else
-					if ( _sAttr == m_BranchNames.m_sW )
-						_attr->QueryDoubleValue( &w );
+					if ( _sAttr == m_BranchNames.m_sT )
+						_attr->QueryDoubleValue( &t );
 					else
 						if ( _sAttr == m_BranchNames.m_snX )
 							_attr->QueryDoubleValue( &nx );
@@ -152,8 +152,8 @@ void xmlBranchLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 								if ( _sAttr == m_BranchNames.m_snZ )
 									_attr->QueryDoubleValue( &nz );
 								else
-									if ( _sAttr == m_BranchNames.m_snW )
-										_attr->QueryDoubleValue( &nw );
+									if ( _sAttr == m_BranchNames.m_sP )
+										_attr->QueryDoubleValue( &p );
 									else
 										if ( _sAttr == m_BranchNames.m_sS )
 											_attr->QueryDoubleValue( &s );
@@ -168,14 +168,14 @@ void xmlBranchLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 	m_pDataBranch->m_vCoords.push_back( x );
 	m_pDataBranch->m_vCoords.push_back( y );
 	m_pDataBranch->m_vCoords.push_back( z );
-	m_pDataBranch->m_vCoords.push_back( w );
 
 	m_pDataBranch->m_vNormals.push_back( nx );
 	m_pDataBranch->m_vNormals.push_back( ny );
 	m_pDataBranch->m_vNormals.push_back( nz );
-	m_pDataBranch->m_vNormals.push_back( nw );
 
 	m_pDataBranch->m_vTexCoords0.push_back( s );
+	m_pDataBranch->m_vTexCoords0.push_back( t );
+	m_pDataBranch->m_vTexCoords0.push_back( p );
 	m_pDataBranch->m_vTexCoords0.push_back( q );
 }
 

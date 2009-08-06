@@ -3,8 +3,7 @@
 #include <osg/MatrixTransform>
 #include <osg/Timer>
 
-BranchXMLWindCallback::BranchXMLWindCallback( osg::Uniform *_wRot , osg::ref_ptr<osg::Image> image0 ) : m_fWindStrength( 1.0f )
-, m_wRot( _wRot )
+BranchXMLWindCallback::BranchXMLWindCallback() : m_fWindStrength( 1.0f )
 {
 	//всего 4 матрицы ветра
 	m_vWM.resize( 4 );
@@ -14,9 +13,6 @@ BranchXMLWindCallback::BranchXMLWindCallback( osg::Uniform *_wRot , osg::ref_ptr
 	m_vWM[1].resize( 16 );
 	m_vWM[2].resize( 16 );
 	m_vWM[3].resize( 16 );
-
-	//передать указатель на картинку
-	m_Image0 = image0;
 }
 
 BranchXMLWindCallback::~BranchXMLWindCallback()
@@ -35,12 +31,15 @@ void BranchXMLWindCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 	{
 		SetupWindMatrices( time );
 
-		osg::Matrix m( &m_vWM[0][0] );
+		osg::Matrix m0( &m_vWM[0][0] );
+		osg::Matrix m1( &m_vWM[1][0] );
+		osg::Matrix m2( &m_vWM[2][0] );
+		osg::Matrix m3( &m_vWM[3][0] );
 
-		//передаем матрицу в шейдер
-		m_wRot->set( m );
-
-		//mt->setMatrix( m );
+		m_vUM[0]->set( m0 );
+		m_vUM[1]->set( m1 );
+		m_vUM[2]->set( m2 );
+		m_vUM[3]->set( m3 );
 	}
 
 	// Continue traversing so that OSG can process
@@ -55,7 +54,7 @@ void BranchXMLWindCallback::SetupWindMatrices( float fTimeInSecs )
 	static float afMatrixTimes[4] = { 0.0f };
 	static float afFrequencies[4][2] = 
 	{
-		{ 0.0f, 0.17f },
+		{ 0.15f, 0.17f },
 		{ 0.25f, 0.15f },
 		{ 0.19f, 0.05f },
 		{ 0.15f, 0.22f }

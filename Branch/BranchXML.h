@@ -2,6 +2,7 @@
 #define _BRANCH_XML_H_
 
 #include "LightSource.h"
+#include "BranchXMLWindCallback.h"
 
 #include <osg/Referenced>
 #include <osg/ref_ptr>
@@ -35,8 +36,8 @@ private:
 	// load source from a file.
 	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
 
-	//добавить динамическую текстуру
-	void AddDynamicTexture();
+	//добавить uniform матрицы
+	void AddUniformMatrix();
 
 	//корневой узел
 	osg::ref_ptr< osg::Group > m_rootNode;
@@ -46,12 +47,9 @@ private:
 
 	//источник света
 	LightSource m_LightSource;
-
-	//матрица трансформации ветра
-	osg::Uniform *m_wRot;
-
-	//изобрание, содержащее матрицы трансформации
-	osg::ref_ptr<osg::Image> image0;
+	
+	//обратный вызов обновления
+	BranchXMLWindCallback *m_BrClbk;
 };
 
 #endif	//_BRANCH_XML_H_

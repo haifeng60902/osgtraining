@@ -14,14 +14,14 @@ struct xmlBranchNames
 		, m_sX( "x" )
 		, m_sY( "y" )
 		, m_sZ( "z" )
-		, m_sW( "w" )
 
 		, m_snX( "nx" )
 		, m_snY( "ny" )
 		, m_snZ( "nz" )
-		, m_snW( "nw" )
 		
 		, m_sS( "s" )
+		, m_sT( "t" )
+		, m_sP( "p" )
 		, m_sQ( "q" )
 
 		, m_sStrips( "strips" )
@@ -40,15 +40,16 @@ struct xmlBranchNames
 	std::string m_sX;
 	std::string m_sY;
 	std::string m_sZ;
-	std::string m_sW;
 
 	std::string m_snX;
 	std::string m_snY;
 	std::string m_snZ;
-	std::string m_snW;
 
 	std::string m_sS;
+	std::string m_sT;
+	std::string m_sP;
 	std::string m_sQ;
+
 
 	std::string m_sStrips;
 	std::string m_sStrip;

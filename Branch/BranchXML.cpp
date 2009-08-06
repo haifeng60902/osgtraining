@@ -1,7 +1,6 @@
 #include "BranchXML.h"
 
 #include "BranchXMLCallback.h"
-#include "BranchXMLWindCallback.h"
 #include "xmlRoot/xmlRoot.h"
 
 #include <osg/Geometry>
@@ -13,7 +12,7 @@
 #include <osg/AlphaFunc>
 #include <osg/CullFace>
 
-BranchXML::BranchXML() : m_wRot( NULL )
+BranchXML::BranchXML() : m_BrClbk( NULL )
 {
 	// the root of our scenegraph.
 	m_rootNode = new osg::Group;
@@ -35,14 +34,15 @@ BranchXML::BranchXML() : m_wRot( NULL )
 	//формирование сцены с шейдером
 	buildSceneShader();
 
-	//добавить динамическую текстуру
-	AddDynamicTexture();
-
 	//динамически меняемый узел
 	m_MatrNode->setDataVariance( osg::Object::DYNAMIC );
 
 	//класс обновления матриц ветра
-	m_MatrNode->setUpdateCallback( new BranchXMLWindCallback( m_wRot , image0.get() ) );
+	m_BrClbk = new BranchXMLWindCallback;
+	m_MatrNode->setUpdateCallback( m_BrClbk );
+
+	//добавить uniform матрицы
+	AddUniformMatrix();
 
 	//передать узел света
 	m_rootNode->addChild( m_LightSource.getRootNode().get() );
@@ -60,42 +60,43 @@ void BranchXML::InitRootNode()
 	// Create an object to store geometry in.
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
 
-	// Create an array of four vertices.
+	// Create an array of vertices.
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
-	geom->setVertexArray( v.get() );
 
-	// Create an array of four normals.
+	// Create an array of normals.
 	osg::ref_ptr<osg::Vec3Array> n = new osg::Vec3Array;
-	geom->setNormalArray( n.get() );
-	geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
 
 	// Create a Vec2Array of texture coordinates for texture unit 0
 	// and attach it to the geom.
-	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
-	geom->setTexCoordArray( 0, tc.get() );
+	osg::ref_ptr<osg::Vec4Array> tc = new osg::Vec4Array;
 
 	//получить ссылку на данные веток
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
 
 	//копируем координаты
-	for ( int i = 0 ; i < _data.m_vCoords.size() / 4 ; ++i )
+	for ( int i = 0 ; i < _data.m_vCoords.size() / 3 ; ++i )
 	{
-		osg::Vec3 coord( _data.m_vCoords[ i * 4 ] , 
-			_data.m_vCoords[ i * 4 + 1 ] ,
-			_data.m_vCoords[ i * 4 + 2 ]
-			); //_data.m_vCoords[ i * 4 + 3 ] );
+		osg::Vec3 coord( _data.m_vCoords[ i * 3 ] , 
+			_data.m_vCoords[ i * 3 + 1 ] ,
+			_data.m_vCoords[ i * 3 + 2 ] );
 		v->push_back( coord );
 
-		osg::Vec3 normal( _data.m_vNormals[ i * 4 ] , 
-			_data.m_vNormals[ i * 4 + 1 ] ,
-			_data.m_vNormals[ i * 4 + 2 ]
-			); //_data.m_vNormals[ i * 4 + 3 ] );
+		osg::Vec3 normal( _data.m_vNormals[ i * 3 ] , 
+			_data.m_vNormals[ i * 3 + 1 ] ,
+			_data.m_vNormals[ i * 3 + 2 ] );
 		n->push_back( normal );
 
-		osg::Vec2 tex0( _data.m_vTexCoords0[ i * 2 ] ,
-			_data.m_vTexCoords0[ i * 2 + 1 ] );
+		osg::Vec4 tex0( _data.m_vTexCoords0[ i * 4 ] ,
+			_data.m_vTexCoords0[ i * 4 + 1 ] ,
+			_data.m_vTexCoords0[ i * 4 + 2 ] ,
+			_data.m_vTexCoords0[ i * 4 + 3 ] );
 		tc->push_back( tex0 );
 	}
+
+	geom->setVertexArray( v.get() );
+	geom->setNormalArray( n.get() );
+	geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+	geom->setTexCoordArray( 0, tc.get() );
 
 	for ( int i = 0 ; i < _data.m_Strips.size() ; ++i )
 	{
@@ -139,8 +140,8 @@ void BranchXML::AddTexture()
 	state->setTextureAttributeAndModes( 0, tex0.get() );
 
 	//включаем отсечение нелицевых граней
-	//osg::CullFace* cf = new osg::CullFace( osg::CullFace::BACK );
-	//state->setAttributeAndModes( cf );
+	osg::CullFace* cf = new osg::CullFace( osg::CullFace::BACK );
+	state->setAttributeAndModes( cf );
 }
 
 void BranchXML::SetupAlfaFunc()
@@ -195,6 +196,7 @@ void BranchXML::AddShader( osg::StateSet* ss )
 	//добавление uniform'ов для работы с текстурными модулями
 	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
 
+
 	//динамическое положение источника света
 	osg::Uniform *lightPos = new osg::Uniform( "lightPos" , osg::Vec3(0,0,0) );
 
@@ -202,11 +204,6 @@ void BranchXML::AddShader( osg::StateSet* ss )
 
 	//передать Uniform
 	m_LightSource.SetUniform( lightPos );
-
-	//матрица трансформации ствола
-	osg::Matrix m;
-	m_wRot = new osg::Uniform( "wRot" , m );
-	ss->addUniform( m_wRot );
 }  
 
 void BranchXML::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -223,21 +220,25 @@ void BranchXML::LoadShaderSource( osg::Shader* shader, const std::string& fileNa
 	}
 }
 
-void BranchXML::AddDynamicTexture()
+void BranchXML::AddUniformMatrix()
 {
-	//добавить динамическую текстуру
+	//добавить uniform матрицы
 
-	//добавить текстуру
-	osg::StateSet* state = m_MatrNode->getOrCreateStateSet();
+	osg::StateSet* ss = m_MatrNode->getOrCreateStateSet();
 
-	image0 = new osg::Image;
-	image0->allocateImage( 16, 4, 1, GL_RGBA, GL_UNSIGNED_BYTE);
+	osg::Matrix m;
 
-	// Attach the image in a Texture2D object
-	osg::ref_ptr<osg::Texture2D> tex1 = new osg::Texture2D;
-	tex1->setImage( image0.get() );
+	std::vector< osg::Uniform* > vU;
 
-	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
-	// both on texture unit 0.
-	state->setTextureAttributeAndModes( 1, tex1.get() , osg::StateAttribute::ON );
+	vU.push_back( new osg::Uniform( "wRot0" , m ) );
+	ss->addUniform( vU.back() );
+	vU.push_back( new osg::Uniform( "wRot1" , m ) );
+	ss->addUniform( vU.back() );
+	vU.push_back( new osg::Uniform( "wRot2" , m ) );
+	ss->addUniform( vU.back() );
+	vU.push_back( new osg::Uniform( "wRot3" , m ) );
+	ss->addUniform( vU.back() );
+
+	//передать вектор uniform матриц
+	m_BrClbk->SetUniformMatrix( vU );
 }
