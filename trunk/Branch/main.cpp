@@ -17,7 +17,6 @@ int main()
 
 	viewer.setSceneData( branch->getRootNode().get() );
 	
-	
 	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 
 	// Display, and main loop.
