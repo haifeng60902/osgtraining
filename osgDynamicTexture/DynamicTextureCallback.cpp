@@ -23,7 +23,10 @@ void DynamicTextureCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 
 	for ( int i = 0; i < image0->t() ; ++i )
 		for ( int j = 0 ; j < image0->s() * byte ; ++j )
-			data[ i * image0->t() * byte + j ] = GetRand();
+		{
+			if ( i == j )
+				data[ i * image0->t() * byte + j ] = GetRand();
+		}
 
 	image0->dirty();
 }

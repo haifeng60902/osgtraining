@@ -37,10 +37,10 @@ void DynamicTexture::buildScene()
 	// Create an array of four vertices.
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	geom->setVertexArray( v.get() );
-	v->push_back( osg::Vec3( -1.f, 0.f, -1.f ) );
-	v->push_back( osg::Vec3( 1.f, 0.f, -1.f ) );
-	v->push_back( osg::Vec3( 1.f, 0.f, 1.f ) );
 	v->push_back( osg::Vec3( -1.f, 0.f, 1.f ) );
+	v->push_back( osg::Vec3( 1.f, 0.f, 1.f ) );
+	v->push_back( osg::Vec3( 1.f, 0.f, -1.f ) );
+	v->push_back( osg::Vec3( -1.f, 0.f, -1.f ) );
 
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
