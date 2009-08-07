@@ -1,6 +1,5 @@
-#include "BranchXML.h"
+#include "FrondsXML.h"
 
-#include "BranchXMLCallback.h"
 #include "xmlRoot/xmlRoot.h"
 
 #include <osg/Geometry>
@@ -12,13 +11,13 @@
 #include <osg/AlphaFunc>
 #include <osg/CullFace>
 
-BranchXML::BranchXML()
+FrondsXML::FrondsXML()
 {
 	// the root of our scenegraph.
-	m_branchGeode = new osg::Geode;
+	m_frondsGeode = new osg::Geode;
 
 	//инициировать корневой узел данными
-	InitBranchGeode();
+	InitFrondsGeode();
 
 	//добавить текстуру
 	AddTexture();
@@ -27,12 +26,12 @@ BranchXML::BranchXML()
 	SetupAlfaFunc();
 }
 
-BranchXML::~BranchXML()
+FrondsXML::~FrondsXML()
 {
 
 }
 
-void BranchXML::InitBranchGeode()
+void FrondsXML::InitFrondsGeode()
 {
 	//инициировать корневой узел данными
 
@@ -50,7 +49,7 @@ void BranchXML::InitBranchGeode()
 	osg::ref_ptr<osg::Vec4Array> tc = new osg::Vec4Array;
 
 	//получить ссылку на данные веток
-	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
+	dataFronds &_data = xmlRoot::Instance().GetDataFronds();
 
 	//копируем координаты
 	for ( int i = 0 ; i < _data.m_vCoords.size() / 3 ; ++i )
@@ -85,19 +84,19 @@ void BranchXML::InitBranchGeode()
 
 	//geom->setUseDisplayList( false );
 
-	m_branchGeode->addDrawable( geom.get() );
+	m_frondsGeode->addDrawable( geom.get() );
 }
 
-void BranchXML::AddTexture()
+void FrondsXML::AddTexture()
 {
 	//добавить текстуру
-	osg::StateSet* state = m_branchGeode->getOrCreateStateSet();
+	osg::StateSet* state = m_frondsGeode->getOrCreateStateSet();
 
 	//получить ссылку на данные веток
-	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
+	dataFronds &_data = xmlRoot::Instance().GetDataFronds();
 
 	// Load the texture image
-	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( _data.m_sTexture.c_str() );
+	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( _data.m_vTextures[0].c_str() );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
@@ -113,21 +112,21 @@ void BranchXML::AddTexture()
 	state->setTextureAttributeAndModes( 0, tex0.get() );
 
 	//включаем отсечение нелицевых граней
-	osg::CullFace* cf = new osg::CullFace( osg::CullFace::BACK );
-	state->setAttributeAndModes( cf );
+	//osg::CullFace* cf = new osg::CullFace( osg::CullFace::FRONT );
+	//state->setAttributeAndModes( cf );
 }
 
-void BranchXML::SetupAlfaFunc()
+void FrondsXML::SetupAlfaFunc()
 {
 	//настроить альфа канал
 
-	//получить ссылку на данные ствола
-	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
+	//получить ссылку на данные веток
+	dataFronds &_data = xmlRoot::Instance().GetDataFronds();
 
 	if ( _data.m_fAlphaTestValue > 0.0f)
 	{
 		//настройка атрибутов состояния LOD ствола
-		osg::StateSet* state = m_branchGeode->getOrCreateStateSet();
+		osg::StateSet* state = m_frondsGeode->getOrCreateStateSet();
 
 		//помечаем объект как имеющий прозрачность
 		state->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );

@@ -10,7 +10,7 @@ public:
 	xmlFronds();
 	~xmlFronds();
 
-	//инициализация данных
+	//инициализация данных веток
 	void Init( TiXmlElement* root );
 
 	//получить xml тег с сформированными данными

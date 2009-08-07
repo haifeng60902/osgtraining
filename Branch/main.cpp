@@ -1,6 +1,6 @@
 #include "xmlRoot/xmlRoot.h"
 
-#include "BranchXML.h"
+#include "Tree.h"
 
 #include <osgViewer/Viewer>
 #include <osgDB/ReadFile>
@@ -13,9 +13,9 @@ int main()
 	// Create a Viewer.
 	osgViewer::Viewer viewer;
 
-	osg::ref_ptr< BranchXML > branch = new BranchXML;
+	osg::ref_ptr< Tree > tree = new Tree;
 
-	viewer.setSceneData( branch->getRootNode().get() );
+	viewer.setSceneData( tree->getRootNode().get() );
 	
 	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 
