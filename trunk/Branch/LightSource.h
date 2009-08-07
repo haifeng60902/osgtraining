@@ -17,7 +17,7 @@ public:
 	//вернуть узел света
 	osg::ref_ptr< osg::Group > getRootNode() { return m_rootGroup.get(); }
 
-	//передать Uniform
+	//передать Uniform положения источника света
 	void SetUniform( osg::Uniform *_LightPos ){ cb->SetUniform( _LightPos ); };
 
 private:

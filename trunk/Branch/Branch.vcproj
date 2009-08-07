@@ -207,6 +207,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FrondsXML.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FrondsXML.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LightSource.cpp"
 				>
 			</File>
@@ -224,6 +232,14 @@
 			</File>
 			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Tree.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Tree.h"
 				>
 			</File>
 			<Filter
@@ -278,6 +294,14 @@
 					</File>
 					<File
 						RelativePath=".\xmlRoot\xmlFronds\xmlFronds.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlRoot\xmlFronds\xmlFrondsLoad.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlRoot\xmlFronds\xmlFrondsLoad.h"
 						>
 					</File>
 					<File

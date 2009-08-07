@@ -38,6 +38,9 @@ void xmlRoot::InitChild( TiXmlElement* root )
 
 	//инициализировать данные ствола
 	m_xmlBranch.Init( root );
+
+	//инициализировать данные веток
+	m_xmlFronds.Init( root );
 }
 
 void xmlRoot::Close()

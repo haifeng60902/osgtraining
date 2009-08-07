@@ -24,24 +24,19 @@ void BranchXMLWindCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 {
 	double time = osg::Timer::instance()->time_s();
 
-	//привести указатель к osg::Geode
-	osg::MatrixTransform *mt = dynamic_cast< osg::MatrixTransform* >( node );
+	//вычислить матрицы ветра
+	SetupWindMatrices( time );
 
-	if ( mt )
-	{
-		SetupWindMatrices( time );
+	osg::Matrix m0( &m_vWM[0][0] );
+	osg::Matrix m1( &m_vWM[1][0] );
+	osg::Matrix m2( &m_vWM[2][0] );
+	osg::Matrix m3( &m_vWM[3][0] );
 
-		osg::Matrix m0( &m_vWM[0][0] );
-		osg::Matrix m1( &m_vWM[1][0] );
-		osg::Matrix m2( &m_vWM[2][0] );
-		osg::Matrix m3( &m_vWM[3][0] );
-
-		m_vUM[0]->set( m0 );
-		m_vUM[1]->set( m1 );
-		m_vUM[2]->set( m2 );
-		m_vUM[3]->set( m3 );
-	}
-
+	m_vUM[0]->set( m0 );
+	m_vUM[1]->set( m1 );
+	m_vUM[2]->set( m2 );
+	m_vUM[3]->set( m3 );
+	
 	// Continue traversing so that OSG can process
 	//   any other nodes with callbacks.
 	traverse( node, nv );

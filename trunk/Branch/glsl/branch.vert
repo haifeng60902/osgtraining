@@ -32,6 +32,7 @@ void main()
 	vec3 lightVector = normalize( lightPos );
 	float nxDir = max( 0.0 , dot( normal , lightVector ) );
 	diffuse = gl_LightSource[0].diffuse * nxDir;
+	diffuse.a = 1.0;
 	
 	gl_TexCoord[0] = gl_MultiTexCoord0;
 }
