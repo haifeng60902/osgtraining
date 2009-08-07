@@ -53,8 +53,11 @@ void xmlRoot::Close()
 	TiXmlElement* pRoot = NULL;
 	pRoot = new TiXmlElement( "root" );
 
-	//добавляем узел weather
+	//добавляем узел branch
 	pRoot->LinkEndChild( m_xmlBranch.GetXmlData() );
+
+	//добавляем узел fronds
+	pRoot->LinkEndChild( m_xmlFronds.GetXmlData() );
 
 	doc.LinkEndChild( pRoot );	
 

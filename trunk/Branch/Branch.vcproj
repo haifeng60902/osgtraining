@@ -269,6 +269,30 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="xmlFronds"
+					>
+					<File
+						RelativePath=".\xmlRoot\xmlFronds\xmlFronds.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlRoot\xmlFronds\xmlFronds.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlRoot\xmlFronds\xmlFrondsNames.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlRoot\xmlFronds\xmlFrondsSave.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlRoot\xmlFronds\xmlFrondsSave.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="tinyXML"
@@ -303,6 +327,10 @@
 				>
 				<File
 					RelativePath=".\binData\dataBranch.h"
+					>
+				</File>
+				<File
+					RelativePath=".\binData\dataFronds.h"
 					>
 				</File>
 			</Filter>
