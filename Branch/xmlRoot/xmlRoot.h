@@ -1,9 +1,8 @@
 #ifndef _XML_ROOT_H_
 #define _XML_ROOT_H_
 
-#include "../binData/dataBranch.h"
-
 #include "xmlBranch/xmlBranch.h"
+#include "xmlFronds/xmlFronds.h"
 
 #include "../Singleton.h"
 
@@ -13,8 +12,12 @@ public:
 	xmlRoot();
 	~xmlRoot();
 
-	//получить ссылку на данные веток
+	//получить ссылку на данные ствола
 	dataBranch& GetDataBranch(){ return m_xmlBranch.GetDataBranch(); };
+
+	//получить ссылку на данные веток
+	dataFronds& GetDataFronds(){ return m_xmlFronds.GetDataFronds(); };
+
 
 	//инициализация разбора xml содержащего данные
 	void Init( std::string _name );
@@ -29,6 +32,9 @@ private:
 
 	//данные о стволе
 	xmlBranch m_xmlBranch;
+
+	//данные о ветках
+	xmlFronds m_xmlFronds;
 };
 
 #endif	//_XML_ROOT_H_
