@@ -26,8 +26,14 @@ private:
 	//инициализировать ветки
 	void InitFronds();
 
+	//инициализировать листву
+	void InitLeaf();
+
 	//добавить шейдер для ствола в сцену
 	void AddShaderBranch();
+
+	//добавить шейдер для листвы в сцену
+	void AddShaderLeaf();
 
 	// load source from a file.
 	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
@@ -40,6 +46,12 @@ private:
 
 	//узел, содержащий геометрию ствола и веток
 	osg::ref_ptr< osg::Group > m_branchFrondsNode;
+
+	//узел, содержащий геометрию веток
+	osg::ref_ptr< osg::Group > m_leafNode;
+
+	//положение источника света
+	osg::Uniform *m_LightPos;
 
 	//источник света
 	LightSource m_LightSource;

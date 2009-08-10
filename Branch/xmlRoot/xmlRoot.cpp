@@ -41,6 +41,9 @@ void xmlRoot::InitChild( TiXmlElement* root )
 
 	//инициализировать данные веток
 	m_xmlFronds.Init( root );
+
+	//инициализировать данные листвы
+	m_xmlLeaf.Init( root );
 }
 
 void xmlRoot::Close()
@@ -61,6 +64,9 @@ void xmlRoot::Close()
 
 	//добавляем узел fronds
 	pRoot->LinkEndChild( m_xmlFronds.GetXmlData() );
+
+	//добавляем узел leaf
+	pRoot->LinkEndChild( m_xmlLeaf.GetXmlData() );
 
 	doc.LinkEndChild( pRoot );	
 
