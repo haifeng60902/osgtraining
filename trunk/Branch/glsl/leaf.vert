@@ -1,3 +1,4 @@
+uniform float osg_FrameTime;
 uniform vec3 lightPos;
 uniform mat4 wRot0;
 uniform mat4 wRot1;
@@ -6,7 +7,7 @@ uniform mat4 wRot3;
 varying vec4 diffuse;
 
 void main()
-{	
+{
 /////////////////////////////////////
 //WIND CALCULATION
 	float i = gl_MultiTexCoord0.q;
@@ -22,10 +23,23 @@ void main()
 			else
 				if ( i == 3.0 )
 					R = wRot3;
-	
+
 	gl_Position = R * gl_Vertex;
 	gl_Position = mix( gl_Vertex , gl_Position , gl_MultiTexCoord0.p );
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
+	gl_Position = gl_ModelViewMatrix * gl_Position;
+	
+	float offset = gl_Vertex.x + gl_Vertex.y + gl_Vertex.z;
+	float angle = atan( gl_ModelViewMatrix[2][0] , gl_ModelViewMatrix[2][1]) + cos( osg_FrameTime * 10.0 + cos( offset ) * 4.0 ) * 0.05;
+		
+	mat3 mvM = mat3( vec3( cos( angle ) , -sin( angle ) , 0 ) ,
+		vec3( sin( angle ), cos( angle ) , 0 ) ,
+		vec3( 0,0,1) );
+		
+	//calculate new vertex position
+	vec3 rotPos = mvM * vec3( gl_MultiTexCoord1.xy , 0 );
+	gl_Position.xyz += rotPos;
+		
+	gl_Position = gl_ProjectionMatrix * gl_Position;
 	
 	////////////////////////////////////////////////
 	//light
@@ -36,4 +50,5 @@ void main()
 	diffuse.a = 1.0;
 	
 	gl_TexCoord[0] = gl_MultiTexCoord0;
-}
+	gl_TexCoord[1] = gl_MultiTexCoord1;
+} 

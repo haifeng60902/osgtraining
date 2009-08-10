@@ -3,7 +3,7 @@
 #include <osg/MatrixTransform>
 #include <osg/Timer>
 
-BranchXMLWindCallback::BranchXMLWindCallback() : m_fWindStrength( 1.0f )
+BranchXMLWindCallback::BranchXMLWindCallback() : m_fWindStrength( 0.5f )
 {
 	//всего 4 матрицы ветра
 	m_vWM.resize( 4 );

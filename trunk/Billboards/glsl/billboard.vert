@@ -13,8 +13,8 @@ void main()
 	//calculate angle
 	float angle = atan( gl_ModelViewMatrix[2][0] , gl_ModelViewMatrix[2][1]) + cos( osg_FrameTime * 2.0 + cos( offset ) * 4.0 ) * 0.05;
 	
-	mat3 mvM = mat3( vec3( cos( angle ) , sin( angle ) , 0 ) ,
-		vec3( -sin( angle ), cos( angle ) , 0 ) ,
+	mat3 mvM = mat3( vec3( cos( angle ) , -sin( angle ) , 0 ) ,
+		vec3( sin( angle ), cos( angle ) , 0 ) ,
 		vec3( 0,0,1) );
 		
 	float angleY = cos( ( osg_FrameTime * 32.0 ) + cos( offset ) ) * 0.785398 * 0.05;

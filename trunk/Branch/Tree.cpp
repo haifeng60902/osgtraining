@@ -2,6 +2,7 @@
 
 #include "BranchXML.h"
 #include "FrondsXML.h"
+#include "LeafXML.h"
 
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
@@ -14,7 +15,11 @@ Tree::Tree() : m_BrClbk( NULL )
 	//узел, содержащий геометрию ствола и веток
 	m_branchFrondsNode = new osg::Group;
 
+	//узел, содержащий геометрию листвы
+	m_leafNode = new osg::Group;
+
 	m_rootNode->addChild( m_branchFrondsNode.get() );
+	m_rootNode->addChild( m_leafNode.get() );
 
 	//инициализировать ствол
 	InitBranch();
@@ -22,8 +27,14 @@ Tree::Tree() : m_BrClbk( NULL )
 	//инициализировать ветки
 	InitFronds();
 
+	//инициализировать листву
+	InitLeaf();
+
 	//добавить шейдер для ствола в сцену
 	AddShaderBranch();
+
+	//добавить шейдер для листвы в сцену
+	AddShaderLeaf();
 
 	//добавить узел света
 	m_rootNode->addChild( m_LightSource.getRootNode().get() );
@@ -60,6 +71,16 @@ void Tree::InitFronds()
 	m_branchFrondsNode->addChild( fronds->getFrondsGeode() );
 }
 
+void Tree::InitLeaf()
+{
+	//инициализировать листву
+
+	osg::ref_ptr< LeafXML > leaf = new LeafXML;
+
+	//добавить узел листвы
+	m_leafNode->addChild( leaf->getLeafGeode() );
+}
+
 void Tree::AddShaderBranch()
 {
 	//добавить шейдер для ствола в сцену
@@ -85,12 +106,38 @@ void Tree::AddShaderBranch()
 	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
 
 	//динамическое положение источника света
-	osg::Uniform *lightPos = new osg::Uniform( "lightPos" , osg::Vec3(0,0,0) );
+	m_LightPos = new osg::Uniform( "lightPos" , osg::Vec3(0,0,0) );
 
-	ss->addUniform( lightPos );
+	ss->addUniform( m_LightPos );
 
 	//передать Uniform положения источника света
-	m_LightSource.SetUniform( lightPos );
+	m_LightSource.SetUniform( m_LightPos );
+}
+
+void Tree::AddShaderLeaf()
+{
+	//добавить шейдер для листвы в сцену
+	osg::StateSet* ss = m_leafNode->getOrCreateStateSet();
+
+	//создать экземпляр программы
+	osg::Program* program = new osg::Program;
+	program->setName( "leaf_shader" );
+
+	osg::Shader *VertObj = new osg::Shader( osg::Shader::VERTEX );
+	osg::Shader *FragObj = new osg::Shader( osg::Shader::FRAGMENT );
+	program->addShader( VertObj );
+	program->addShader( FragObj );
+
+	LoadShaderSource( VertObj , "glsl/leaf.vert" );
+	LoadShaderSource( FragObj , "glsl/leaf.frag" );
+
+	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
+
+	//добавление uniform'ов для работы с текстурными модулями
+	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+	ss->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
+
+	ss->addUniform( m_LightPos );
 }
 
 void Tree::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
