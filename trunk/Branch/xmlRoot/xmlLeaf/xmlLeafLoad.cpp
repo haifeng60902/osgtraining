@@ -280,8 +280,10 @@ void xmlLeafLoad::DecodeWind( TiXmlElement* root )
 
 void xmlLeafLoad::DecodeAttrWind( TiXmlAttribute* _attr )
 {
-	double dFrY = 0;
-	double dFrZ = 0;
+	double dFrqY = 0;
+	double dFrqZ = 0;
+	double dAmpY = 0;
+	double dAmpZ = 0;
 	//извлечь атрибуты ветра
 	while ( _attr )
 	{
@@ -290,11 +292,26 @@ void xmlLeafLoad::DecodeAttrWind( TiXmlAttribute* _attr )
 		std::string _sAttr( _name );
 
 		//извлекаем значения
-		//if ( _sAttr == m_LeafNames.m_sFreqY )
+		if ( _sAttr == m_LeafNames.m_sFreqY )
+			_attr->QueryDoubleValue( &dFrqY );
+		else
+			if ( _sAttr == m_LeafNames.m_sFreqZ )
+				_attr->QueryDoubleValue( &dFrqZ );
+			else
+				if ( _sAttr == m_LeafNames.m_sAmplY )
+					_attr->QueryDoubleValue( &dAmpY );
+				else
+					if ( _sAttr == m_LeafNames.m_sAmplZ )
+						_attr->QueryDoubleValue( &dAmpZ );
 
-		//	_attr->QueryDoubleValue( &m_pDataLeaf->m_fFreqY );
 
 		//переходим к следующему атрибуту
 		_attr = _attr->Next();
 	}
+
+	//передача считанных значений
+	m_pDataLeaf->m_fFreqY = dFrqY;
+	m_pDataLeaf->m_fFreqZ = dFrqZ;
+	m_pDataLeaf->m_fAmplY = dAmpY;
+	m_pDataLeaf->m_fAmplZ = dAmpZ;
 }

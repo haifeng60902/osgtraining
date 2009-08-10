@@ -35,6 +35,9 @@ private:
 	//добавить шейдер для листвы в сцену
 	void AddShaderLeaf();
 
+	//настроить uniform'ы для шейдера листвы
+	void AddLeafUniforms();
+
 	// load source from a file.
 	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
 

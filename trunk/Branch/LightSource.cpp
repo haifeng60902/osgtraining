@@ -44,8 +44,8 @@ osg::ref_ptr< osg::Transform > LightSource::CreateLight()
 	osg::ref_ptr<osg::Light> light = new osg::Light;
 	light->setLightNum( 0 );
 	light->setPosition( osg::Vec4( 0.f, 0.f, 0.f, 1.f));
-	light->setAmbient( osg::Vec4( 0.0f, 0.0f, 0.0f, 1.f));
-	light->setDiffuse( osg::Vec4( 1.f, 1.0f, 1.0f, 1.f));
+	light->setAmbient( osg::Vec4( 0.3f, 0.3f, 0.3f, 1.f));
+	light->setDiffuse( osg::Vec4( 0.8f, 0.8f, 0.8f, 1.f));
 	light->setSpecular( osg::Vec4( 1.f, .1f, .1f, 1.f));
 
 	light->setConstantAttenuation( 0.0001 );

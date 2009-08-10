@@ -4,6 +4,8 @@
 #include "FrondsXML.h"
 #include "LeafXML.h"
 
+#include "xmlRoot/xmlRoot.h"
+
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 
@@ -46,6 +48,8 @@ Tree::Tree() : m_BrClbk( NULL )
 	//добавить uniform матрицы
 	AddUniformMatrix();
 
+	//настроить uniform'ы для шейдера листвы
+	AddLeafUniforms();
 }
 
 Tree::~Tree()
@@ -132,12 +136,6 @@ void Tree::AddShaderLeaf()
 	LoadShaderSource( FragObj , "glsl/leaf.frag" );
 
 	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
-
-	//добавление uniform'ов для работы с текстурными модулями
-	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
-	ss->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
-
-	ss->addUniform( m_LightPos );
 }
 
 void Tree::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -175,4 +173,29 @@ void Tree::AddUniformMatrix()
 
 	//передать вектор uniform матриц
 	m_BrClbk->SetUniformMatrix( vU );
+}
+
+void Tree::AddLeafUniforms()
+{
+	//настроить uniform'ы для шейдера листвы
+	osg::StateSet* ss = m_leafNode->getOrCreateStateSet();
+
+	//добавление uniform'ов для работы с текстурными модулями
+	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+	ss->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
+
+	//положение источника света
+	ss->addUniform( m_LightPos );
+
+	//задать управление силой ветра
+	osg::Uniform *wind = new osg::Uniform( "windStrength" , 1.0f );
+	ss->addUniform( wind );
+	m_BrClbk->SetUniformWindStrength( wind  );
+
+	//получить данные листвы
+	dataLeaf &_data = xmlRoot::Instance().GetDataLeaf();
+	ss->addUniform( new osg::Uniform( "freqY" , _data.m_fFreqY ) );
+	ss->addUniform( new osg::Uniform( "amplY" , _data.m_fAmplY ) );
+	ss->addUniform( new osg::Uniform( "freqZ" , _data.m_fFreqZ ) );
+	ss->addUniform( new osg::Uniform( "amplZ" , _data.m_fAmplZ ) );
 }

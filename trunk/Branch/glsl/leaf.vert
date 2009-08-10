@@ -4,6 +4,11 @@ uniform mat4 wRot0;
 uniform mat4 wRot1;
 uniform mat4 wRot2;
 uniform mat4 wRot3;
+uniform float windStrength;
+uniform float freqY;
+uniform float amplY;
+uniform float freqZ;
+uniform float amplZ;
 varying vec4 diffuse;
 
 void main()
@@ -29,14 +34,20 @@ void main()
 	gl_Position = gl_ModelViewMatrix * gl_Position;
 	
 	float offset = gl_Vertex.x + gl_Vertex.y + gl_Vertex.z;
-	float angle = atan( gl_ModelViewMatrix[2][0] , gl_ModelViewMatrix[2][1]) + cos( osg_FrameTime * 10.0 + cos( offset ) * 4.0 ) * 0.05;
+	float angleYoffset = cos( osg_FrameTime * freqY * windStrength + cos( offset ) * 4.0 ) * amplY * windStrength;
+	float angleY = atan( gl_ModelViewMatrix[2][0] , gl_ModelViewMatrix[2][1]) + angleYoffset;
 		
-	mat3 mvM = mat3( vec3( cos( angle ) , -sin( angle ) , 0 ) ,
-		vec3( sin( angle ), cos( angle ) , 0 ) ,
+	mat3 mvY = mat3( vec3( cos( angleY ) , -sin( angleY ) , 0 ) ,
+		vec3( sin( angleY ), cos( angleY ) , 0 ) ,
 		vec3( 0,0,1) );
 		
+	float angleZ = cos( osg_FrameTime * freqZ * windStrength + cos( offset ) * 4.0 ) * amplZ * windStrength;
+	mat3 mvZ = mat3( vec3( cos( angleZ ) ,  0 , sin( angleZ ) ) ,
+		vec3( 0,1,0) ,
+		vec3( -sin( angleZ ), 0 , cos( angleZ ) ) );
+		
 	//calculate new vertex position
-	vec3 rotPos = mvM * vec3( gl_MultiTexCoord1.xy , 0 );
+	vec3 rotPos = mvZ * mvY * vec3( gl_MultiTexCoord1.xy , 0 );
 	gl_Position.xyz += rotPos;
 		
 	gl_Position = gl_ProjectionMatrix * gl_Position;
