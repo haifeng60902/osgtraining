@@ -4,6 +4,7 @@
 #include <osg/Timer>
 
 BranchXMLWindCallback::BranchXMLWindCallback() : m_fWindStrength( 0.5f )
+, m_unifWindStrength( NULL )
 {
 	//всего 4 матрицы ветра
 	m_vWM.resize( 4 );
@@ -36,6 +37,9 @@ void BranchXMLWindCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 	m_vUM[1]->set( m1 );
 	m_vUM[2]->set( m2 );
 	m_vUM[3]->set( m3 );
+
+	//передать силу ветра в шейдер
+	m_unifWindStrength->set( m_fWindStrength );
 	
 	// Continue traversing so that OSG can process
 	//   any other nodes with callbacks.
