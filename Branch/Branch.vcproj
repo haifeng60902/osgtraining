@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="osgViewer.lib osgDB.lib osg.lib"
+				AdditionalDependencies="osgViewer.lib osgDB.lib osg.lib osgGA.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(OSG_LIB_ST)"

@@ -3,6 +3,7 @@ uniform mat4 wRot0;
 uniform mat4 wRot1;
 uniform mat4 wRot2;
 uniform mat4 wRot3;
+uniform vec3 posOffset;
 varying vec4 diffuse;
 
 void main()
@@ -25,6 +26,7 @@ void main()
 	
 	gl_Position = R * gl_Vertex;
 	gl_Position = mix( gl_Vertex , gl_Position , gl_MultiTexCoord0.p );
+	gl_Position.xyz += posOffset;
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
 	
 	////////////////////////////////////////////////

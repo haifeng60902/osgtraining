@@ -3,6 +3,7 @@
 #include "Tree.h"
 
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
 
@@ -14,6 +15,9 @@ int main()
 	osgViewer::Viewer viewer;
 
 	osg::ref_ptr< Tree > tree = new Tree;
+
+	// add the stats handler
+	viewer.addEventHandler( new osgViewer::StatsHandler );
 
 	viewer.setSceneData( tree->getRootNode().get() );
 	
