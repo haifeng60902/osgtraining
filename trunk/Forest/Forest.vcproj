@@ -183,7 +183,51 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\BranchXML.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BranchXML.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BranchXMLWindCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BranchXMLWindCallback.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Forest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Forest.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSourceCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LightSourceCallback.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Singleton.h"
 				>
 			</File>
 			<Filter
