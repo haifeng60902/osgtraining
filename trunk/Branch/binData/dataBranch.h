@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+//проверка
 struct dataBranch
 {
 	dataBranch() : m_fAlphaTestValue( 0.0f )
