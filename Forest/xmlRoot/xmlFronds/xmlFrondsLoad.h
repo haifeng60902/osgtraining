@@ -1,0 +1,62 @@
+#ifndef _XML_FRONDS_LOAD_H_
+#define _XML_FRONDS_LOAD_H_
+
+#include "../../binData/dataFronds.h"
+
+#include "../../tinyXML/tinyxml.h"
+
+class xmlFrondsLoad
+{
+public:
+	xmlFrondsLoad();
+	~xmlFrondsLoad();
+
+	//разбор xml и заполнение бинарных данных о ветках
+	void ParseXml( TiXmlElement* root , dataFronds *_data );
+
+private:
+
+	//извлечь данные о стволе
+	void DecodeFronds( TiXmlElement* root );
+
+	//декодировать параметр для альфа теста
+	void DecodeAttrAlfa( TiXmlAttribute* _attr );
+
+	//извлечь данные о текстурах
+	void DecodeTextures( TiXmlElement* root );
+
+	//извлечь данные о текстуре
+	void DecodeTexture( TiXmlElement* root );
+
+	//декодировать атрибут имя текстуры
+	void DecodeAttrTexture( TiXmlAttribute* _attr );
+
+	//извлечь данные о вершинах
+	void DecodeVertexs( TiXmlElement* root );
+
+	//извлечь данные о точке
+	void DecodePoints( TiXmlElement* root );
+
+	//декодировать параметр точки
+	void DecodeAttrPoint( TiXmlAttribute* _attr );
+
+	//извлечь данные о индексах
+	void DecodeStrips( TiXmlElement* root );
+
+	//извлечь количество полосок
+	void DecodeAttrNumStrips( TiXmlAttribute* _attr );
+
+	//декодировать полоски
+	void DecodeStrip( TiXmlElement* root );
+
+	//декодировать индексы
+	void DecodeInd( TiXmlElement* root , int ind );
+
+	//извлечь очередной индекс
+	int DecodeAttrInd( TiXmlAttribute* _attr );
+
+	dataFronds *m_pDataFronds;
+
+};
+
+#endif	//_XML_BRANCH_LOAD_H_
