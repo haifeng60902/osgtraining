@@ -34,14 +34,14 @@ bool KeyboardHandler::handle( const osgGA::GUIEventAdapter& ea,
 			if ( ea.getKey()=='o' )
 			{
 				m_fOffsetX += 1.0;
-				m_OffsetX->set( m_fOffsetX / 8196.0f );
+				m_OffsetX->set( m_fOffsetX / 32768.0f );
 				std::cout << "m_fOffsetX: " << m_fOffsetX << "\n";
 			}
 			else
 				if ( ea.getKey()=='O' )
 				{
 					m_fOffsetX -= 1.0;
-					m_OffsetX->set( m_fOffsetX / 8196.0f );
+					m_OffsetX->set( m_fOffsetX / 32768.0f );
 					std::cout << "m_fOffsetX: " << m_fOffsetX << "\n";
 				}
 				else
