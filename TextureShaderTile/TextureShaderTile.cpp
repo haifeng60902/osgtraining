@@ -55,10 +55,10 @@ void TextureShaderTile::InitGeom()
 	for ( int z = 0 ; z < 512 ; ++z )
 		for ( int x = 0 ; x < 512 ; ++x )
 		{
-			v->push_back( osg::Vec3( x , 0 ,  z ) );
-			v->push_back( osg::Vec3( x + 1.0 , 0 ,  z ) );
-			v->push_back( osg::Vec3( x + 1.0 , 0 ,  z + 1.0 ) );
-			v->push_back( osg::Vec3( x , 0 ,  z + 1.0 ) );
+			v->push_back( osg::Vec3( x * 2000.0 , 0 ,  z * 2000.0) );
+			v->push_back( osg::Vec3( ( x + 1.0 ) * 2000.0 , 0 ,  z * 2000.0) );
+			v->push_back( osg::Vec3( ( x + 1.0 ) * 2000.0 , 0 ,  ( z + 1.0 ) * 2000.0 ) );
+			v->push_back( osg::Vec3( x * 2000.0 , 0 , ( z + 1.0 ) * 2000.0 ) );
 
 			int r = dataR[ z * 512 * 3 + x * 3 ];
 			int g = dataR[ z * 512 * 3 + x * 3 + 1];
