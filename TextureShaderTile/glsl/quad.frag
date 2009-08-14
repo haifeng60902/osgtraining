@@ -11,26 +11,26 @@ uniform float scaleY;
 uniform float offsetScaleX;
 uniform float offsetScaleY;
 
+varying vec2 texCoord0;
+
 void main()
 {
-	vec4 texTile = texture2D( u_texture0 , gl_TexCoord[0].st );
-	vec2 sTC = gl_TexCoord[0].st * 512.0;
+	vec4 texTile = texture2D( u_texture0 , texCoord0 ) * 256.0f;
+	if( texTile != floor( texTile ) )
+		discard;
+	texTile *= 0.0625;
 	
-	//vec4 offsetTex = texture2D( u_texture2 , sTC );
-	vec2 offsetTex = fract( sTC );
-	
-	offsetTex.x = offsetTex.x * scaleX + offsetScaleX;
-	offsetTex.y = offsetTex.y * scaleY + offsetScaleY;
+//	if ( tX != floor( tX ) )
+//		discard;
 		
-	vec2 nTC0 = vec2( texTile.x * 16.0 + offsetTex.x / 16.0, texTile.y * 16.0 + offsetTex.y / 16.0 );
-	vec2 nTC1 = vec2( texTile.x * 16.0 + offsetTex.x / 16.0 + offsetX, texTile.y * 16.0 + offsetTex.y / 16.0 );
-	vec2 nTC2 = vec2( texTile.x * 16.0 + offsetTex.x / 16.0 , texTile.y * 16.0 + offsetTex.y / 16.0 + offsetY );
-	vec2 nTC3 = vec2( texTile.x * 16.0 + offsetTex.x / 16.0 + offsetX, texTile.y * 16.0 + offsetTex.y / 16.0 + offsetY );
+	vec2 sTC0 = texCoord0 * 512.0f;
+	
+	vec2 offsetTex = fract( sTC0 );
+
+	vec2 nTC0 = vec2( texTile.x + offsetTex.x * 0.0625f , texTile.y + offsetTex.y * 0.0625f );
 	
 	vec4 res0 = texture2D( u_texture1 , nTC0 );
-	vec4 res1 = texture2D( u_texture1 , nTC1 );
-	vec4 res2 = texture2D( u_texture1 , nTC2 );
-	vec4 res3 = texture2D( u_texture1 , nTC3 );
-	gl_FragColor = res0 * 0.25 + res1 * 0.25 + res2 * 0.25 + res3 * 0.25;
+	
+	gl_FragColor = res0;
 	
 }

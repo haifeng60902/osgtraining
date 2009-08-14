@@ -43,18 +43,18 @@ void TextureShaderTile::InitGeom()
 
 	// Create an array of vertices.
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
-	v->push_back( osg::Vec3( -1024.0 , 0 , -1024.0 ) );
-	v->push_back( osg::Vec3( 1024.0 , 0 , -1024.0 ) );
-	v->push_back( osg::Vec3( 1024.0 , 0 , 1024.0 ) );
-	v->push_back( osg::Vec3( -1024.0 , 0 , 1024.0 ) );
+	v->push_back( osg::Vec3( -1.0 , 0 , -1.0 ) );
+	v->push_back( osg::Vec3( 1.0 , 0 , -1.0 ) );
+	v->push_back( osg::Vec3( 1.0 , 0 , 1.0 ) );
+	v->push_back( osg::Vec3( -1.0 , 0 , 1.0 ) );
 
 	// Create a Vec2Array of texture coordinates for texture unit 0
 	// and attach it to the geom.
 	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
-	tc->push_back( osg::Vec2( 0.00012207 , 0.00012207 ) );
-	tc->push_back( osg::Vec2( 0.99987793 , 0.00012207 ) );
-	tc->push_back( osg::Vec2( 0.99987793 , 0.99987793 ) );
-	tc->push_back( osg::Vec2( 0.00012207 , 0.99987793 ) );
+	tc->push_back( osg::Vec2( 0.0 , 0.0 ) );
+	tc->push_back( osg::Vec2( 1 , 0.0 ) );
+	tc->push_back( osg::Vec2( 1 , 1 ) );
+	tc->push_back( osg::Vec2( 0 , 1 ) );
 
 	geom->setVertexArray( v.get() );
 	geom->setTexCoordArray( 0, tc.get() );
@@ -107,8 +107,8 @@ void TextureShaderTile::AddTextureTile()
 	osg::ref_ptr<osg::Texture2D> tex = new osg::Texture2D;
 	tex->setFilter(osg::Texture::MIN_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
 	tex->setFilter(osg::Texture::MAG_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
-	tex->setWrap(osg::Texture::WRAP_S,osg::Texture::REPEAT); 
-	tex->setWrap(osg::Texture::WRAP_T,osg::Texture::REPEAT); 
+	tex->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP); 
+	tex->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP); 
 
 	tex->setImage( image.get() );
 
