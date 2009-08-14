@@ -15,13 +15,10 @@ varying vec2 texCoord0;
 
 void main()
 {
+/*
 	vec4 texTile = texture2D( u_texture0 , texCoord0 ) * 256.0f;
-	if( texTile != floor( texTile ) )
-		discard;
-	texTile *= 0.0625;
 	
-//	if ( tX != floor( tX ) )
-//		discard;
+	texTile *= 0.0625;
 		
 	vec2 sTC0 = texCoord0 * 512.0f;
 	
@@ -30,6 +27,8 @@ void main()
 	vec2 nTC0 = vec2( texTile.x + offsetTex.x * 0.0625f , texTile.y + offsetTex.y * 0.0625f );
 	
 	vec4 res0 = texture2D( u_texture1 , nTC0 );
+*/
+	vec4 res0 = texture2D( u_texture1 , gl_TexCoord[0].st );
 	
 	gl_FragColor = res0;
 	

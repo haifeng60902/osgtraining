@@ -17,13 +17,13 @@ TextureShaderTile::TextureShaderTile()
 	InitGeom();
 
 	//добавить текстуру индексов
-	AddTextureIndex();
+//	AddTextureIndex();
 
 	//добавить текстуру с тайлами
 	AddTextureTile();
 
 	//добавить текстуру повторений
-	AddTextureRepeat();
+//	AddTextureRepeat();
 
 	//добавить шейдер
 	AddShader();
@@ -43,24 +43,37 @@ void TextureShaderTile::InitGeom()
 
 	// Create an array of vertices.
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
-	v->push_back( osg::Vec3( -1.0 , 0 , -1.0 ) );
-	v->push_back( osg::Vec3( 1.0 , 0 , -1.0 ) );
-	v->push_back( osg::Vec3( 1.0 , 0 , 1.0 ) );
-	v->push_back( osg::Vec3( -1.0 , 0 , 1.0 ) );
 
 	// Create a Vec2Array of texture coordinates for texture unit 0
 	// and attach it to the geom.
-	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
-	tc->push_back( osg::Vec2( 0.0 , 0.0 ) );
-	tc->push_back( osg::Vec2( 1 , 0.0 ) );
-	tc->push_back( osg::Vec2( 1 , 1 ) );
-	tc->push_back( osg::Vec2( 0 , 1 ) );
+	osg::ref_ptr<osg::Vec2Array> tc0 = new osg::Vec2Array;
+
+	// Load the texture image
+	osg::ref_ptr<osg::Image> image = osgDB::readImageFile( "index.bmp" );
+	unsigned char *dataR = image->data();
+	
+	for ( int z = 0 ; z < 512 ; ++z )
+		for ( int x = 0 ; x < 512 ; ++x )
+		{
+			v->push_back( osg::Vec3( x , 0 ,  z ) );
+			v->push_back( osg::Vec3( x + 1.0 , 0 ,  z ) );
+			v->push_back( osg::Vec3( x + 1.0 , 0 ,  z + 1.0 ) );
+			v->push_back( osg::Vec3( x , 0 ,  z + 1.0 ) );
+
+			int r = dataR[ z * 512 * 3 + x * 3 ];
+			int g = dataR[ z * 512 * 3 + x * 3 + 1];
+
+			tc0->push_back( osg::Vec2( r / 16.0 + 1 / 8192.0 , g / 16.0 + 1 / 8192.0) );
+			tc0->push_back( osg::Vec2( ( r + 1.0 ) / 16.0 - 1 / 8192.0, g / 16.0 + 1 / 8192.0 ) );
+			tc0->push_back( osg::Vec2( ( r + 1.0 ) / 16.0 - 1 / 8192.0, ( g + 1.0 ) / 16.0 - 1 / 8192.0 ) );
+			tc0->push_back( osg::Vec2( r / 16.0 + 1 / 8192.0 , ( g + 1.0 ) / 16.0 - 1 / 8192.0 ) );
+		}
 
 	geom->setVertexArray( v.get() );
-	geom->setTexCoordArray( 0, tc.get() );
+	geom->setTexCoordArray( 0, tc0.get() );
 
 	geom->addPrimitiveSet( new osg::DrawArrays(
-		osg::PrimitiveSet::QUADS , 0 , 4 ) );
+		osg::PrimitiveSet::QUADS , 0 , v->size() ) );
 
 	//корневой узел геометрии листвы
 	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
@@ -86,9 +99,6 @@ void TextureShaderTile::AddTextureIndex()
 	tex->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP); 
 
 	tex->setImage( image.get() );
-
-	//освободить память от image
-	tex->setUnRefImageDataAfterApply( true );
 
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 0.
