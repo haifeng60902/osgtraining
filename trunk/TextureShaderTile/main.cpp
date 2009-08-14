@@ -31,9 +31,12 @@ int main()
 
 	viewer.addEventHandler( key );
 
+	//настройка камеры
+	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 1050.0 / 1680.0 , 1.0 , 30000.0 );
+
 	viewer.setSceneData( plane->getRootNode().get() );
 
-	//viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
+	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 
 	// Display, and main loop.
 	return viewer.run();
