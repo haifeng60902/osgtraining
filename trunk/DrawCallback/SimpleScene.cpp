@@ -37,7 +37,7 @@ void SimpleScene::InitGeom()
 	// Create an object to store geometry in.
 	m_Geom = new osg::Geometry;
 
-	m_Geom->setUseDisplayList( false );
+	m_Geom->setUseDisplayList( true );
 
 	// Create an array of four vertices.
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
@@ -122,13 +122,16 @@ void SimpleScene::InitGeom()
 	// Add the Geometry (Drawable) to a Geode and
 	// return the Geode.
 	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
-	//geode->addDrawable( m_Geom.get() );
+	geode->addDrawable( m_Geom.get() );
+
+	m_Geom->setUseDisplayList( true );
+	m_Geom->setDrawCallback( dCbk );
 
 //////////////////////////////////////////////////////////////////////////
 	//передать геометрию для отрисовки
-	dCbk->SetGeometry( m_Geom.get() );
+	//dCbk->SetGeometry( m_Geom.get() );
 
-	geode->addDrawable( dCbk );
+	//geode->addDrawable( dCbk );
 //////////////////////////////////////////////////////////////////////////
 
 
