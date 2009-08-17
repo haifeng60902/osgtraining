@@ -1,10 +1,15 @@
 #include "CullCallback.h"
 
+#include "DynamicFrustum.h"
+
 #include <osgUtil/CullVisitor>
+#include <osg/Geometry>
+#include <osg/Geode>
+#include <osg/MatrixTransform>
 
 #include <iostream>
 
-CullCallback::CullCallback()
+CullCallback::CullCallback( std::string name ) : m_sCallbackName( name )
 {
 
 }
@@ -16,6 +21,7 @@ CullCallback::~CullCallback()
 
 void CullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 { 
+	
 	// first update subgraph to make sure objects are all moved into position
 	traverse(node,nv);
 
@@ -24,112 +30,96 @@ void CullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	{
 		const osg::Matrix *MV = cv->getModelViewMatrix();
 		const osg::Matrix *Pr = cv->getProjectionMatrix();
-		osg::Matrix mvp = ( *MV ) * ( *Pr );
+		osg::Matrix mvp =  osg::Matrixd::inverse( *MV ) * ( *Pr );
 
 		//обновить информацию о плоскостях отсечения
-		UpdateFrustum( (float*)mvp.ptr() );
+		UpdateFrustum( *Pr , *MV );
 
-		osg::Vec3 pos = cv->getEyePoint();
-		std::cout << pos.x() << " " 
-			<< pos.y() << " " 
-			<< pos.z() << " " 
-			<<  "\n";
-
-		/*
 		if ( BoxVisible( osg::Vec3(-1,-1,-1) , osg::Vec3(1,1,1) ) )
 			std::cout << "1 ";
 		else
 			std::cout << "0 ";
-*/
+		
+
+		//нужно ли создавать фрустум?
+		bool bFrustum = DynamicFrustum::Instance().IsCreateFrustum();
+
+		if ( bFrustum )
+		{
+			osg::Node *frustum = makeFrustumFromCamera( *Pr , *MV );
+
+			osg::Group *group = dynamic_cast< osg::Group * >( node );
+
+			if ( group )
+			{
+				group->addChild( frustum );
+			}
+		}
+		
 	}
 }
 
-void CullCallback::UpdateFrustum( const float *clip )
+void CullCallback::UpdateFrustum( osg::Matrix proj , osg::Matrix mv )
 {
-	float t = 0.0f;
+	//Get near and far from the Projection matrix.
+	near = proj(3,2) / (proj(2,2)-1.0);
+	far = proj(3,2) / (1.0+proj(2,2));
 
-	//обновить информацию о плоскостях отсечения
-	plane[0].x() = clip[ 3] -	clip[ 0];			//Извлечение из матрицы clip
-	plane[0].y() = clip[ 7] - clip[ 4];			//уравнений шести плоскотей отсечения
-	plane[0].z() = clip[11] - clip[ 8]; 
-	plane[0].w() = clip[15] - clip[12]; 
-	t = 1.0 / sqrt( plane[0].x() * plane[0].x()
-		+ plane[0].y() * plane[0].y()
-		+ plane[0].z() * plane[0].z() ); 
+	// Get the sides of the near plane.
+	nLeft = near * (proj(2,0)-1.0) / proj(0,0);
+	nRight = near * (1.0+proj(2,0)) / proj(0,0);
+	nTop = near * (1.0+proj(2,1)) / proj(1,1);
+	nBottom = near * (proj(2,1)-1.0) / proj(1,1);
 
-	plane[0].x() *= t; 
-	plane[0].y() *= t; 
-	plane[0].z() *= t; 
-	plane[0].w() *= t; 
+	// Get the sides of the far plane.
+	fLeft = far * (proj(2,0)-1.0) / proj(0,0);
+	fRight = far * (1.0+proj(2,0)) / proj(0,0);
+	fTop = far * (1.0+proj(2,1)) / proj(1,1);
+	fBottom = far * (proj(2,1)-1.0) / proj(1,1);
 
-	plane[1].x() = clip[ 3] + clip[ 0]; 
-	plane[1].y() = clip[ 7] + clip[ 4]; 
-	plane[1].z() = clip[11] + clip[ 8]; 
-	plane[1].w() = clip[15] + clip[12]; 
-	t = 1.0 / sqrt( plane[1].x() * plane[1].x()
-		+ plane[1].y() * plane[1].y()
-		+ plane[1].z() * plane[1].z() ); 
-	
-	plane[1].x() *= t; 
-	plane[1].y() *= t; 
-	plane[1].z() *= t; 
-	plane[1].w() *= t; 
+	// Our vertex array needs only 9 vertices: The origin, and the
+	// eight corners of the near and far planes.
+	osg::Vec3Array* v = new osg::Vec3Array;
+	v->resize( 8 );
 
-	plane[2].x() = clip[ 3] + clip[ 1]; 
-	plane[2].y() = clip[ 7] + clip[ 5]; 
-	plane[2].z() = clip[11] + clip[ 9]; 
-	plane[2].w() = clip[15] + clip[13]; 
-	t = 1.0 / sqrt( plane[2].x() * plane[2].x() 
-		+ plane[2].y() * plane[2].y() 
-		+ plane[2].z() * plane[2].z() ); 
+	(*v)[0].set( nLeft, nBottom, -near );
+	(*v)[1].set( nRight, nBottom, -near );
+	(*v)[2].set( nRight, nTop, -near );
+	(*v)[3].set( nLeft, nTop, -near );
+	(*v)[4].set( fLeft, fBottom, -far );
+	(*v)[5].set( fRight, fBottom, -far );
+	(*v)[6].set( fRight, fTop, -far );
+	(*v)[7].set( fLeft, fTop, -far );
 
-	plane[2].x() *= t; 
-	plane[2].y() *= t; 
-	plane[2].z() *= t; 
-	plane[2].w() *= t; 
+	osg::Matrix mt = osg::Matrix::inverse( mv );
 
-	plane[3].x() = clip[ 3] - clip[ 1]; 
-	plane[3].y() = clip[ 7] - clip[ 5]; 
-	plane[3].z() = clip[11] - clip[ 9]; 
-	plane[3].w() = clip[15] - clip[13]; 
-	t = 1.0 / sqrt( plane[3].x() * plane[3].x() 
-		+ plane[3].y() * plane[3].y() 
-		+ plane[3].z() * plane[3].z() ); 
-	plane[3].x() *= t; 
-	plane[3].y() *= t; 
-	plane[3].z() *= t; 
-	plane[3].w() *= t; 
+	for ( int i = 0 ; i < 8 ; ++i )
+		(*v)[i] = (*v)[i] * mt;
 
-	plane[4].x() = clip[ 3] - clip[ 2]; 
-	plane[4].y() = clip[ 7] - clip[ 6]; 
-	plane[4].z() = clip[11] - clip[10]; 
-	plane[4].w() = clip[15] - clip[14]; 
-	t = 1.0 / sqrt( plane[4].x() * plane[4].x() 
-		+ plane[4].y() * plane[4].y() 
-		+ plane[4].z() * plane[4].z() );
-	plane[4].x() *= t; 
-	plane[4].y() *= t; 
-	plane[4].z() *= t; 
-	plane[4].w() *= t; 
+	//левая плоскость отсечения
+	plane[0] = MakePlane( (*v)[0] , (*v)[7] , (*v)[3] );
 
-	plane[5].x() = clip[ 3] + clip[ 2]; 
-	plane[5].y() = clip[ 7] + clip[ 6]; 
-	plane[5].z() = clip[11] + clip[10]; 
-	plane[5].w() = clip[15] + clip[14]; 
-	t = 1.0 / sqrt( plane[5].x() * plane[5].x()
-		+ plane[5].y() * plane[5].y() 
-		+ plane[5].z() * plane[5].z() );
+	//правая плоскость отсечения
+	plane[1] = MakePlane( (*v)[1] , (*v)[2] , (*v)[6] );
 
-	plane[5].x() *= t; 
-	plane[5].y() *= t; 
-	plane[5].z() *= t; 
-	plane[5].w() *= t; 
+	//верхняя плоскость
+	plane[2] = MakePlane( (*v)[2] , (*v)[3] , (*v)[7] );
+
+	//нижняя плоскость
+	plane[3] = MakePlane( (*v)[0] , (*v)[1] , (*v)[4] );
+
+	//ближняя плоскость
+	plane[4] = MakePlane( (*v)[0] , (*v)[2] , (*v)[1] );
+
+	//дальняя плоскость
+	plane[5] = MakePlane( (*v)[5] , (*v)[6] , (*v)[7] );
 }
 
 bool CullCallback::BoxVisible( const osg::Vec3 &minn , const osg::Vec3 &maxx )
 {
 	//Определение видимости BOX'a
-	for(int i = 0; i < 6; i++) {
+	for( int i = 0 ; i < 6 ; i++ )
+	{
 		if( plane[i] * osg::Vec4( minn.x() , minn.y() , minn.z() , 1.0 ) > 0.0 ) continue;
 		if( plane[i] * osg::Vec4( minn.x() , minn.y() , maxx.z() , 1.0 ) > 0.0 ) continue;
 		if( plane[i] * osg::Vec4( minn.x() , maxx.y() , minn.z() , 1.0 ) > 0.0 ) continue;
@@ -142,4 +132,106 @@ bool CullCallback::BoxVisible( const osg::Vec3 &minn , const osg::Vec3 &maxx )
 		return false;
 	}
 	return true;
+}
+
+// Given a Camera, create a wireframe representation of its
+// view frustum. Create a default representation if camera==NULL.
+osg::Node* CullCallback::makeFrustumFromCamera( osg::Matrixd proj , osg::Matrixd mv )
+{
+	// Projection and ModelView matrices
+
+	// Get near and far from the Projection matrix.
+	near = proj(3,2) / (proj(2,2)-1.0);
+	far = proj(3,2) / (1.0+proj(2,2));
+
+	// Get the sides of the near plane.
+	nLeft = near * (proj(2,0)-1.0) / proj(0,0);
+	nRight = near * (1.0+proj(2,0)) / proj(0,0);
+	nTop = near * (1.0+proj(2,1)) / proj(1,1);
+	nBottom = near * (proj(2,1)-1.0) / proj(1,1);
+
+	// Get the sides of the far plane.
+	fLeft = far * (proj(2,0)-1.0) / proj(0,0);
+	fRight = far * (1.0+proj(2,0)) / proj(0,0);
+	fTop = far * (1.0+proj(2,1)) / proj(1,1);
+	fBottom = far * (proj(2,1)-1.0) / proj(1,1);
+
+	// Our vertex array needs only 9 vertices: The origin, and the
+	// eight corners of the near and far planes.
+	osg::Vec3Array* v = new osg::Vec3Array;
+	v->resize( 9 );
+	(*v)[0].set( 0., 0., 0. );
+	(*v)[1].set( nLeft, nBottom, -near );
+	(*v)[2].set( nRight, nBottom, -near );
+	(*v)[3].set( nRight, nTop, -near );
+	(*v)[4].set( nLeft, nTop, -near );
+	(*v)[5].set( fLeft, fBottom, -far );
+	(*v)[6].set( fRight, fBottom, -far );
+	(*v)[7].set( fRight, fTop, -far );
+	(*v)[8].set( fLeft, fTop, -far );
+
+	std::cout << nLeft << " "
+		<< nRight << " "
+		<< nBottom << " "
+		<< nTop << " "
+		<< near << " "
+		<< far << "\n";
+
+	osg::Geometry* geom = new osg::Geometry;
+	geom->setUseDisplayList( false );
+	geom->setVertexArray( v );
+
+	osg::Vec4Array* c = new osg::Vec4Array;
+	c->push_back( osg::Vec4( 1., 1., 1., 1. ) );
+	geom->setColorArray( c );
+	geom->setColorBinding( osg::Geometry::BIND_OVERALL );
+
+	GLushort idxLines[8] = {
+		0, 5, 0, 6, 0, 7, 0, 8 };
+
+	GLushort idxLoops0[4] = {
+		1, 2, 3, 4 };
+
+	GLushort idxLoops1[4] = {
+		5, 6, 7, 8 };
+
+	geom->addPrimitiveSet( new osg::DrawElementsUShort( osg::PrimitiveSet::LINES, 8, idxLines ) );
+	geom->addPrimitiveSet( new osg::DrawElementsUShort( osg::PrimitiveSet::LINE_LOOP, 4, idxLoops0 ) );
+	geom->addPrimitiveSet( new osg::DrawElementsUShort( osg::PrimitiveSet::LINE_LOOP, 4, idxLoops1 ) );
+
+	osg::Geode* geode = new osg::Geode;
+	geode->addDrawable( geom );
+
+	geode->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED );
+
+
+	// Create parent MatrixTransform to transform the view volume by
+	// the inverse ModelView matrix.
+	osg::MatrixTransform* mt = new osg::MatrixTransform;
+	mt->setMatrix( osg::Matrixd::inverse( mv ) );
+	mt->addChild( geode );
+
+	return mt;
+}
+
+osg::Vec4 CullCallback::MakePlane( osg::Vec3 P1 , osg::Vec3 P2 , osg::Vec3 P3 )
+{
+	//вычислить уравнение плоскости по трем точкам
+	osg::Vec4 plane;
+
+	//  A = y1 (z2 - z3) + y2 (z3 - z1) + y3 (z1 - z2)
+	plane.x() = P1.y() * ( P2.z() - P3.z() ) + P2.y() * ( P3.z() - P1.z() ) + P3.y() * ( P1.z() - P2.z() );
+
+	//	B = z1 (x2 - x3) + z2 (x3 - x1) + z3 (x1 - x2) 
+	plane.y() = P1.z() * ( P2.x() - P3.x() ) + P2.z() * ( P3.x() - P1.x() ) + P3.z() * ( P1.x() - P2.x() );
+
+	//	C = x1 (y2 - y3) + x2 (y3 - y1) + x3 (y1 - y2)
+	plane.z() = P1.x() * ( P2.y() - P3.y() ) + P2.x() * ( P3.y() - P1.y() ) + P3.x() * ( P1.y() - P2.y() );
+
+	//	- D = x1 (y2 z3 - y3 z2) + x2 (y3 z1 - y1 z3) + x3 (y1 z2 - y2 z1)
+	plane.w() = -P1.x() * ( P2.y() * P3.z() - P3.y() * P2.z() ) 
+		- P2.x() * ( P3.y() * P1.z() - P1.y() * P3.z() )
+		- P3.x() * ( P1.y() * P2.z() - P2.y() * P1.z() );
+
+	return plane;
 }
