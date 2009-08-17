@@ -4,23 +4,15 @@
 #include <osg/Drawable>
 #include <osg/Geometry>
 
-class DrawCallback : public osg::Drawable
+class DrawCallback : public osg::Drawable::DrawCallback
 {
 public:
 
 	DrawCallback();
 
-	/** Copy constructor using CopyOp to manage deep vs shallow copy.*/
-	DrawCallback(const DrawCallback& ShaderGeometry,const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY):
-	osg::Drawable(ShaderGeometry,copyop) {}
-
-	META_Object(osg,DrawCallback)
-
 	virtual ~DrawCallback();
 
-	virtual void drawImplementation(osg::RenderInfo& renderInfo) const;
-
-	virtual osg::BoundingBox computeBound() const;
+	virtual void drawImplementation( osg::RenderInfo& renderInfo , const osg::Drawable* drawable ) const;
 
 	//передать геометрию для отрисовки
 	void SetGeometry( osg::ref_ptr<osg::Geometry> geom ){ _geometry = geom; };
