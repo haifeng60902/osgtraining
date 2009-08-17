@@ -16,14 +16,8 @@ TextureShaderTile::TextureShaderTile()
 	//инициализировать геометрию
 	InitGeom();
 
-	//добавить текстуру индексов
-//	AddTextureIndex();
-
 	//добавить текстуру с тайлами
 	AddTextureTile();
-
-	//добавить текстуру повторений
-//	AddTextureRepeat();
 
 	//добавить шейдер
 	AddShader();
@@ -55,10 +49,10 @@ void TextureShaderTile::InitGeom()
 	for ( int z = 0 ; z < 512 ; ++z )
 		for ( int x = 0 ; x < 512 ; ++x )
 		{
-			v->push_back( osg::Vec3( x * 2000.0 , 0 ,  z * 2000.0) );
-			v->push_back( osg::Vec3( ( x + 1.0 ) * 2000.0 , 0 ,  z * 2000.0) );
-			v->push_back( osg::Vec3( ( x + 1.0 ) * 2000.0 , 0 ,  ( z + 1.0 ) * 2000.0 ) );
-			v->push_back( osg::Vec3( x * 2000.0 , 0 , ( z + 1.0 ) * 2000.0 ) );
+			v->push_back( osg::Vec3( x * 2048.0 , 0 ,  z * 2048.0) );
+			v->push_back( osg::Vec3( ( x + 1.0 ) * 2048.0 , 0 ,  z * 2048.0) );
+			v->push_back( osg::Vec3( ( x + 1.0 ) * 2048.0 , 0 ,  ( z + 1.0 ) * 2048.0 ) );
+			v->push_back( osg::Vec3( x * 2048.0 , 0 , ( z + 1.0 ) * 2048.0 ) );
 
 			int r = dataR[ z * 512 * 3 + x * 3 ];
 			int g = dataR[ z * 512 * 3 + x * 3 + 1];
@@ -81,28 +75,6 @@ void TextureShaderTile::InitGeom()
 	geode->addDrawable( geom.get() );
 
 	m_rootNode->addChild( geode.get() );
-}
-
-void TextureShaderTile::AddTextureIndex()
-{
-	//добавить текстуру индексов
-	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
-
-	// Load the texture image
-	osg::ref_ptr<osg::Image> image = osgDB::readImageFile( "index.bmp" );
-
-	// Attach the image in a Texture2D object
-	osg::ref_ptr<osg::Texture2D> tex = new osg::Texture2D;
-	tex->setFilter(osg::Texture::MIN_FILTER,osg::Texture::NEAREST );
-	tex->setFilter(osg::Texture::MAG_FILTER,osg::Texture::NEAREST );
-	tex->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP); 
-	tex->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP); 
-
-	tex->setImage( image.get() );
-
-	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
-	// both on texture unit 0.
-	state->setTextureAttributeAndModes( 0 , tex.get() );
 }
 
 void TextureShaderTile::AddTextureTile()
@@ -128,67 +100,6 @@ void TextureShaderTile::AddTextureTile()
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 1.
 	state->setTextureAttributeAndModes( 1 , tex.get() );
-}
-
-void TextureShaderTile::AddTextureRepeat()
-{
-	//добавить текстуру повторений
-	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
-
-	osg::ref_ptr< osg::Image > imageR = new osg::Image;
-	imageR->allocateImage( 256, 256, 1, GL_RGB, GL_UNSIGNED_BYTE); 
-	{
-		unsigned char *dataR = imageR->data();
-
-		//получить размер текстуры
-		int t = imageR->t();
-		int s = imageR->s();
-		int byte = imageR->getPixelSizeInBits() / 8;
-
-		for ( int y = 0 ; y < t ; ++y )
-			for ( int x = 0 ; x < s ; ++x )
-			{
-				//записать преобразованный цвет
-				/*
-				if ( x == 1)
-					dataR[ y * s * byte + x * byte ] = 0;
-				else
-					if ( x == 255 )
-						dataR[ y * s * byte + x * byte ] = 254;
-				else
-					dataR[ y * s * byte + x * byte ] = x;
-
-				if ( y == 1)
-					dataR[ y * s * byte + x * byte  + 1] = 0;
-				else
-					if ( y == 255 )
-						dataR[ y * s * byte + x * byte + 1] = 254;
-					else
-						dataR[ y * s * byte + x * byte + 1] = y;
-
-				*/
-				dataR[ y * s * byte + x * byte ] = x;
-				dataR[ y * s * byte + x * byte + 1 ] = y;
-				dataR[ y * s * byte + x * byte + 2 ] = 0;
-			}
-	}
-
-	// Attach the image in a Texture2D object
-	osg::ref_ptr<osg::Texture2D> tex = new osg::Texture2D;
-	tex->setFilter(osg::Texture::MIN_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
-	tex->setFilter(osg::Texture::MAG_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR);
-	tex->setWrap(osg::Texture::WRAP_S,osg::Texture::REPEAT); 
-	tex->setWrap(osg::Texture::WRAP_T,osg::Texture::REPEAT); 
-
-	tex->setImage( imageR.get() );
-
-	//освободить память от image
-	tex->setUnRefImageDataAfterApply( true );
-
-	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
-	// both on texture unit 1.
-	state->setTextureAttributeAndModes( 2 , tex.get() );
-
 }
 
 void TextureShaderTile::AddShader()
