@@ -1,0 +1,39 @@
+#ifndef _DRAW_CALLBACK_H_
+#define _DRAW_CALLBACK_H_
+
+#include <osg/Drawable>
+#include <osg/Geometry>
+
+class DrawCallback : public osg::Drawable
+{
+public:
+
+	DrawCallback();
+
+	/** Copy constructor using CopyOp to manage deep vs shallow copy.*/
+	DrawCallback(const DrawCallback& ShaderGeometry,const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY):
+	osg::Drawable(ShaderGeometry,copyop) {}
+
+	META_Object(osg,DrawCallback)
+
+	virtual ~DrawCallback();
+
+	virtual void drawImplementation(osg::RenderInfo& renderInfo) const;
+
+	virtual osg::BoundingBox computeBound() const;
+
+	//передать геометрию для отрисовки
+	void SetGeometry( osg::ref_ptr<osg::Geometry> geom ){ _geometry = geom; };
+
+	//передать uniform смещения
+	void SetUniformOffset( osg::ref_ptr< osg::Uniform > _uOffset ){ m_uOffset = _uOffset; } ;
+
+private:
+	//геометрия для отрисовки
+	osg::ref_ptr<osg::Geometry> _geometry;
+
+	//смещение геометрии
+	osg::ref_ptr< osg::Uniform > m_uOffset;
+};
+
+#endif	//_DRAW_CALLBACK_H_
