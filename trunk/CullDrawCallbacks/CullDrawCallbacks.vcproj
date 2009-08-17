@@ -191,6 +191,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DynamicFrustum.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicFrustum.h"
+				>
+			</File>
+			<File
+				RelativePath=".\KeyboardHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\KeyboardHandler.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -200,6 +216,10 @@
 			</File>
 			<File
 				RelativePath=".\SimpleScene.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Singleton.h"
 				>
 			</File>
 		</Filter>

@@ -1,5 +1,8 @@
 #include "SimpleScene.h"
 
+#include "KeyboardHandler.h"
+#include "CullCallback.h"
+
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgDB/ReadFile>
@@ -17,8 +20,10 @@ int main()
 	// add the stats handler
 	viewer.addEventHandler( new osgViewer::StatsHandler );
 
+	viewer.addEventHandler( new KeyboardHandler );
+
 	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 1050.0 / 1680.0 , 1.0 , 30000.0 );
+	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 1050.0 / 1680.0 , 1.0 , 200.0 );
 
 	viewer.setSceneData( simple->getRootNode().get() );
 
