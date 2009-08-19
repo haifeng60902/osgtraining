@@ -6,11 +6,12 @@
 #include <osg/ref_ptr>
 #include <osg/Program>
 #include <osg/Image>
+#include <osg/Camera>
 
 class SimpleScene : public osg::Referenced
 {
 public:
-	SimpleScene();
+	SimpleScene( osg::Camera *_pCamera );
 	~SimpleScene();
 
 	//вернуть узел содержащий геометрию

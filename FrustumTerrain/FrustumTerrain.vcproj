@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="CullDrawCallbacks"
-	ProjectGUID="{F9ED01FA-8B00-4727-BCF8-5F587BE54283}"
-	RootNamespace="CullDrawCallbacks"
+	Name="FrustumTerrain"
+	ProjectGUID="{F35BC754-C957-485E-BCD6-F39DCF19C449}"
+	RootNamespace="FrustumTerrain"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -183,27 +183,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\CullCallback.cpp"
+				RelativePath=".\FrustumSingleton.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CullCallback.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicFrustum.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicFrustum.h"
-				>
-			</File>
-			<File
-				RelativePath=".\KeyboardHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\KeyboardHandler.h"
+				RelativePath=".\FrustumSingleton.h"
 				>
 			</File>
 			<File
@@ -211,23 +195,39 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SimpleScene.cpp"
+				RelativePath=".\PatchCullCallback.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SimpleScene.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SimpleUpdateCallback.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SimpleUpdateCallback.h"
+				RelativePath=".\PatchCullCallback.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Singleton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainCullCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainCullCallback.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainPatchNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainPatchNode.h"
 				>
 			</File>
 		</Filter>
