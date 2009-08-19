@@ -1,7 +1,6 @@
-#include "SimpleScene.h"
+#include "TerrainNode.h"
 
-#include "KeyboardHandler.h"
-#include "CullCallback.h"
+//#include "KeyboardHandler.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
@@ -12,20 +11,20 @@
 
 int main()
 {
+	osg::ref_ptr< TerrainNode > terrain = new TerrainNode;
+
 	// Create a Viewer.
 	osgViewer::Viewer viewer;
-
-	osg::ref_ptr< SimpleScene > simple = new SimpleScene( viewer.getCamera() );
 
 	// add the stats handler
 	viewer.addEventHandler( new osgViewer::StatsHandler );
 
-	viewer.addEventHandler( new KeyboardHandler );
+//	viewer.addEventHandler( new KeyboardHandler );
 
 	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 1050.0 / 1680.0 , 1.0 , 200.0 );
+	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 1050.0 / 1680.0 , 1.0 , 35000.0 );
 
-	viewer.setSceneData( simple->getRootNode().get() );
+	viewer.setSceneData( terrain->getRootNode().get() );
 
 	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 

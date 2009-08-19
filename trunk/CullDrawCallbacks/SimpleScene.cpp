@@ -5,7 +5,7 @@
 #include <osg/Geode>
 #include <osg/ShapeDrawable>
 
-SimpleScene::SimpleScene()
+SimpleScene::SimpleScene( osg::Camera *_pCamera )
 {
 	m_rootNode = new osg::Group;
 
