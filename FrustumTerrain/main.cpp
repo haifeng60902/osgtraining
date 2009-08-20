@@ -28,7 +28,7 @@ int main()
 
 	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 
-	viewer.setUpViewInWindow(40, 40, 640, 480 );
+	//viewer.setUpViewInWindow(40, 40, 640, 480 );
 
 	// Display, and main loop.
 	return viewer.run();
