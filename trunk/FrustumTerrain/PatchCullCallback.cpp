@@ -23,7 +23,7 @@ void PatchCullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	m_VisiblePatchArray.Update();
 
 	//обновить картинку
-//	UpdateImage();
+	UpdateImage();
 }
 
 void PatchCullCallback::UpdateImage()
