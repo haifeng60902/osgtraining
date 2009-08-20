@@ -243,6 +243,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="glsl"
+			>
+			<File
+				RelativePath=".\glsl\terrain.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\terrain.vert"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
