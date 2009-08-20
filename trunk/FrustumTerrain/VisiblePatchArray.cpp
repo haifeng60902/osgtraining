@@ -74,7 +74,7 @@ bool VisiblePatchArray::PatchVisible( const dataPatch &patch )
 void VisiblePatchArray::ProcessPatch( const dataPatch &patch )
 {
 	//разбить на следующих уровень
-	if ( patch.m_iSize == 512 )
+	if ( patch.m_iSize == 1024 )
 	{
 		//это последний уровень, записать в список патчей на отображение
 		m_vVisible.push_back( patch );

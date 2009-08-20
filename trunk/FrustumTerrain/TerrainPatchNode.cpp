@@ -39,8 +39,8 @@ void TerrainPatchNode::CreateGeometry()
 	//корневой узел геометрии
 	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
 
-	for ( int y = 0 ; y < 64 ; ++y )
-		for ( int x = 0 ; x < 64 ; ++x )
+	for ( int y = 0 ; y < 32 ; ++y )
+		for ( int x = 0 ; x < 32 ; ++x )
 			//создать очередную геометрию
 			geode->addDrawable( CreateGeometry( x , y ).get() );
 
@@ -67,7 +67,7 @@ osg::ref_ptr< osg::Geometry > TerrainPatchNode::CreateGeometry( int x , int y )
 
 	float rndOffset = GetFloatRand() * 128.0;
 
-	int sizeC = 17;
+	int sizeC = 33;
 	//Заполнение массива points
 	for (int i = 0 ; i < sizeC ; ++i )
 		for (int j = 0 ; j < sizeC ; ++j )
@@ -129,7 +129,7 @@ osg::ref_ptr< osg::Geometry > TerrainPatchNode::CreateGeometry( int x , int y )
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
 	geom->setNormalBinding( osg::Geometry::BIND_OVERALL );
-	n->push_back( osg::Vec3( x / 64.0 + 1.0 / 128.0 , y / 64.0 + 1.0 / 128.0  , 0.f ) );
+	n->push_back( osg::Vec3( x / 32.0 + 1.0 / 64.0 , y / 32.0 + 1.0 / 64.0  , 0.f ) );
 
 	geom->setVertexArray( v.get() );
 	geom->setNormalArray( n.get() );
@@ -169,7 +169,7 @@ void TerrainPatchNode::CreateTexture()
 	//	GL_RGBA, GL_RGBA, GL_FLOAT,
 	//	new unsigned char[ 4 * 4 * 64 * 64 ],
 	//	osg::Image::USE_NEW_DELETE);
-	image->allocateImage(64, 64, 1, GL_RGBA, GL_FLOAT); 
+	image->allocateImage( 32, 32, 1, GL_RGBA, GL_FLOAT); 
 
 	image->setInternalTextureFormat( GL_RGBA_FLOAT32_ATI );
 
