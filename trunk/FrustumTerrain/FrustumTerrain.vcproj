@@ -183,6 +183,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\dataPatch.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FrustumSingleton.cpp"
 				>
 			</File>
@@ -228,6 +232,14 @@
 			</File>
 			<File
 				RelativePath=".\TerrainPatchNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VisiblePatchArray.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VisiblePatchArray.h"
 				>
 			</File>
 		</Filter>
