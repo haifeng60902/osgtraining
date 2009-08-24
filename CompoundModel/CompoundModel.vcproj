@@ -191,6 +191,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CompoundUpdateCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CompoundUpdateCallback.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -200,6 +208,18 @@
 			</File>
 			<File
 				RelativePath=".\TransGeomNode2VertArray.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="glsl"
+			>
+			<File
+				RelativePath=".\glsl\compound.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\compound.vert"
 				>
 			</File>
 		</Filter>

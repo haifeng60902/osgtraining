@@ -16,7 +16,7 @@ int main()
 	//	viewer.addEventHandler( new KeyboardHandler );
 
 	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 600.0/ 1024.0 , 1.0 , 35000.0 );
+	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 1050.0/ 1680.0 , 1.0 , 35000.0 );
 
 	viewer.setSceneData( compound->getRootNode().get() );
 
