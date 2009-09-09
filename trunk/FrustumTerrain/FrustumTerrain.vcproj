@@ -195,6 +195,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GeometryPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryPatch.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
