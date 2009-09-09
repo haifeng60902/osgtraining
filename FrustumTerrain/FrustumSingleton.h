@@ -21,6 +21,12 @@ public:
 	//Определение видимости BOX'a
 	bool BoxVisible( const osg::Vec3 &minn , const osg::Vec3 &maxx );
 
+	//задать положение наблюдателя
+	void SetViewPos( osg::Vec3 pos ){ m_Pos = pos; };
+
+	//вернуть положение наблюдателя
+	osg::Vec3 GetViewPos() const { return m_Pos; };
+
 private:
 
 	//вычислить плоскости отсечения
@@ -37,6 +43,9 @@ private:
 
 	//шесть плоскостей, ограничивающих видимый объем
 	osg::Vec4 plane[6];
+
+	//положение наблюдателя
+	osg::Vec3 m_Pos;
 };
 
 #endif	//_FRUSTUM_SINGLETON_H_

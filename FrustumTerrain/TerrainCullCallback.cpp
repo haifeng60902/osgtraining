@@ -31,5 +31,8 @@ void TerrainCullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 		
 		//обновить плоскости отсечения камеры
 		FrustumSingleton::Instance().UpdateFrustum( osg::Matrix::inverse( *cv->getModelViewMatrix() ) );
+
+		//задать положение наблюдателя
+		FrustumSingleton::Instance().SetViewPos( cv->getViewPoint() );
 	}
 }
