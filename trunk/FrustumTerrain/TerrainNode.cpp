@@ -24,7 +24,7 @@ void TerrainNode::InitTerrainNode()
 	//инициализировать корневой узел земли
 
 	// определение ограничивающего объема, размер земли 1024км(в 1 км - 1024 метра), максимальная высота 500м
-	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 500 );
+	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	m_rootNode->setInitialBound( bbox );
 
 	//задать класс вычисления области видимости
@@ -40,5 +40,5 @@ void TerrainNode::InitTerrainNode()
 
 	osg::PolygonMode* polymode = new osg::PolygonMode;
 	polymode->setMode( osg::PolygonMode::FRONT_AND_BACK , osg::PolygonMode::LINE );
-	//state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
+	state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
 }

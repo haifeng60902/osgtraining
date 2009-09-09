@@ -2,6 +2,8 @@
 
 #include "FrustumSingleton.h"
 
+#include <iostream>
+
 VisiblePatchArray::VisiblePatchArray()
 {
 
@@ -18,6 +20,9 @@ void VisiblePatchArray::Update()
 
 	//очищаем результат предыдущих вычислений
 	m_vVisible.clear();
+
+	//вернуть положение наблюдателя
+	m_Pos = FrustumSingleton::Instance().GetViewPos();
 
 	//заполнить данными корневой патч
 	FillRootPatch();
@@ -62,6 +67,8 @@ void VisiblePatchArray::Process()
 		//поменять местами
 		m_vTemp0.swap( m_vTemp1 );
 	}
+
+	std::cout << m_vVisible.size() << " ";
 }
 
 bool VisiblePatchArray::PatchVisible( const dataPatch &patch )
@@ -74,12 +81,15 @@ bool VisiblePatchArray::PatchVisible( const dataPatch &patch )
 void VisiblePatchArray::ProcessPatch( const dataPatch &patch )
 {
 	//разбить на следующих уровень
-	if ( patch.m_iSize == 1024 )
+	if ( ( patch.m_iSize == 512 ) && ( DistAppropriate( patch ) ) )
 	{
 		//это последний уровень, записать в список патчей на отображение
 		m_vVisible.push_back( patch );
 		return;
 	}
+
+	if ( patch.m_iSize == 512 )
+		return;
 
 	dataPatch downPatch;
 	downPatch.m_iX = patch.m_iX;
@@ -95,4 +105,18 @@ void VisiblePatchArray::ProcessPatch( const dataPatch &patch )
 
 	downPatch.m_iX = patch.m_iX;
 	m_vTemp1.push_back( downPatch );	//4 патч
+}
+
+//проверка расстояния
+bool VisiblePatchArray::DistAppropriate( const dataPatch &patch )
+{
+	osg::Vec3 vec_dist( patch.m_iX + patch.m_iSize * 0.5 - m_Pos.x() , 
+		patch.m_iY + patch.m_iSize * 0.5 - m_Pos.y(), -m_Pos.z() );
+
+	float dist = vec_dist.x() * vec_dist.x() + vec_dist.y() * vec_dist.y() + vec_dist.z() * vec_dist.z();
+
+	if ( dist <= 512 * 512 )
+		return true;
+
+	return false;
 }

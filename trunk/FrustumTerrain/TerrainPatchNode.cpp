@@ -23,7 +23,7 @@ TerrainPatchNode::TerrainPatchNode()
 	AddShader();
 
 	// определение ограничивающего объема, размер земли 1024км(в 1 км - 1024 метра), максимальная высота 500м
-	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 500 );
+	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	m_rootNode->setInitialBound( bbox );
 }
 
@@ -45,7 +45,7 @@ void TerrainPatchNode::CreateGeometry()
 			geode->addDrawable( CreateGeometry( x , y ).get() );
 
 	// определение ограничивающего объема, размер земли 1024км(в 1 км - 1024 метра), максимальная высота 500м
-	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 500 );
+	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	geode->setInitialBound( bbox );
 
 	m_rootNode->addChild( geode.get() );
@@ -72,7 +72,7 @@ osg::ref_ptr< osg::Geometry > TerrainPatchNode::CreateGeometry( int x , int y )
 	for (int i = 0 ; i < sizeC ; ++i )
 		for (int j = 0 ; j < sizeC ; ++j )
 		{
-			v->push_back( osg::Vec3( j * 32, i * 32, 0 ) );
+			v->push_back( osg::Vec3( j * 16, i * 16, 0 ) );
 		}
 
 	m_vIndex.push_back( 0 );
@@ -138,7 +138,7 @@ osg::ref_ptr< osg::Geometry > TerrainPatchNode::CreateGeometry( int x , int y )
 		osg::PrimitiveSet::TRIANGLE_STRIP, m_vIndex.size() , &m_vIndex[ 0 ] ) );
 
 	// определение ограничивающего объема, размер земли 1024км(в 1 км - 1024 метра), максимальная высота 500м
-	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 500 );
+	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	geom->setInitialBound( bbox );
 
 	return geom.get();
