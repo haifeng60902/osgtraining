@@ -1,12 +1,16 @@
-#include "GeometryPatch.h"
+#include "GeometryTexturePatch.h"
 
-GeometryPatch::GeometryPatch( int x , int y , int sizeC , int scaleC )
+GeometryTexturePatch::GeometryTexturePatch( int x , int y , int sizeC , int scaleC , osg::ref_ptr<osg::Image> image )
 {
 	//создать объект для хранения в нем геометрии
 	m_patchGeom = new osg::Geometry;
 
 	//создать массив вершин
 	m_patchGeom->setVertexArray( CreateVertexArray( x , y , sizeC , scaleC ).get() );
+
+	//создать массив текстурных координат
+	m_patchGeom->setTexCoordArray( 0, CreateTexCoordArray( x , y , sizeC , scaleC , 
+		image->data() ).get() );
 
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -23,12 +27,12 @@ GeometryPatch::GeometryPatch( int x , int y , int sizeC , int scaleC )
 		osg::PrimitiveSet::TRIANGLE_STRIP, m_vIndex.size() , &m_vIndex[ 0 ] ) );
 }
 
-GeometryPatch::~GeometryPatch()
+GeometryTexturePatch::~GeometryTexturePatch()
 {
 
 }
 
-osg::ref_ptr<osg::Vec3Array> GeometryPatch::CreateVertexArray( int x , int y , int sizeC , int scaleC )
+osg::ref_ptr<osg::Vec3Array> GeometryTexturePatch::CreateVertexArray( int x , int y , int sizeC , int scaleC )
 {
 	//создать массив вершин
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
@@ -45,7 +49,34 @@ osg::ref_ptr<osg::Vec3Array> GeometryPatch::CreateVertexArray( int x , int y , i
 	return v.get();
 }
 
-void GeometryPatch::FillIndexVector( std::vector< unsigned int > &_vIndex , int sizeC )
+osg::ref_ptr<osg::Vec2Array> GeometryTexturePatch::CreateTexCoordArray( int x , int y , int sizeC , 
+																	   int scaleC , unsigned char *dataR )
+{
+	//создать массив текстурных координат
+	osg::ref_ptr<osg::Vec2Array> tc0 = new osg::Vec2Array;
+
+	float kof = (float)scaleC / (float)( sizeC - 1 );
+
+	//Заполнение массива points
+	for (int i = 0 ; i < sizeC ; ++i )
+		for (int j = 0 ; j < sizeC ; ++j )
+		{
+			float indX = ( x + j * kof ) / 262144.0  * 512.0;
+			float indY = ( y + i * kof ) / 262144.0  * 512.0;
+			
+			int iIndX = floor( indX );
+			int iIndY = floor( indY );
+
+			int r = dataR[ iIndY * 512 * 3 + iIndX * 3 ];
+			int g = dataR[ iIndY * 512 * 3 + iIndX * 3 + 1];
+
+			tc0->push_back( osg::Vec2( r / 16.0 + indX - iIndX , g / 16.0 + indY - iIndY ) );
+		}
+
+	return tc0.get();
+}
+
+void GeometryTexturePatch::FillIndexVector( std::vector< unsigned int > &_vIndex , int sizeC )
 {
 	//заполнить вектор индексами
 	_vIndex.push_back( 0 );

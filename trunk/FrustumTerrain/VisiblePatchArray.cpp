@@ -24,6 +24,10 @@ void VisiblePatchArray::Update()
 	//вернуть положение наблюдателя
 	m_Pos = FrustumSingleton::Instance().GetViewPos();
 
+	//std::cout << m_Pos.x() << " "
+	//	<< m_Pos.y() << " "
+		//<< m_Pos.z() << ";  ";
+
 	//заполнить данными корневой патч
 	FillRootPatch();
 
@@ -68,7 +72,7 @@ void VisiblePatchArray::Process()
 		m_vTemp0.swap( m_vTemp1 );
 	}
 
-	std::cout << m_vVisible.size() << " ";
+	//std::cout << m_vVisible.size() << " ";
 }
 
 bool VisiblePatchArray::PatchVisible( const dataPatch &patch )
@@ -80,43 +84,77 @@ bool VisiblePatchArray::PatchVisible( const dataPatch &patch )
 
 void VisiblePatchArray::ProcessPatch( const dataPatch &patch )
 {
-	//разбить на следующих уровень
-	if ( ( patch.m_iSize == 512 ) && ( DistAppropriate( patch ) ) )
+	//разбить на следующих уровень?
+	if ( !DistAppropriate( patch ) )
 	{
-		//это последний уровень, записать в список патчей на отображение
-		m_vVisible.push_back( patch );
-		return;
+		dataPatch downPatch;
+		downPatch.m_iX = patch.m_iX;
+		downPatch.m_iY = patch.m_iY;
+		downPatch.m_iSize = patch.m_iSize / 2;
+		m_vTemp1.push_back( downPatch );	//1 патч
+
+		downPatch.m_iX = patch.m_iX + downPatch.m_iSize;
+		m_vTemp1.push_back( downPatch );	//2 патч
+
+		downPatch.m_iY = patch.m_iY + downPatch.m_iSize;
+		m_vTemp1.push_back( downPatch );	//3 патч
+
+		downPatch.m_iX = patch.m_iX;
+		m_vTemp1.push_back( downPatch );	//4 патч
 	}
-
-	if ( patch.m_iSize == 512 )
-		return;
-
-	dataPatch downPatch;
-	downPatch.m_iX = patch.m_iX;
-	downPatch.m_iY = patch.m_iY;
-	downPatch.m_iSize = patch.m_iSize / 2;
-	m_vTemp1.push_back( downPatch );	//1 патч
-
-	downPatch.m_iX = patch.m_iX + downPatch.m_iSize;
-	m_vTemp1.push_back( downPatch );	//2 патч
-
-	downPatch.m_iY = patch.m_iY + downPatch.m_iSize;
-	m_vTemp1.push_back( downPatch );	//3 патч
-
-	downPatch.m_iX = patch.m_iX;
-	m_vTemp1.push_back( downPatch );	//4 патч
 }
 
 //проверка расстояния
 bool VisiblePatchArray::DistAppropriate( const dataPatch &patch )
 {
-	osg::Vec3 vec_dist( patch.m_iX + patch.m_iSize * 0.5 - m_Pos.x() , 
-		patch.m_iY + patch.m_iSize * 0.5 - m_Pos.y(), -m_Pos.z() );
+	//патч такого размера надо еще разбивать на потомков
+	//if ( patch.m_iSize > 32768 )
+	//	return false;
 
-	float dist = vec_dist.x() * vec_dist.x() + vec_dist.y() * vec_dist.y() + vec_dist.z() * vec_dist.z();
+//////////////////////////////////////////////////////////////////////////
+	std::vector< dataPatch > vTemp;
 
-	if ( dist <= 512 * 512 )
-		return true;
+	dataPatch downPatch;
+	downPatch.m_iX = patch.m_iX;
+	downPatch.m_iY = patch.m_iY;
+	downPatch.m_iSize = patch.m_iSize / 2;
+	vTemp.push_back( downPatch );	//1 патч
 
-	return false;
+	downPatch.m_iX = patch.m_iX + downPatch.m_iSize;
+	vTemp.push_back( downPatch );	//2 патч
+
+	downPatch.m_iY = patch.m_iY + downPatch.m_iSize;
+	vTemp.push_back( downPatch );	//3 патч
+
+	downPatch.m_iX = patch.m_iX;
+	vTemp.push_back( downPatch );	//4 патч
+//////////////////////////////////////////////////////////////////////////
+
+	for ( int i = 0 ; i < 4 ; ++i )
+	{
+		osg::Vec3 vec_dist( vTemp[ i ].m_iX + vTemp[ i ].m_iSize * 0.5 - m_Pos.x() , 
+			vTemp[ i ].m_iY + vTemp[ i ].m_iSize * 0.5 - m_Pos.y(), -m_Pos.z() );
+
+		double dist = sqrt( vec_dist.x() * vec_dist.x() + vec_dist.y() * vec_dist.y() + vec_dist.z() * vec_dist.z() );
+
+		double radius = vTemp[ i ].m_iSize * 2.0;
+
+		if ( dist < radius )
+		{
+			if ( patch.m_iSize == 512 )
+			{
+				//это последний уровень, записать в список патчей на отображение
+				m_vVisible.push_back( patch );
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	m_vVisible.push_back( patch );
+
+	return true;
 }
