@@ -30,15 +30,17 @@ void TerrainNode::InitTerrainNode()
 	//задать класс вычисления области видимости
 	m_rootNode->setCullCallback( new TerrainCullCallback );
 
-	m_TerrainPatch = new TerrainPatchNode;
+	//m_TerrainPatch = new TerrainPatchNode;
+	m_TerrainSimplePatch = new TerrainSimplePatchNode;
 
 	//добавить узел ратчей
-	m_rootNode->addChild( m_TerrainPatch->getRootNode().get() );
+	//m_rootNode->addChild( m_TerrainPatch->getRootNode().get() );
+	m_rootNode->addChild( m_TerrainSimplePatch->getRootNode().get() );
 
 	//добавить режим отображения 
 	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
 
 	osg::PolygonMode* polymode = new osg::PolygonMode;
 	polymode->setMode( osg::PolygonMode::FRONT_AND_BACK , osg::PolygonMode::LINE );
-	state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
+	//state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
 }
