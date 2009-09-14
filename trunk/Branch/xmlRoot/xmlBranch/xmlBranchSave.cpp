@@ -25,21 +25,50 @@ TiXmlElement* xmlBranchSave::GetXmlData()
 	pBranch = new TiXmlElement( m_BranchNames.m_sBranch.c_str() );
 
 	//значение альфа теста
-	pBranch->SetAttribute( m_BranchNames.m_sAlfaTest.c_str() , _data.m_fAlphaTestValue );
-
-	//значение альфа теста
 	pBranch->SetAttribute( m_BranchNames.m_sTexture.c_str() , _data.m_sTexture.c_str() );
 
-	//заполнить данными о координатах
-	FillVertex( _data  ,  pBranch );
-
-	//заполнить индексами
-	FillIndexes( _data  ,  pBranch );
+	//формирование записей LOD'ов
+	FillLODs( _data  , pBranch );
 
 	return pBranch;
 }
 
-void xmlBranchSave::FillVertex( const dataBranch &_data  , TiXmlElement* root )
+void xmlBranchSave::FillLODs( const dataBranch &_data  , TiXmlElement* root )
+{
+	//формирование записей LOD'ов
+
+	//создать запись для вершин
+	TiXmlElement *pLods = NULL;
+	pLods = new TiXmlElement( m_BranchNames.m_sLODs.c_str() );
+
+	//количество LOD's
+	pLods->SetAttribute( m_BranchNames.m_sNum.c_str() , _data.m_vLOD.size() );
+
+	for( int i = 0 ; i < _data.m_vLOD.size() ; ++i )
+	{
+		//создать запись для вершин
+		TiXmlElement *pLod = NULL;
+		pLod = new TiXmlElement( m_BranchNames.m_sLOD.c_str() );
+
+		//номер LOD's
+		pLod->SetAttribute( m_BranchNames.m_sNum.c_str() , i );
+
+		//номер LOD's
+		pLod->SetDoubleAttribute( m_BranchNames.m_sAlfaTest.c_str() , _data .m_vLOD[ i ].m_fAlphaTestValue );
+
+		//заполнить данными о координатах
+		FillVertex( _data .m_vLOD[ i ] ,  pLod );
+
+		//заполнить индексами
+		FillIndexes( _data .m_vLOD[ i ]  ,  pLod );
+
+		pLods->LinkEndChild( pLod );
+	}
+
+	root->LinkEndChild( pLods );
+}
+
+void xmlBranchSave::FillVertex( const dataLOD &_data  , TiXmlElement* root )
 {
 	//перебрать все шаблоны слоев
 
@@ -75,7 +104,7 @@ void xmlBranchSave::FillVertex( const dataBranch &_data  , TiXmlElement* root )
 	root->LinkEndChild( pVertexs );
 }
 
-void xmlBranchSave::FillIndexes( const dataBranch &_data  , TiXmlElement* root )
+void xmlBranchSave::FillIndexes( const dataLOD &_data  , TiXmlElement* root )
 {
 	//заполнить индексами
 

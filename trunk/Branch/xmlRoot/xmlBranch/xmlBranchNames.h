@@ -8,6 +8,8 @@ struct xmlBranchNames
 	xmlBranchNames() : m_sBranch( "branch" )
 		, m_sAlfaTest( "alfa" )
 		, m_sTexture( "texture" )
+		, m_sLODs( "LODs" )
+		, m_sLOD( "LOD" )
 		, m_sVertexs( "vertexs" )
 		, m_sNum( "num" )
 		, m_sPoint( "point" )
@@ -33,6 +35,8 @@ struct xmlBranchNames
 	std::string m_sBranch;
 	std::string m_sAlfaTest;
 	std::string m_sTexture;
+	std::string m_sLODs;
+	std::string m_sLOD;
 	std::string m_sVertexs;
 	std::string m_sNum;
 	std::string m_sPoint;
