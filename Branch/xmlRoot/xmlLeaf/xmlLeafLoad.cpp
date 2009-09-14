@@ -2,7 +2,7 @@
 
 #include "xmlLeafNames.h"
 
-xmlLeafLoad::xmlLeafLoad()
+xmlLeafLoad::xmlLeafLoad() : m_iLOD( 0 )
 {
 
 }
@@ -40,40 +40,14 @@ void xmlLeafLoad::DecodeLeaf( TiXmlElement* root )
 		//получить указатель на первый атрибут элемента
 		TiXmlAttribute* _attr = pLeaf->FirstAttribute();
 
-		//декодировать параметр для альфа теста
-		DecodeAttrAlfa( _attr );
-
 		//извлечь данные о текстурах
 		DecodeTextures( pLeaf );
 
-		//извлечь данные о вершинах
-		DecodeVertexs( pLeaf );
-
 		//извлечь данные о влиянии ветра
 		DecodeWind( pLeaf );
-	}
-}
 
-void xmlLeafLoad::DecodeAttrAlfa( TiXmlAttribute* _attr )
-{
-	//декодировать параметр для альфа теста
-	while ( _attr )
-	{
-		//имя атрибута
-		const char *_name = _attr->Name();
-		std::string _sAttr( _name );
-
-		//извлекаем значения
-		if ( _sAttr == m_LeafNames.m_sAlfaTest )
-		{
-			double alfa = 0.0;
-			_attr->QueryDoubleValue( &alfa );
-
-			m_pDataLeaf->m_fAlphaTestValue = alfa;
-		}
-
-		//переходим к следующему атрибуту
-		_attr = _attr->Next();
+		//декодировать данные LOD'ов
+		DecodeLODs( pLeaf );
 	}
 }
 
@@ -136,6 +110,104 @@ void xmlLeafLoad::DecodeAttrTexture( TiXmlAttribute* _attr )
 		//переходим к следующему атрибуту
 		_attr = _attr->Next();
 	}
+}
+
+void xmlLeafLoad::DecodeLODs( TiXmlElement* root )
+{
+	//декодировать данные LOD'ов
+
+	//извлечение информации из узла XML
+	TiXmlNode* node = root->FirstChild( m_LeafNames.m_sLODs.c_str() );
+
+	if ( node )
+	{
+		TiXmlElement* pLODs = node->ToElement();
+
+		//извлечь имя элемента
+		const char *_name = pLODs->Value();
+		std::string _sElem( _name );
+
+		//получить указатель на первый атрибут элемента
+		TiXmlAttribute* _attr = pLODs->FirstAttribute();
+
+		//узнать количество LOD'ов
+		DecodeAttrNumLods( _attr );
+
+		//декодировать данные LOD'а
+		DecodeLOD( pLODs );
+	}
+}
+
+void xmlLeafLoad::DecodeAttrNumLods( TiXmlAttribute* _attr )
+{
+	//узнать количество LOD'ов
+	while ( _attr )
+	{
+		//имя атрибута
+		const char *_name = _attr->Name();
+		std::string _sAttr( _name );
+
+		//извлекаем значения
+		if ( _sAttr == m_LeafNames.m_sNum )
+		{
+			int iNum = 0;
+			_attr->QueryIntValue( &iNum );
+
+			m_pDataLeaf->m_vLfLOD.resize( iNum );
+		}
+
+		//переходим к следующему атрибуту
+		_attr = _attr->Next();
+	}
+}
+
+void xmlLeafLoad::DecodeLOD( TiXmlElement* root )
+{
+	//декодировать данные LOD'а
+
+	for ( TiXmlElement *pLOD = root->FirstChildElement() ; pLOD ; pLOD = pLOD->NextSiblingElement() )
+	{
+		//извлечь имя элемента
+		const char *_name = pLOD->Value();
+		std::string _sElem( _name );
+
+		if ( _sElem == m_LeafNames.m_sLOD )
+		{
+			//получить указатель на первый атрибут элемента
+			TiXmlAttribute* _attr = pLOD->FirstAttribute();
+
+			//узнать текущий номер LOD'а
+			DecodeAttrLod( _attr );
+
+			//извлечь данные о вершинах
+			DecodeVertexs( pLOD );
+		}
+	}
+}
+
+void xmlLeafLoad::DecodeAttrLod( TiXmlAttribute* _attr )
+{
+	double alfa = 0.0;
+
+	//узнать текущий номер LOD'а
+	while ( _attr )
+	{
+		//имя атрибута
+		const char *_name = _attr->Name();
+		std::string _sAttr( _name );
+
+		//извлекаем значения
+		if ( _sAttr == m_LeafNames.m_sNum )
+			_attr->QueryIntValue( &m_iLOD );
+		else
+			if ( _sAttr == m_LeafNames.m_sAlfaTest )
+				_attr->QueryDoubleValue( &alfa );
+
+		//переходим к следующему атрибуту
+		_attr = _attr->Next();
+	}
+
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_fAlphaTestValue = alfa;
 }
 
 void xmlLeafLoad::DecodeVertexs( TiXmlElement* root )
@@ -238,22 +310,22 @@ void xmlLeafLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 		_attr = _attr->Next();
 	}
 
-	m_pDataLeaf->m_vCoords.push_back( x );
-	m_pDataLeaf->m_vCoords.push_back( y );
-	m_pDataLeaf->m_vCoords.push_back( z );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( x );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( y );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( z );
 
-	m_pDataLeaf->m_vNormals.push_back( nx );
-	m_pDataLeaf->m_vNormals.push_back( ny );
-	m_pDataLeaf->m_vNormals.push_back( nz );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vNormals.push_back( nx );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vNormals.push_back( ny );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vNormals.push_back( nz );
 
-	m_pDataLeaf->m_vTexCoords0.push_back( s0 );
-	m_pDataLeaf->m_vTexCoords0.push_back( t0 );
-	m_pDataLeaf->m_vTexCoords0.push_back( p0 );
-	m_pDataLeaf->m_vTexCoords0.push_back( q0 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords0.push_back( s0 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords0.push_back( t0 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords0.push_back( p0 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords0.push_back( q0 );
 
-	m_pDataLeaf->m_vTexCoords1.push_back( s1 );
-	m_pDataLeaf->m_vTexCoords1.push_back( t1 );
-	m_pDataLeaf->m_vTexCoords1.push_back( p1 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( s1 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( t1 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( p1 );
 }
 
 void xmlLeafLoad::DecodeWind( TiXmlElement* root )

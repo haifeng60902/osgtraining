@@ -17,8 +17,11 @@ private:
 	//заполнить данными о текстурах
 	void FillTextures( const dataLeaf &_data  , TiXmlElement* root );
 
+	//формирование записей LOD'ов
+	void FillLODs( const dataLeaf &_data , TiXmlElement* root );
+
 	//заполнить данными о координатах
-	void FillVertex( const dataLeaf &_data  , TiXmlElement* root );
+	void FillVertex( const dataLfLOD &_data  , TiXmlElement* root );
 
 	//заполнить данными о ветре
 	void FillWind( TiXmlElement* root );

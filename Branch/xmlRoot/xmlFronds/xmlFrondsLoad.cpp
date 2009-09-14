@@ -2,7 +2,7 @@
 
 #include "xmlFrondsNames.h"
 
-xmlFrondsLoad::xmlFrondsLoad()
+xmlFrondsLoad::xmlFrondsLoad() : m_iLOD( 0 )
 {
 
 }
@@ -40,40 +40,11 @@ void xmlFrondsLoad::DecodeFronds( TiXmlElement* root )
 		//получить указатель на первый атрибут элемента
 		TiXmlAttribute* _attr = pFronds->FirstAttribute();
 
-		//декодировать параметр для альфа теста
-		DecodeAttrAlfa( _attr );
-
 		//извлечь данные о текстурах
 		DecodeTextures( pFronds );
 
-		//извлечь данные о вершинах
-		DecodeVertexs( pFronds );
-
-		//извлечь данные о индексах
-		DecodeStrips( pFronds );
-	}
-}
-
-void xmlFrondsLoad::DecodeAttrAlfa( TiXmlAttribute* _attr )
-{
-	//декодировать параметр для альфа теста
-	while ( _attr )
-	{
-		//имя атрибута
-		const char *_name = _attr->Name();
-		std::string _sAttr( _name );
-
-		//извлекаем значения
-		if ( _sAttr == m_FrondsNames.m_sAlfaTest )
-		{
-			double alfa = 0.0;
-			_attr->QueryDoubleValue( &alfa );
-
-			m_pDataFronds->m_fAlphaTestValue = alfa;
-		}
-
-		//переходим к следующему атрибуту
-		_attr = _attr->Next();
+		//декодировать данные LOD'ов
+		DecodeLODs( pFronds );
 	}
 }
 
@@ -136,6 +107,107 @@ void xmlFrondsLoad::DecodeAttrTexture( TiXmlAttribute* _attr )
 		//переходим к следующему атрибуту
 		_attr = _attr->Next();
 	}
+}
+
+void xmlFrondsLoad::DecodeLODs( TiXmlElement* root )
+{
+	//декодировать данные LOD'ов
+	
+	//извлечение информации из узла XML
+	TiXmlNode* node = root->FirstChild( m_FrondsNames.m_sLODs.c_str() );
+
+	if ( node )
+	{
+		TiXmlElement* pLODs = node->ToElement();
+
+		//извлечь имя элемента
+		const char *_name = pLODs->Value();
+		std::string _sElem( _name );
+
+		//получить указатель на первый атрибут элемента
+		TiXmlAttribute* _attr = pLODs->FirstAttribute();
+
+		//узнать количество LOD'ов
+		DecodeAttrNumLods( _attr );
+
+		//декодировать данные LOD'а
+		DecodeLOD( pLODs );
+	}
+}
+
+void xmlFrondsLoad::DecodeAttrNumLods( TiXmlAttribute* _attr )
+{
+	//узнать количество LOD'ов
+	while ( _attr )
+	{
+		//имя атрибута
+		const char *_name = _attr->Name();
+		std::string _sAttr( _name );
+
+		//извлекаем значения
+		if ( _sAttr == m_FrondsNames.m_sNum )
+		{
+			int iNum = 0;
+			_attr->QueryIntValue( &iNum );
+
+			m_pDataFronds->m_vFrLOD.resize( iNum );
+		}
+
+		//переходим к следующему атрибуту
+		_attr = _attr->Next();
+	}
+}
+
+void xmlFrondsLoad::DecodeLOD( TiXmlElement* root )
+{
+	//декодировать данные LOD'а
+
+	for ( TiXmlElement *pLOD = root->FirstChildElement() ; pLOD ; pLOD = pLOD->NextSiblingElement() )
+	{
+		//извлечь имя элемента
+		const char *_name = pLOD->Value();
+		std::string _sElem( _name );
+
+		if ( _sElem == m_FrondsNames.m_sLOD )
+		{
+			//получить указатель на первый атрибут элемента
+			TiXmlAttribute* _attr = pLOD->FirstAttribute();
+
+			//узнать текущий номер LOD'а
+			DecodeAttrLod( _attr );
+
+			//извлечь данные о вершинах
+			DecodeVertexs( pLOD );
+
+			//извлечь данные о индексах
+			DecodeStrips( pLOD );
+		}
+	}
+}
+
+void xmlFrondsLoad::DecodeAttrLod( TiXmlAttribute* _attr )
+{
+	double alfa = 0.0;
+
+	//узнать текущий номер LOD'а
+	while ( _attr )
+	{
+		//имя атрибута
+		const char *_name = _attr->Name();
+		std::string _sAttr( _name );
+
+		//извлекаем значения
+		if ( _sAttr == m_FrondsNames.m_sNum )
+			_attr->QueryIntValue( &m_iLOD );
+		else
+			if ( _sAttr == m_FrondsNames.m_sAlfaTest )
+				_attr->QueryDoubleValue( &alfa );
+
+		//переходим к следующему атрибуту
+		_attr = _attr->Next();
+	}
+
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_fAlphaTestValue = alfa;
 }
 
 void xmlFrondsLoad::DecodeVertexs( TiXmlElement* root )
@@ -228,18 +300,18 @@ void xmlFrondsLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 		_attr = _attr->Next();
 	}
 
-	m_pDataFronds->m_vCoords.push_back( x );
-	m_pDataFronds->m_vCoords.push_back( y );
-	m_pDataFronds->m_vCoords.push_back( z );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( x );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( y );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( z );
 
-	m_pDataFronds->m_vNormals.push_back( nx );
-	m_pDataFronds->m_vNormals.push_back( ny );
-	m_pDataFronds->m_vNormals.push_back( nz );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vNormals.push_back( nx );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vNormals.push_back( ny );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vNormals.push_back( nz );
 
-	m_pDataFronds->m_vTexCoords0.push_back( s );
-	m_pDataFronds->m_vTexCoords0.push_back( t );
-	m_pDataFronds->m_vTexCoords0.push_back( p );
-	m_pDataFronds->m_vTexCoords0.push_back( q );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vTexCoords0.push_back( s );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vTexCoords0.push_back( t );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vTexCoords0.push_back( p );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vTexCoords0.push_back( q );
 }
 
 void xmlFrondsLoad::DecodeStrips( TiXmlElement* root )
@@ -283,7 +355,7 @@ void xmlFrondsLoad::DecodeAttrNumStrips( TiXmlAttribute* _attr )
 		{
 			int num;
 			_attr->QueryIntValue( &num );
-			m_pDataFronds->m_Strips.resize( num );
+			m_pDataFronds->m_vFrLOD[ m_iLOD ].m_Strips.resize( num );
 		}
 
 		//переходим к следующему атрибуту
@@ -329,7 +401,7 @@ void xmlFrondsLoad::DecodeInd( TiXmlElement* root , int ind )
 
 			//извлечь очередной индекс
 			int i = DecodeAttrInd( _attr );
-			m_pDataFronds->m_Strips[ ind ].push_back( i );
+			m_pDataFronds->m_vFrLOD[ m_iLOD ].m_Strips[ ind ].push_back( i );
 		}
 	}
 }

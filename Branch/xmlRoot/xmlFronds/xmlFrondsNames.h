@@ -8,6 +8,8 @@ struct xmlFrondsNames
 	xmlFrondsNames() : m_sFronds( "fronds" )
 		, m_sAlfaTest( "alfa" )
 		, m_sTextures( "textures" )
+		, m_sLODs( "LODs" )
+		, m_sLOD( "LOD" ) 
 		, m_sTexture( "texture" )
 		, m_sVertexs( "vertexs" )
 		, m_sNum( "num" )
@@ -35,6 +37,8 @@ struct xmlFrondsNames
 	std::string m_sAlfaTest;
 	std::string m_sTextures;
 	std::string m_sTexture;
+	std::string m_sLODs;
+	std::string m_sLOD;
 	std::string m_sVertexs;
 	std::string m_sNum;
 	std::string m_sPoint;

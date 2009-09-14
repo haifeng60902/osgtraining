@@ -24,19 +24,56 @@ TiXmlElement* xmlFrondsSave::GetXmlData()
 	TiXmlElement *pFronds = NULL;
 	pFronds = new TiXmlElement( m_FrondsNames.m_sFronds.c_str() );
 
-	//значение альфа теста
-	pFronds->SetDoubleAttribute( m_FrondsNames.m_sAlfaTest.c_str() , _data.m_fAlphaTestValue );
-
 	//заполнить данными о текстурах
 	FillTextures( _data  , pFronds );
 
+	//формирование записей LOD'ов
+	FillLODs( _data , pFronds );
+
+	/*
 	//заполнить данными о координатах
 	FillVertex( _data  ,  pFronds );
 
 	//заполнить индексами
 	FillIndexes( _data  ,  pFronds );
+	*/
 
 	return pFronds;
+}
+
+void xmlFrondsSave::FillLODs( const dataFronds &_data  , TiXmlElement* root )
+{
+	//формирование записей LOD'ов
+
+	TiXmlElement *pLods = NULL;
+	pLods = new TiXmlElement( m_FrondsNames.m_sLODs.c_str() );
+
+	//количество LOD's
+	pLods->SetAttribute( m_FrondsNames.m_sNum.c_str() , _data.m_vFrLOD.size() );
+
+	for( int i = 0 ; i < _data.m_vFrLOD.size() ; ++i )
+	{
+		//создать запись для вершин
+		TiXmlElement *pLod = NULL;
+		pLod = new TiXmlElement( m_FrondsNames.m_sLOD.c_str() );
+
+		//номер LOD's
+		pLod->SetAttribute( m_FrondsNames.m_sNum.c_str() , i );
+
+		//номер LOD's
+		pLod->SetDoubleAttribute( m_FrondsNames.m_sAlfaTest.c_str() , _data .m_vFrLOD[ i ].m_fAlphaTestValue );
+
+		//заполнить данными о координатах
+		FillVertex( _data .m_vFrLOD[ i ] ,  pLod );
+
+		//заполнить индексами
+		FillIndexes( _data .m_vFrLOD[ i ]  ,  pLod );
+
+		pLods->LinkEndChild( pLod );
+	}
+
+	root->LinkEndChild( pLods );
+
 }
 
 void xmlFrondsSave::FillTextures( const dataFronds &_data  , TiXmlElement* root )
@@ -64,7 +101,7 @@ void xmlFrondsSave::FillTextures( const dataFronds &_data  , TiXmlElement* root 
 	root->LinkEndChild( pTextures );
 }
 
-void xmlFrondsSave::FillVertex( const dataFronds &_data  , TiXmlElement* root )
+void xmlFrondsSave::FillVertex( const dataFrLOD &_data  , TiXmlElement* root )
 {
 	//создать запись для вершин
 	TiXmlElement *pVertexs = NULL;
@@ -98,7 +135,7 @@ void xmlFrondsSave::FillVertex( const dataFronds &_data  , TiXmlElement* root )
 	root->LinkEndChild( pVertexs );
 }
 
-void xmlFrondsSave::FillIndexes( const dataFronds &_data  , TiXmlElement* root )
+void xmlFrondsSave::FillIndexes( const dataFrLOD &_data  , TiXmlElement* root )
 {
 	//заполнить индексами
 
