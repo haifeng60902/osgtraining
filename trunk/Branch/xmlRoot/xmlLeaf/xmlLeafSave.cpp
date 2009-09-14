@@ -24,19 +24,48 @@ TiXmlElement* xmlLeafSave::GetXmlData()
 	TiXmlElement *pLeaf = NULL;
 	pLeaf = new TiXmlElement( m_LeafNames.m_sLeaf.c_str() );
 
-	//значение альфа теста
-	pLeaf->SetDoubleAttribute( m_LeafNames.m_sAlfaTest.c_str() , _data.m_fAlphaTestValue );
-
 	//заполнить данными о текстурах
 	FillTextures( _data  , pLeaf );
-
-	//заполнить данными о координатах
-	FillVertex( _data  ,  pLeaf );
 
 	//заполнить данными о ветре
 	FillWind( pLeaf );
 
+	//формирование записей LOD'ов
+	FillLODs( _data , pLeaf );
+
 	return pLeaf;
+}
+
+void xmlLeafSave::FillLODs( const dataLeaf &_data  , TiXmlElement* root )
+{
+	//формирование записей LOD'ов
+
+	TiXmlElement *pLods = NULL;
+	pLods = new TiXmlElement( m_LeafNames.m_sLODs.c_str() );
+
+	//количество LOD's
+	pLods->SetAttribute( m_LeafNames.m_sNum.c_str() , _data.m_vLfLOD.size() );
+
+	for( int i = 0 ; i < _data.m_vLfLOD.size() ; ++i )
+	{
+		//создать запись для вершин
+		TiXmlElement *pLod = NULL;
+		pLod = new TiXmlElement( m_LeafNames.m_sLOD.c_str() );
+
+		//номер LOD's
+		pLod->SetAttribute( m_LeafNames.m_sNum.c_str() , i );
+
+		//номер LOD's
+		pLod->SetDoubleAttribute( m_LeafNames.m_sAlfaTest.c_str() , _data .m_vLfLOD[ i ].m_fAlphaTestValue );
+
+		//заполнить данными о координатах
+		FillVertex( _data .m_vLfLOD[ i ] ,  pLod );
+
+		pLods->LinkEndChild( pLod );
+	}
+
+	root->LinkEndChild( pLods );
+
 }
 
 void xmlLeafSave::FillTextures( const dataLeaf &_data  , TiXmlElement* root )
@@ -64,7 +93,7 @@ void xmlLeafSave::FillTextures( const dataLeaf &_data  , TiXmlElement* root )
 	root->LinkEndChild( pTextures );
 }
 
-void xmlLeafSave::FillVertex( const dataLeaf &_data  , TiXmlElement* root )
+void xmlLeafSave::FillVertex( const dataLfLOD &_data  , TiXmlElement* root )
 {
 	//создать запись для вершин
 	TiXmlElement *pVertexs = NULL;

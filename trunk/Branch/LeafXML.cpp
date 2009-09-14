@@ -11,6 +11,8 @@
 #include <osg/AlphaFunc>
 #include <osg/CullFace>
 
+#define NUM_LOD 0
+
 LeafXML::LeafXML()
 {
 	// the root of our scenegraph.
@@ -56,27 +58,27 @@ void LeafXML::InitLeafGeode()
 	dataLeaf &_data = xmlRoot::Instance().GetDataLeaf();
 
 	//копируем координаты
-	for ( int i = 0 ; i < _data.m_vCoords.size() / 3 ; ++i )
+	for ( int i = 0 ; i < _data.m_vLfLOD[ NUM_LOD ].m_vCoords.size() / 3 ; ++i )
 	{
-		osg::Vec3 coord( _data.m_vCoords[ i * 3 ] , 
-			_data.m_vCoords[ i * 3 + 1 ] ,
-			_data.m_vCoords[ i * 3 + 2 ] );
+		osg::Vec3 coord( _data.m_vLfLOD[ NUM_LOD ].m_vCoords[ i * 3 ] , 
+			_data.m_vLfLOD[ NUM_LOD ].m_vCoords[ i * 3 + 1 ] ,
+			_data.m_vLfLOD[ NUM_LOD ].m_vCoords[ i * 3 + 2 ] );
 		v->push_back( coord );
 
-		osg::Vec3 normal( _data.m_vNormals[ i * 3 ] , 
-			_data.m_vNormals[ i * 3 + 1 ] ,
-			_data.m_vNormals[ i * 3 + 2 ] );
+		osg::Vec3 normal( _data.m_vLfLOD[ NUM_LOD ].m_vNormals[ i * 3 ] , 
+			_data.m_vLfLOD[ NUM_LOD ].m_vNormals[ i * 3 + 1 ] ,
+			_data.m_vLfLOD[ NUM_LOD ].m_vNormals[ i * 3 + 2 ] );
 		n->push_back( normal );
 
-		osg::Vec4 tex0( _data.m_vTexCoords0[ i * 4 ] ,
-			_data.m_vTexCoords0[ i * 4 + 1 ] ,
-			_data.m_vTexCoords0[ i * 4 + 2 ] ,
-			_data.m_vTexCoords0[ i * 4 + 3 ] );
+		osg::Vec4 tex0( _data.m_vLfLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 ] ,
+			_data.m_vLfLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 1 ] ,
+			_data.m_vLfLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 2 ] ,
+			_data.m_vLfLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 3 ] );
 		tc0->push_back( tex0 );
 
-		osg::Vec3 tex1( _data.m_vTexCoords1[ i * 3 ] ,
-			_data.m_vTexCoords1[ i * 3 + 1 ] ,
-			_data.m_vTexCoords1[ i * 3 + 2 ] );
+		osg::Vec3 tex1( _data.m_vLfLOD[ NUM_LOD ].m_vTexCoords1[ i * 3 ] ,
+			_data.m_vLfLOD[ NUM_LOD ].m_vTexCoords1[ i * 3 + 1 ] ,
+			_data.m_vLfLOD[ NUM_LOD ].m_vTexCoords1[ i * 3 + 2 ] );
 		tc1->push_back( tex1 );
 	}
 
@@ -87,7 +89,7 @@ void LeafXML::InitLeafGeode()
 	geom->setTexCoordArray( 1, tc1.get() );
 
 	geom->addPrimitiveSet( new osg::DrawArrays(
-		osg::PrimitiveSet::QUADS , 0 , _data.m_vTexCoords0.size() / 4 ) );
+		osg::PrimitiveSet::QUADS , 0 , _data.m_vLfLOD[ NUM_LOD ].m_vTexCoords0.size() / 4 ) );
 
 	m_leafGeode->addDrawable( geom.get() );
 }
@@ -135,7 +137,7 @@ void LeafXML::SetupAlfaFunc()
 	//получить ссылку на данные листвы
 	dataLeaf &_data = xmlRoot::Instance().GetDataLeaf();
 
-	if ( _data.m_fAlphaTestValue > 0.0f)
+	if ( _data.m_vLfLOD[ NUM_LOD ].m_fAlphaTestValue > 0.0f)
 	{
 		//настройка атрибутов состояния LOD ствола
 		osg::StateSet* state = m_leafGeode->getOrCreateStateSet();
@@ -145,7 +147,7 @@ void LeafXML::SetupAlfaFunc()
 
 		// Turn on alpha testing
 		osg::AlphaFunc* af = new osg::AlphaFunc(
-			osg::AlphaFunc::GREATER, _data.m_fAlphaTestValue );
+			osg::AlphaFunc::GREATER, _data.m_vLfLOD[ NUM_LOD ].m_fAlphaTestValue );
 		state->setAttributeAndModes( af );
 	}
 }

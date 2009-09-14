@@ -19,9 +19,6 @@ private:
 	//извлечь данные о листве
 	void DecodeLeaf( TiXmlElement* root );
 
-	//декодировать параметр для альфа теста
-	void DecodeAttrAlfa( TiXmlAttribute* _attr );
-
 	//извлечь данные о текстурах
 	void DecodeTextures( TiXmlElement* root );
 
@@ -30,6 +27,18 @@ private:
 
 	//декодировать атрибут имя текстуры
 	void DecodeAttrTexture( TiXmlAttribute* _attr );
+
+	//декодировать данные LOD'ов
+	void DecodeLODs( TiXmlElement* root );
+
+	//узнать количество LOD'ов
+	void DecodeAttrNumLods( TiXmlAttribute* _attr );
+
+	//декодировать данные LOD'а
+	void DecodeLOD( TiXmlElement* root );
+
+	//узнать текущий номер LOD'а
+	void DecodeAttrLod( TiXmlAttribute* _attr );
 
 	//извлечь данные о вершинах
 	void DecodeVertexs( TiXmlElement* root );
@@ -47,6 +56,9 @@ private:
 	void DecodeAttrWind( TiXmlAttribute* _attr );
 
 	dataLeaf *m_pDataLeaf;
+
+	//номер текущего обрабатываемого LOD'а
+	int m_iLOD;
 };
 
 #endif	//_XML_LEAF_LOAD_H_

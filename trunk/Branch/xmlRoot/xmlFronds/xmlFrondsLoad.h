@@ -31,6 +31,18 @@ private:
 	//декодировать атрибут имя текстуры
 	void DecodeAttrTexture( TiXmlAttribute* _attr );
 
+	//декодировать данные LOD'ов
+	void DecodeLODs( TiXmlElement* root );
+
+	//узнать количество LOD'ов
+	void DecodeAttrNumLods( TiXmlAttribute* _attr );
+
+	//декодировать данные LOD'а
+	void DecodeLOD( TiXmlElement* root );
+
+	//узнать текущий номер LOD'а
+	void DecodeAttrLod( TiXmlAttribute* _attr );
+
 	//извлечь данные о вершинах
 	void DecodeVertexs( TiXmlElement* root );
 
@@ -57,6 +69,8 @@ private:
 
 	dataFronds *m_pDataFronds;
 
+	//номер текущего обрабатываемого LOD'а
+	int m_iLOD;
 };
 
 #endif	//_XML_BRANCH_LOAD_H_

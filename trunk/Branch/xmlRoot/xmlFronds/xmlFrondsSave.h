@@ -14,14 +14,17 @@ public:
 	TiXmlElement* GetXmlData();
 
 private:
+	//формирование записей LOD'ов
+	void FillLODs( const dataFronds &_data , TiXmlElement* root );
+
 	//заполнить данными о текстурах
 	void FillTextures( const dataFronds &_data  , TiXmlElement* root );
 
 	//заполнить данными о координатах
-	void FillVertex( const dataFronds &_data  , TiXmlElement* root );
+	void FillVertex( const dataFrLOD &_data  , TiXmlElement* root );
 
 	//заполнить индексами
-	void FillIndexes( const dataFronds &_data  , TiXmlElement* root );
+	void FillIndexes( const dataFrLOD &_data  , TiXmlElement* root );
 
 };
 
