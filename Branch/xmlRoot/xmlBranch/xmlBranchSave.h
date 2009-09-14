@@ -15,11 +15,14 @@ public:
 	TiXmlElement* GetXmlData();
 
 private:
+	//формирование записей LOD'ов
+	void FillLODs( const dataBranch &_data  , TiXmlElement* root );
+
 	//заполнить данными о координатах
-	void FillVertex( const dataBranch &_data  , TiXmlElement* root );
+	void FillVertex( const dataLOD &_data  , TiXmlElement* root );
 
 	//заполнить индексами
-	void FillIndexes( const dataBranch &_data  , TiXmlElement* root );
+	void FillIndexes( const dataLOD &_data  , TiXmlElement* root );
 
 };
 

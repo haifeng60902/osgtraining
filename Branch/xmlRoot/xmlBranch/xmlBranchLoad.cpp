@@ -2,7 +2,7 @@
 
 #include "xmlBranchNames.h"
 
-xmlBranchLoad::xmlBranchLoad()
+xmlBranchLoad::xmlBranchLoad() : m_iLOD( 0 )
 {
 
 }
@@ -41,19 +41,62 @@ void xmlBranchLoad::DecodeBranch( TiXmlElement* root )
 		TiXmlAttribute* _attr = pBranch->FirstAttribute();
 
 		//декодировать параметр для альфа теста
-		DecodeAttrAlfa( _attr );
+		//DecodeAttrAlfa( _attr );
 
-		//извлечь данные о вершинах
-		DecodeVertexs( pBranch );
+		//декодировать параметр с именем текстуры
+		DecodeAttrTexture( _attr );
 
-		//извлечь данные о индексах
-		DecodeStrips( pBranch );
+		//декодировать данные LOD'ов
+		DecodeLODs( pBranch );
 	}
 }
 
-void xmlBranchLoad::DecodeAttrAlfa( TiXmlAttribute* _attr )
+void xmlBranchLoad::DecodeAttrTexture( TiXmlAttribute* _attr )
 {
-	//декодировать параметр для альфа теста
+	//декодировать параметр с именем текстуры
+	while ( _attr )
+	{
+		//имя атрибута
+		const char *_name = _attr->Name();
+		std::string _sAttr( _name );
+
+		if ( _sAttr == m_BranchNames.m_sTexture )
+			m_pDataBranch->m_sTexture = _attr->Value();
+
+		//переходим к следующему атрибуту
+		_attr = _attr->Next();
+	}
+}
+
+void xmlBranchLoad::DecodeLODs( TiXmlElement* root )
+{
+	//декодировать данные LOD'ов
+
+	//извлечение информации из узла XML
+	TiXmlNode* node = root->FirstChild( m_BranchNames.m_sLODs.c_str() );
+
+	if ( node )
+	{
+		TiXmlElement* pLODs = node->ToElement();
+
+		//извлечь имя элемента
+		const char *_name = pLODs->Value();
+		std::string _sElem( _name );
+
+		//получить указатель на первый атрибут элемента
+		TiXmlAttribute* _attr = pLODs->FirstAttribute();
+
+		//узнать количество LOD'ов
+		DecodeAttrNumLods( _attr );
+
+		//декодировать данные LOD'а
+		DecodeLOD( pLODs );
+	}
+}
+
+void xmlBranchLoad::DecodeAttrNumLods( TiXmlAttribute* _attr )
+{
+	//узнать количество LOD'ов
 	while ( _attr )
 	{
 		//имя атрибута
@@ -61,20 +104,69 @@ void xmlBranchLoad::DecodeAttrAlfa( TiXmlAttribute* _attr )
 		std::string _sAttr( _name );
 
 		//извлекаем значения
-		if ( _sAttr == m_BranchNames.m_sAlfaTest )
+		if ( _sAttr == m_BranchNames.m_sNum )
 		{
-			double alfa = 0.0;
-			_attr->QueryDoubleValue( &alfa );
+			int iNum = 0;
+			_attr->QueryIntValue( &iNum );
 
-			m_pDataBranch->m_fAlphaTestValue = alfa;
+			m_pDataBranch->m_vLOD.resize( iNum );
 		}
-		else
-			if ( _sAttr == m_BranchNames.m_sTexture )
-				m_pDataBranch->m_sTexture = _attr->Value();
 
 		//переходим к следующему атрибуту
 		_attr = _attr->Next();
 	}
+}
+
+void xmlBranchLoad::DecodeLOD( TiXmlElement* root )
+{
+	//декодировать данные LOD'а
+
+	for ( TiXmlElement *pLOD = root->FirstChildElement() ; pLOD ; pLOD = pLOD->NextSiblingElement() )
+	{
+		//извлечь имя элемента
+		const char *_name = pLOD->Value();
+		std::string _sElem( _name );
+
+		if ( _sElem == m_BranchNames.m_sLOD )
+		{
+			//получить указатель на первый атрибут элемента
+			TiXmlAttribute* _attr = pLOD->FirstAttribute();
+
+			//узнать текущий номер LOD'а
+			DecodeAttrLod( _attr );
+
+			//извлечь данные о вершинах
+			DecodeVertexs( pLOD );
+
+			//извлечь данные о индексах
+			DecodeStrips( pLOD );
+		}
+	}
+}
+
+void xmlBranchLoad::DecodeAttrLod( TiXmlAttribute* _attr )
+{
+	double alfa = 0.0;
+
+	//узнать текущий номер LOD'а
+	while ( _attr )
+	{
+		//имя атрибута
+		const char *_name = _attr->Name();
+		std::string _sAttr( _name );
+
+		//извлекаем значения
+		if ( _sAttr == m_BranchNames.m_sNum )
+			_attr->QueryIntValue( &m_iLOD );
+		else
+			if ( _sAttr == m_BranchNames.m_sAlfaTest )
+				_attr->QueryDoubleValue( &alfa );
+
+		//переходим к следующему атрибуту
+		_attr = _attr->Next();
+	}
+
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_fAlphaTestValue = alfa;
 }
 
 void xmlBranchLoad::DecodeVertexs( TiXmlElement* root )
@@ -109,11 +201,14 @@ void xmlBranchLoad::DecodePoints( TiXmlElement* root )
 		const char *_name = pElem->Value();
 		std::string _sAttr( _name );
 
-		//получить указатель на первый атрибут элемента
-		TiXmlAttribute* _attr = pElem->FirstAttribute();
+		if ( _sAttr == m_BranchNames.m_sPoint )
+		{
+			//получить указатель на первый атрибут элемента
+			TiXmlAttribute* _attr = pElem->FirstAttribute();
 
-		//декодировать параметр точки
-		DecodeAttrPoint( _attr );
+			//декодировать параметр точки
+			DecodeAttrPoint( _attr );
+		}
 	}
 }
 
@@ -165,18 +260,18 @@ void xmlBranchLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 		_attr = _attr->Next();
 	}
 
-	m_pDataBranch->m_vCoords.push_back( x );
-	m_pDataBranch->m_vCoords.push_back( y );
-	m_pDataBranch->m_vCoords.push_back( z );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( x );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( y );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( z );
 
-	m_pDataBranch->m_vNormals.push_back( nx );
-	m_pDataBranch->m_vNormals.push_back( ny );
-	m_pDataBranch->m_vNormals.push_back( nz );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vNormals.push_back( nx );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vNormals.push_back( ny );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vNormals.push_back( nz );
 
-	m_pDataBranch->m_vTexCoords0.push_back( s );
-	m_pDataBranch->m_vTexCoords0.push_back( t );
-	m_pDataBranch->m_vTexCoords0.push_back( p );
-	m_pDataBranch->m_vTexCoords0.push_back( q );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vTexCoords0.push_back( s );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vTexCoords0.push_back( t );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vTexCoords0.push_back( p );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vTexCoords0.push_back( q );
 }
 
 void xmlBranchLoad::DecodeStrips( TiXmlElement* root )
@@ -220,7 +315,7 @@ void xmlBranchLoad::DecodeAttrNumStrips( TiXmlAttribute* _attr )
 		{
 			int num;
 			_attr->QueryIntValue( &num );
-			m_pDataBranch->m_Strips.resize( num );
+			m_pDataBranch->m_vLOD[ m_iLOD ].m_Strips.resize( num );
 		}
 
 		//переходим к следующему атрибуту
@@ -266,7 +361,7 @@ void xmlBranchLoad::DecodeInd( TiXmlElement* root , int ind )
 
 			//извлечь очередной индекс
 			int i = DecodeAttrInd( _attr );
-			m_pDataBranch->m_Strips[ ind ].push_back( i );
+			m_pDataBranch->m_vLOD[ m_iLOD ].m_Strips[ ind ].push_back( i );
 		}
 	}
 }

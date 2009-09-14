@@ -19,8 +19,20 @@ private:
 	//извлечь данные о стволе
 	void DecodeBranch( TiXmlElement* root );
 
-	//декодировать параметр для альфа теста
-	void DecodeAttrAlfa( TiXmlAttribute* _attr );
+	//декодировать параметр с именем текстуры
+	void DecodeAttrTexture( TiXmlAttribute* _attr );
+
+	//декодировать данные LOD'ов
+	void DecodeLODs( TiXmlElement* root );
+
+	//узнать количество LOD'ов
+	void DecodeAttrNumLods( TiXmlAttribute* _attr );
+
+	//декодировать данные LOD'а
+	void DecodeLOD( TiXmlElement* root );
+
+	//узнать текущий номер LOD'а
+	void DecodeAttrLod( TiXmlAttribute* _attr );
 
 	//извлечь данные о вершинах
 	void DecodeVertexs( TiXmlElement* root );
@@ -47,6 +59,9 @@ private:
 	int DecodeAttrInd( TiXmlAttribute* _attr );
 
 	dataBranch *m_pDataBranch;
+
+	//номер текущего обрабатываемого LOD'а
+	int m_iLOD;
 
 };
 

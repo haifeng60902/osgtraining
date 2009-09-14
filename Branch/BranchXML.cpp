@@ -12,6 +12,8 @@
 #include <osg/AlphaFunc>
 #include <osg/CullFace>
 
+#define NUM_LOD 1
+
 BranchXML::BranchXML()
 {
 	// the root of our scenegraph.
@@ -53,22 +55,22 @@ void BranchXML::InitBranchGeode()
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
 
 	//копируем координаты
-	for ( int i = 0 ; i < _data.m_vCoords.size() / 3 ; ++i )
+	for ( int i = 0 ; i < _data.m_vLOD[ NUM_LOD ].m_vCoords.size() / 3 ; ++i )
 	{
-		osg::Vec3 coord( _data.m_vCoords[ i * 3 ] , 
-			_data.m_vCoords[ i * 3 + 1 ] ,
-			_data.m_vCoords[ i * 3 + 2 ] );
+		osg::Vec3 coord( _data.m_vLOD[ NUM_LOD ].m_vCoords[ i * 3 ] , 
+			_data.m_vLOD[ NUM_LOD ].m_vCoords[ i * 3 + 1 ] ,
+			_data.m_vLOD[ NUM_LOD ].m_vCoords[ i * 3 + 2 ] );
 		v->push_back( coord );
 
-		osg::Vec3 normal( _data.m_vNormals[ i * 3 ] , 
-			_data.m_vNormals[ i * 3 + 1 ] ,
-			_data.m_vNormals[ i * 3 + 2 ] );
+		osg::Vec3 normal( _data.m_vLOD[ NUM_LOD ].m_vNormals[ i * 3 ] , 
+			_data.m_vLOD[ NUM_LOD ].m_vNormals[ i * 3 + 1 ] ,
+			_data.m_vLOD[ NUM_LOD ].m_vNormals[ i * 3 + 2 ] );
 		n->push_back( normal );
 
-		osg::Vec4 tex0( _data.m_vTexCoords0[ i * 4 ] ,
-			_data.m_vTexCoords0[ i * 4 + 1 ] ,
-			_data.m_vTexCoords0[ i * 4 + 2 ] ,
-			_data.m_vTexCoords0[ i * 4 + 3 ] );
+		osg::Vec4 tex0( _data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 ] ,
+			_data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 1 ] ,
+			_data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 2 ] ,
+			_data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 3 ] );
 		tc->push_back( tex0 );
 	}
 
@@ -77,10 +79,10 @@ void BranchXML::InitBranchGeode()
 	geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
 	geom->setTexCoordArray( 0, tc.get() );
 
-	for ( int i = 0 ; i < _data.m_Strips.size() ; ++i )
+	for ( int i = 0 ; i < _data.m_vLOD[ NUM_LOD ].m_Strips.size() ; ++i )
 	{
 		geom->addPrimitiveSet( new osg::DrawElementsUShort(
-			osg::PrimitiveSet::TRIANGLE_STRIP, _data.m_Strips[ i ].size() , &_data.m_Strips[ i ][ 0 ] ) );
+			osg::PrimitiveSet::TRIANGLE_STRIP, _data.m_vLOD[ NUM_LOD ].m_Strips[ i ].size() , &_data.m_vLOD[ NUM_LOD ].m_Strips[ i ][ 0 ] ) );
 	}
 
 	//geom->setUseDisplayList( false );
@@ -124,7 +126,7 @@ void BranchXML::SetupAlfaFunc()
 	//получить ссылку на данные ствола
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
 
-	if ( _data.m_fAlphaTestValue > 0.0f)
+	if ( _data.m_vLOD[ NUM_LOD ].m_fAlphaTestValue > 0.0f)
 	{
 		//настройка атрибутов состояния LOD ствола
 		osg::StateSet* state = m_branchGeode->getOrCreateStateSet();
@@ -134,7 +136,7 @@ void BranchXML::SetupAlfaFunc()
 
 		// Turn on alpha testing
 		osg::AlphaFunc* af = new osg::AlphaFunc(
-			osg::AlphaFunc::GREATER, _data.m_fAlphaTestValue );
+			osg::AlphaFunc::GREATER, _data.m_vLOD[ NUM_LOD ].m_fAlphaTestValue );
 		state->setAttributeAndModes( af );
 	}
 }
