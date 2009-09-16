@@ -9,7 +9,7 @@
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 
-Tree::Tree() : m_BrClbk( NULL )
+Tree::Tree( float fNear , float fFar ) : m_BrClbk( NULL )
 {
 	//корневой узел дерева
 	m_rootNode = new osg::Group;
@@ -24,13 +24,13 @@ Tree::Tree() : m_BrClbk( NULL )
 	m_rootNode->addChild( m_leafNode.get() );
 
 	//инициализировать ствол
-	InitBranch();
+	InitBranch( fNear , fFar );
 
 	//инициализировать ветки
-	InitFronds();
+	InitFronds( fNear , fFar );
 
 	//инициализировать листву
-	InitLeaf();
+	InitLeaf( fNear , fFar );
 
 	//добавить шейдер для ствола в сцену
 	AddShaderBranch();
@@ -57,32 +57,32 @@ Tree::~Tree()
 
 }
 
-void Tree::InitBranch()
+void Tree::InitBranch( float fNear , float fFar )
 {
 	//инициализировать ствол
-	osg::ref_ptr< BranchXML > branch = new BranchXML;
+	osg::ref_ptr< BranchXML > branch = new BranchXML( fNear , fFar );
 
 	//добавить узел ствола
-	m_branchFrondsNode->addChild( branch->getBranchGeode() );
+	m_branchFrondsNode->addChild( branch->getBranchLOD().get() );
 }
 
-void Tree::InitFronds()
+void Tree::InitFronds( float fNear , float fFar )
 {
 	//инициализировать ветки
-	osg::ref_ptr< FrondsXML > fronds = new FrondsXML;
+	osg::ref_ptr< FrondsXML > fronds = new FrondsXML( fNear , fFar );
 
 	//добавить узел ствола
-	m_branchFrondsNode->addChild( fronds->getFrondsGeode() );
+	m_branchFrondsNode->addChild( fronds->getFrondsLOD().get() );
 }
 
-void Tree::InitLeaf()
+void Tree::InitLeaf( float fNear , float fFar )
 {
 	//инициализировать листву
 
-	osg::ref_ptr< LeafXML > leaf = new LeafXML;
+	osg::ref_ptr< LeafXML > leaf = new LeafXML( fNear , fFar );
 
 	//добавить узел листвы
-	m_leafNode->addChild( leaf->getLeafGeode() );
+	m_leafNode->addChild( leaf->getLeafLOD().get() );
 }
 
 void Tree::AddShaderBranch()

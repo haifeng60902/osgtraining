@@ -14,7 +14,7 @@ int main()
 	// Create a Viewer.
 	osgViewer::Viewer viewer;
 
-	osg::ref_ptr< Tree > tree = new Tree;
+	osg::ref_ptr< Tree > tree = new Tree( 100 , 400 );
 
 	// add the stats handler
 	viewer.addEventHandler( new osgViewer::StatsHandler );

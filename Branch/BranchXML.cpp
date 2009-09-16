@@ -12,21 +12,17 @@
 #include <osg/AlphaFunc>
 #include <osg/CullFace>
 
-#define NUM_LOD 1
-
-BranchXML::BranchXML()
+BranchXML::BranchXML( float fNear , float fFar ) : m_fNear( fNear )
+	, m_fFar( fFar )
 {
-	// the root of our scenegraph.
-	m_branchGeode = new osg::Geode;
+	//создать узел LOD
+	m_BranchLOD = new osg::LOD;
 
-	//инициировать корневой узел данными
-	InitBranchGeode();
+	//создать LOD ствола
+	CreateBranchLOD();
 
 	//добавить текстуру
 	AddTexture();
-
-	//настроить альфа канал
-	SetupAlfaFunc();
 }
 
 BranchXML::~BranchXML()
@@ -34,9 +30,36 @@ BranchXML::~BranchXML()
 
 }
 
-void BranchXML::InitBranchGeode()
+void BranchXML::CreateBranchLOD()
+{
+	//создать LOD ствола
+
+	//получить ссылку на данные веток
+	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
+
+	//количество LOD'ов ствола
+	int numLOD = _data.m_vLOD.size();
+
+	for ( int i = 0 ; i < numLOD ; ++i )
+	{
+		float fLODNear = 0.0f;
+		float fLODFar = 0.0f;
+
+		//расчет новых значений видимости LOD'ов
+		CalcNewLODDist( i , numLOD
+			, m_fNear , m_fFar , &fLODNear , &fLODFar );
+
+		//инициировать корневой узел данными
+		m_BranchLOD->addChild( InitBranchGeode( i ).get() 
+			, fLODNear , fLODFar);
+	}
+}
+
+osg::ref_ptr< osg::Geode > BranchXML::InitBranchGeode( int iLOD )
 {
 	//инициировать корневой узел данными
+
+	osg::ref_ptr< osg::Geode > geode = new osg::Geode;
 
 	// Create an object to store geometry in.
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
@@ -55,22 +78,22 @@ void BranchXML::InitBranchGeode()
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
 
 	//копируем координаты
-	for ( int i = 0 ; i < _data.m_vLOD[ NUM_LOD ].m_vCoords.size() / 3 ; ++i )
+	for ( int i = 0 ; i < _data.m_vLOD[ iLOD ].m_vCoords.size() / 3 ; ++i )
 	{
-		osg::Vec3 coord( _data.m_vLOD[ NUM_LOD ].m_vCoords[ i * 3 ] , 
-			_data.m_vLOD[ NUM_LOD ].m_vCoords[ i * 3 + 1 ] ,
-			_data.m_vLOD[ NUM_LOD ].m_vCoords[ i * 3 + 2 ] );
+		osg::Vec3 coord( _data.m_vLOD[ iLOD ].m_vCoords[ i * 3 ] , 
+			_data.m_vLOD[ iLOD ].m_vCoords[ i * 3 + 1 ] ,
+			_data.m_vLOD[ iLOD ].m_vCoords[ i * 3 + 2 ] );
 		v->push_back( coord );
 
-		osg::Vec3 normal( _data.m_vLOD[ NUM_LOD ].m_vNormals[ i * 3 ] , 
-			_data.m_vLOD[ NUM_LOD ].m_vNormals[ i * 3 + 1 ] ,
-			_data.m_vLOD[ NUM_LOD ].m_vNormals[ i * 3 + 2 ] );
+		osg::Vec3 normal( _data.m_vLOD[ iLOD ].m_vNormals[ i * 3 ] , 
+			_data.m_vLOD[ iLOD ].m_vNormals[ i * 3 + 1 ] ,
+			_data.m_vLOD[ iLOD ].m_vNormals[ i * 3 + 2 ] );
 		n->push_back( normal );
 
-		osg::Vec4 tex0( _data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 ] ,
-			_data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 1 ] ,
-			_data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 2 ] ,
-			_data.m_vLOD[ NUM_LOD ].m_vTexCoords0[ i * 4 + 3 ] );
+		osg::Vec4 tex0( _data.m_vLOD[ iLOD ].m_vTexCoords0[ i * 4 ] ,
+			_data.m_vLOD[ iLOD ].m_vTexCoords0[ i * 4 + 1 ] ,
+			_data.m_vLOD[ iLOD ].m_vTexCoords0[ i * 4 + 2 ] ,
+			_data.m_vLOD[ iLOD ].m_vTexCoords0[ i * 4 + 3 ] );
 		tc->push_back( tex0 );
 	}
 
@@ -79,21 +102,24 @@ void BranchXML::InitBranchGeode()
 	geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
 	geom->setTexCoordArray( 0, tc.get() );
 
-	for ( int i = 0 ; i < _data.m_vLOD[ NUM_LOD ].m_Strips.size() ; ++i )
+	for ( int i = 0 ; i < _data.m_vLOD[ iLOD ].m_Strips.size() ; ++i )
 	{
 		geom->addPrimitiveSet( new osg::DrawElementsUShort(
-			osg::PrimitiveSet::TRIANGLE_STRIP, _data.m_vLOD[ NUM_LOD ].m_Strips[ i ].size() , &_data.m_vLOD[ NUM_LOD ].m_Strips[ i ][ 0 ] ) );
+			osg::PrimitiveSet::TRIANGLE_STRIP, _data.m_vLOD[ iLOD ].m_Strips[ i ].size() , &_data.m_vLOD[ iLOD ].m_Strips[ i ][ 0 ] ) );
 	}
 
-	//geom->setUseDisplayList( false );
+	geode->addDrawable( geom.get() );
 
-	m_branchGeode->addDrawable( geom.get() );
+	//настроить альфа канал
+	SetupAlfaFunc( geode.get() , iLOD );
+
+	return geode.get();
 }
 
 void BranchXML::AddTexture()
 {
 	//добавить текстуру
-	osg::StateSet* state = m_branchGeode->getOrCreateStateSet();
+	osg::StateSet* state = m_BranchLOD->getOrCreateStateSet();
 
 	//получить ссылку на данные веток
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
@@ -119,24 +145,41 @@ void BranchXML::AddTexture()
 	state->setAttributeAndModes( cf );
 }
 
-void BranchXML::SetupAlfaFunc()
+void BranchXML::SetupAlfaFunc( osg::ref_ptr< osg::Geode > geode , int iLOD )
 {
 	//настроить альфа канал
 
 	//получить ссылку на данные ствола
 	dataBranch &_data = xmlRoot::Instance().GetDataBranch();
 
-	if ( _data.m_vLOD[ NUM_LOD ].m_fAlphaTestValue > 0.0f)
+	if ( _data.m_vLOD[ iLOD ].m_fAlphaTestValue > 0.0f)
 	{
 		//настройка атрибутов состояния LOD ствола
-		osg::StateSet* state = m_branchGeode->getOrCreateStateSet();
+		osg::StateSet* state = geode->getOrCreateStateSet();
 
 		//помечаем объект как имеющий прозрачность
 		state->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
 
 		// Turn on alpha testing
 		osg::AlphaFunc* af = new osg::AlphaFunc(
-			osg::AlphaFunc::GREATER, _data.m_vLOD[ NUM_LOD ].m_fAlphaTestValue );
+			osg::AlphaFunc::GREATER, _data.m_vLOD[ iLOD ].m_fAlphaTestValue );
 		state->setAttributeAndModes( af );
+	}
+}
+
+void BranchXML::CalcNewLODDist( float i , float fSize
+										, float fNear , float fFar , float *fLODNear , float *fLODFar )
+{
+	//расчет новых значений видимости LOD'ов
+	if ( i == 0 )
+	{
+		( *fLODNear ) = 0.0f;
+		( *fLODFar ) = fNear;
+	}
+	else
+	{
+		float fStep = ( fFar - fNear ) / ( fSize - 1.0f );
+		( *fLODNear ) = fNear + fStep * ( i - 1.0f );
+		( *fLODFar ) = fNear + fStep * i;
 	}
 }

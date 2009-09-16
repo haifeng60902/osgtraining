@@ -2,6 +2,8 @@
 
 #include "xmlFrondsNames.h"
 
+#include "../../ModelScale.h"
+
 xmlFrondsLoad::xmlFrondsLoad() : m_iLOD( 0 )
 {
 
@@ -300,9 +302,9 @@ void xmlFrondsLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 		_attr = _attr->Next();
 	}
 
-	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( x );
-	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( y );
-	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( z );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( x * MODEL_KOF_SCALE );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( y * MODEL_KOF_SCALE );
+	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vCoords.push_back( z * MODEL_KOF_SCALE );
 
 	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vNormals.push_back( nx );
 	m_pDataFronds->m_vFrLOD[ m_iLOD ].m_vNormals.push_back( ny );

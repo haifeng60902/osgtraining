@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="windows-1251" ?>
 <root>
-  <branch texture="c:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneBark.tga">
+  <branch texture="j:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneBark.tga">
     <LODs num="3">
       <LOD num="0" alfa="0.329412">
         <vertexs num="329">
@@ -2473,7 +2473,7 @@
   </branch>
   <fronds>
     <textures num="1">
-      <texture val="c:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneFrondBranches.tga" />
+      <texture val="j:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneFrondBranches.tga" />
     </textures>
     <LODs num="2">
       <LOD num="0" alfa="0.329412">
@@ -4914,8 +4914,8 @@
   </fronds>
   <leaf>
     <textures num="2">
-      <texture val="c:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneLeaves_RT_1.tga" />
-      <texture val="c:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneLeaves_RT_2.tga" />
+      <texture val="j:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneLeaves_RT_1.tga" />
+      <texture val="j:/Steel/Neko/SpeedTreeLib/Broadleaves/london plane/LondonPlaneLeaves_RT_2.tga" />
     </textures>
     <wind freqY="0" amplY="0" freqZ="0" amplZ="0" />
     <LODs num="3">

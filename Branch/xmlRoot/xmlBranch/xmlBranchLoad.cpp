@@ -2,6 +2,8 @@
 
 #include "xmlBranchNames.h"
 
+#include "../../ModelScale.h"
+
 xmlBranchLoad::xmlBranchLoad() : m_iLOD( 0 )
 {
 
@@ -39,9 +41,6 @@ void xmlBranchLoad::DecodeBranch( TiXmlElement* root )
 
 		//получить указатель на первый атрибут элемента
 		TiXmlAttribute* _attr = pBranch->FirstAttribute();
-
-		//декодировать параметр для альфа теста
-		//DecodeAttrAlfa( _attr );
 
 		//декодировать параметр с именем текстуры
 		DecodeAttrTexture( _attr );
@@ -260,9 +259,9 @@ void xmlBranchLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 		_attr = _attr->Next();
 	}
 
-	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( x );
-	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( y );
-	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( z );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( x * MODEL_KOF_SCALE );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( y * MODEL_KOF_SCALE );
+	m_pDataBranch->m_vLOD[ m_iLOD ].m_vCoords.push_back( z * MODEL_KOF_SCALE );
 
 	m_pDataBranch->m_vLOD[ m_iLOD ].m_vNormals.push_back( nx );
 	m_pDataBranch->m_vLOD[ m_iLOD ].m_vNormals.push_back( ny );
