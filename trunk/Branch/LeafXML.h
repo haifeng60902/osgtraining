@@ -8,23 +8,36 @@
 class LeafXML : public osg::Referenced
 {
 public:
-	LeafXML();
+	LeafXML( float fNear , float fFar );
 	~LeafXML();
 
-	osg::ref_ptr< osg::Geode > getLeafGeode() { return m_leafGeode.get(); }
+	//вернуть листву с LOD'ами
+	osg::ref_ptr< osg::LOD > getLeafLOD(){ return m_LeafLOD.get(); };
 
 private:
-	//инициировать корневой узел данными
-	void InitLeafGeode();
+
+	//создать LOD'ы листвы
+	void CreateLeafLOD();
+
+	//вернуть геометрию заданного LOD'a
+	osg::ref_ptr< osg::Geode > InitLeafGeode( int iLOD );
 
 	//добавить текстуры
 	void AddTextures();
 
 	//настроить альфа канал
-	void SetupAlfaFunc();
+	void SetupAlfaFunc( osg::ref_ptr< osg::Geode > geode , int iLOD );
 
-	//корневой узел геометрии листвы
-	osg::ref_ptr< osg::Geode > m_leafGeode;
+	//расчет новых значений видимости LOD'ов
+	void CalcNewLODDist( float i , float fSize
+		, float fNear , float fFar , float *fLODNear , float *fLODFar );
+
+	//узел с геометрией листвы
+	osg::ref_ptr< osg::LOD > m_LeafLOD;
+
+	//начало и конец работы LOD'ов
+	float m_fNear;
+	float m_fFar;
 };
 
 #endif	//_LEAF_XML_H_

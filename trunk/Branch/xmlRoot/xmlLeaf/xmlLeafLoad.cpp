@@ -2,6 +2,8 @@
 
 #include "xmlLeafNames.h"
 
+#include "../../ModelScale.h"
+
 xmlLeafLoad::xmlLeafLoad() : m_iLOD( 0 )
 {
 
@@ -310,9 +312,9 @@ void xmlLeafLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 		_attr = _attr->Next();
 	}
 
-	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( x );
-	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( y );
-	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( z );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( x * MODEL_KOF_SCALE );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( y * MODEL_KOF_SCALE );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vCoords.push_back( z * MODEL_KOF_SCALE );
 
 	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vNormals.push_back( nx );
 	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vNormals.push_back( ny );
@@ -323,8 +325,8 @@ void xmlLeafLoad::DecodeAttrPoint( TiXmlAttribute* _attr )
 	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords0.push_back( p0 );
 	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords0.push_back( q0 );
 
-	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( s1 );
-	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( t1 );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( s1 * MODEL_KOF_SCALE );
+	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( t1 * MODEL_KOF_SCALE );
 	m_pDataLeaf->m_vLfLOD[ m_iLOD ].m_vTexCoords1.push_back( p1 );
 }
 

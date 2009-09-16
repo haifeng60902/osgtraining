@@ -13,7 +13,7 @@
 class Tree : public osg::Referenced
 {
 public:
-	Tree();
+	Tree( float fNear , float fFar );
 	~Tree();
 
 	//вернуть узел содержащий дерево
@@ -21,13 +21,13 @@ public:
 
 private:
 	//инициализировать ствол
-	void InitBranch();
+	void InitBranch( float fNear , float fFar );
 
 	//инициализировать ветки
-	void InitFronds();
+	void InitFronds( float fNear , float fFar );
 
 	//инициализировать листву
-	void InitLeaf();
+	void InitLeaf( float fNear , float fFar );
 
 	//добавить шейдер для ствола в сцену
 	void AddShaderBranch();

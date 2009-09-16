@@ -8,23 +8,36 @@
 class FrondsXML : public osg::Referenced
 {
 public:
-	FrondsXML();
+	FrondsXML( float fNear , float fFar );
 	~FrondsXML();
 
-	osg::ref_ptr< osg::Geode > getFrondsGeode() { return m_frondsGeode.get(); }
+	//вернуть LOD'ы веток
+	osg::ref_ptr< osg::LOD > getFrondsLOD(){ return m_FrondsLOD.get(); };
 
 private:
+
+	//создать LOD'ы веток
+	void CreateFrondsLOD();
+
 	//инициировать корневой узел данными
-	void InitFrondsGeode();
+	osg::ref_ptr< osg::Geode > InitFrondsGeode( int iLOD );
+
+	//расчет новых значений видимости LOD'ов
+	void CalcNewLODDist( float i , float fSize
+		, float fNear , float fFar , float *fLODNear , float *fLODFar );
 
 	//добавить текстуру
 	void AddTexture();
 
 	//настроить альфа канал
-	void SetupAlfaFunc();
+	void SetupAlfaFunc( osg::ref_ptr< osg::Geode > geode , int iLOD );
 
-	//корневой узел геометрии веток
-	osg::ref_ptr< osg::Geode > m_frondsGeode;
+	//узел с геометрией веток
+	osg::ref_ptr< osg::LOD > m_FrondsLOD;
+
+	//начало и конец работы LOD'ов
+	float m_fNear;
+	float m_fFar;
 };
 
 #endif	//_FRONDS_XML_H_

@@ -243,6 +243,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ModelScale.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Tree.cpp"
 				>
 			</File>
