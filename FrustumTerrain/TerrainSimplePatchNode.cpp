@@ -51,8 +51,8 @@ void TerrainSimplePatchNode::AddTextureTile()
 	osg::ref_ptr<osg::Texture2D> tex = new osg::Texture2D;
 	tex->setFilter(osg::Texture::MIN_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
 	tex->setFilter(osg::Texture::MAG_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
-	tex->setWrap(osg::Texture::WRAP_S,osg::Texture::REPEAT); 
-	tex->setWrap(osg::Texture::WRAP_T,osg::Texture::REPEAT); 
+	tex->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP); 
+	tex->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP); 
 
 	tex->setImage( image.get() );
 
