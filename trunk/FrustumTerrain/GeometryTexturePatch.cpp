@@ -57,23 +57,23 @@ osg::ref_ptr<osg::Vec2Array> GeometryTexturePatch::CreateTexCoordArray( int x , 
 
 	double kof = (double)scaleC / (double)( sizeC - 1.0 );
 
+	double indX = (double)x / 262144.0 * 512.0;
+	double indY = (double)y / 262144.0 * 512.0;
+
+	int iIndX = indX;
+	int iIndY = indY; 
+
+	unsigned char r = dataR[ iIndY * 512 * 3 + iIndX * 3 ];
+	unsigned char g = dataR[ iIndY * 512 * 3 + iIndX * 3 + 1];
+
 	//Заполнение массива points
 	for (int i = 0 ; i < sizeC ; ++i )
 		for (int j = 0 ; j < sizeC ; ++j )
 		{
-			double indX = ( (double)x + (double)j * kof ) / 262144.0 * 512.0;
-			double indY = ( (double)y + (double)i * kof ) / 262144.0 * 512.0;
-			
-			int iIndX = indX + 0.1;
-			int iIndY = indY + 0.1; 
+			double addX = (double)j / (double)( (double)sizeC - 1.0 ) * ( 1.0 - 1.0 / 2048.0 );
+			double addY = (double)i / (double)( (double)sizeC - 1.0 ) * ( 1.0 - 1.0 / 2048.0 );
 
-			unsigned char r = dataR[ iIndY * 512 * 3 + iIndX * 3 ];
-			unsigned char g = dataR[ iIndY * 512 * 3 + iIndX * 3 + 1];
-
-			double addX = (double)j / (double)( (double)sizeC );
-			double addY = (double)i / (double)( (double)sizeC );
-
-			tc0->push_back( osg::Vec2( (double)r / 32.0 + addX * 0.0625 , (double)g / 32.0 + addY * 0.0625 ) );
+			tc0->push_back( osg::Vec2( (double)r / 16.0 + addX * 0.0625 + 1.0 / 8192.0, (double)g / 16.0 + addY * 0.0625  + 1.0 / 8192.0 ) );
 			//tc0->push_back( osg::Vec2( addX , addY ) );
 		}
 
