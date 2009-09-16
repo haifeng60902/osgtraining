@@ -34,7 +34,7 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 
 		if ( !data_vis.empty() )
 		{
-			std::cout << data_vis.size() << "-" << FindMax() << " ";
+			//std::cout << data_vis.size() << "-" << FindMax() << " ";
 
 			//очистить всех детей
 			group->removeChildren( 0 , group->getNumChildren() );

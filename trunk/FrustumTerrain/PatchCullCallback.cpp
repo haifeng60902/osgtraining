@@ -39,8 +39,8 @@ void PatchCullCallback::UpdateImage()
 	//вернуть ссылку на массив видимых патчей
 	const std::vector< dataPatch > &data_vis = m_VisiblePatchArray.GetVisibleArray();
 
-	if ( !data_vis.empty() )
-		std::cout << data_vis.size() << " ";
+	//if ( !data_vis.empty() )
+	//	std::cout << data_vis.size() << " ";
 
 	int count = 0;
 
