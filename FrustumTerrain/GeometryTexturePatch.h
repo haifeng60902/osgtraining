@@ -10,7 +10,7 @@ class GeometryTexturePatch
 {
 public:
 	//x,y - смещение €чейки, sizeC - количество сегментов, scaleC - размер €чейки
-	GeometryTexturePatch( int x , int y , int sizeC , int scaleC , osg::ref_ptr<osg::Image> image );
+	GeometryTexturePatch( int x , int y , int sizeC , int scaleC , osg::ref_ptr<osg::Image> image , double fAdd , double dScale );
 
 	~GeometryTexturePatch();
 
@@ -27,6 +27,10 @@ private:
 
 	//геометри€ €чейки
 	osg::ref_ptr< osg::Geometry > m_patchGeom;
+
+	//сдвиг и масштабирование
+	double m_dAdd;
+	double m_dScale;
 };
 
 #endif	//_GEOMETRY_TEXTURE_PATCH_H_

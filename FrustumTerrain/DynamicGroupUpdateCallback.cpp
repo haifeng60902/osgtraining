@@ -8,8 +8,12 @@
 #include <osgDB/ReadFile>
 
 #include <iostream>
+#include <fstream>
 
-DynamicGroupUpdateCallback::DynamicGroupUpdateCallback()
+int iCount = 0;
+
+DynamicGroupUpdateCallback::DynamicGroupUpdateCallback() : m_dAdd( 1.0 )
+, m_dScale( 30.0 )
 {
 	// загрузить изображение
 	m_ImageIndex = osgDB::readImageFile( "index.bmp" );
@@ -24,6 +28,9 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 {
 	//сформировать массив данных о видимых патчах
 	m_VisiblePatchArray.Update();
+
+	//обновить коэффициенты из файла
+//	UpdateKof();
 
 	osg::ref_ptr< osg::Group > group = dynamic_cast< osg::Group* >( node );
 
@@ -49,7 +56,8 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 
 				GeometryTexturePatch patch( data_vis[ i ].m_iX , 
 					data_vis[ i ].m_iY , 65 , 
-					data_vis[ i ].m_iSize , m_ImageIndex.get() );
+					data_vis[ i ].m_iSize , m_ImageIndex.get()
+					, m_dAdd , m_dScale );
 
 				osg::ref_ptr< osg::Geode > geode = new osg::Geode;
 				geode->addDrawable( patch.GetGeometry().get() );
@@ -80,4 +88,24 @@ int DynamicGroupUpdateCallback::FindMax()
 	}
 
 	return iMax;
+}
+
+void DynamicGroupUpdateCallback::UpdateKof()
+{
+	//обновить коэффициенты из файла
+
+	if ( !( iCount % 60 ) )
+	{
+		// поток для чтения файла
+		std::ifstream m_in;
+
+		m_in.open( "in.txt", std::ios::in);
+
+		m_in >> m_dAdd >> m_dScale;
+
+		m_in.close();
+
+	}
+
+	++iCount;
 }

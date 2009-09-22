@@ -20,12 +20,19 @@ public:
 private:
 	//поиск максимального размера патча
 	int FindMax();
+
+	//обновить коэффициенты из файла
+	void UpdateKof();
 	
 	//класс формирующий массив видимых патчей
 	VisiblePatchArray m_VisiblePatchArray;
 
 	//изображение содержащие индексы
 	osg::ref_ptr<osg::Image> m_ImageIndex;
+
+	//масштаб и смещение
+	double m_dAdd;
+	double m_dScale;
 };
 
 #endif	//_DYNAMIC_GROUP_UPDATE_CALLBACK_H_

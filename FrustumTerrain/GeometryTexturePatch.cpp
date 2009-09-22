@@ -1,7 +1,11 @@
 #include "GeometryTexturePatch.h"
 
-GeometryTexturePatch::GeometryTexturePatch( int x , int y , int sizeC , int scaleC , osg::ref_ptr<osg::Image> image )
+GeometryTexturePatch::GeometryTexturePatch( int x , int y , int sizeC , int scaleC , osg::ref_ptr<osg::Image> image , double dAdd , double dScale )
 {
+	//сдвиг и масштабирование
+	m_dAdd = dAdd;
+	m_dScale = dScale;
+
 	//создать объект для хранения в нем геометрии
 	m_patchGeom = new osg::Geometry;
 
@@ -70,10 +74,10 @@ osg::ref_ptr<osg::Vec2Array> GeometryTexturePatch::CreateTexCoordArray( int x , 
 	for (int i = 0 ; i < sizeC ; ++i )
 		for (int j = 0 ; j < sizeC ; ++j )
 		{
-			double addX = (double)j / (double)( (double)sizeC - 1.0 ) * ( 1.0 - 1.0 / 2048.0 );
-			double addY = (double)i / (double)( (double)sizeC - 1.0 ) * ( 1.0 - 1.0 / 2048.0 );
+			double addX = (double)j / ( (double)sizeC - 1.0 ) * ( 1.0 - m_dScale / 8192.0 );
+			double addY = (double)i / ( (double)sizeC - 1.0 ) * ( 1.0 - m_dScale / 8192.0 );
 
-			tc0->push_back( osg::Vec2( (double)r / 16.0 + addX * 0.0625 + 1.0 / 8192.0, (double)g / 16.0 + addY * 0.0625  + 1.0 / 8192.0 ) );
+			tc0->push_back( osg::Vec2( (double)r / 16.0 + addX * 256.0 / 4096.0 + m_dAdd / 8192.0, (double)g / 16.0 + addY * 256.0 / 4096.0 + m_dAdd / 8192.0 ) );
 			//tc0->push_back( osg::Vec2( addX , addY ) );
 		}
 
