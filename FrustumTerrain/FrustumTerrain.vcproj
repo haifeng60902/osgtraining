@@ -219,6 +219,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GeometryTexturePatch1.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch1.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch2.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>

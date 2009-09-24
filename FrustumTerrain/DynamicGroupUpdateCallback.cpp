@@ -4,6 +4,8 @@
 
 #include "GeometryPatch.h"
 #include "GeometryTexturePatch.h"
+#include "GeometryTexturePatch1.h"
+#include "GeometryTexturePatch2.h"
 
 #include <osgDB/ReadFile>
 
@@ -30,7 +32,10 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 	m_VisiblePatchArray.Update();
 
 	//обновить коэффициенты из файла
-//	UpdateKof();
+	UpdateKof();
+
+	//обновить статистику
+	//UpdateStatistic();
 
 	osg::ref_ptr< osg::Group > group = dynamic_cast< osg::Group* >( node );
 
@@ -41,6 +46,7 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 
 		if ( !data_vis.empty() )
 		{
+			FindMax();
 			//std::cout << data_vis.size() << "-" << FindMax() << " ";
 
 			//очистить всех детей
@@ -54,13 +60,41 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 				//	data_vis[ i ].m_iY , 65 , 
 				//	data_vis[ i ].m_iSize );
 
-				GeometryTexturePatch patch( data_vis[ i ].m_iX , 
-					data_vis[ i ].m_iY , 65 , 
-					data_vis[ i ].m_iSize , m_ImageIndex.get()
-					, m_dAdd , m_dScale );
-
 				osg::ref_ptr< osg::Geode > geode = new osg::Geode;
-				geode->addDrawable( patch.GetGeometry().get() );
+
+				if ( data_vis[ i ].m_iSize == 1024 )
+				{
+					GeometryTexturePatch1 patch( data_vis[ i ].m_iX , 
+						data_vis[ i ].m_iY , 66 , 
+						data_vis[ i ].m_iSize , m_ImageIndex.get()
+						, 1 , -32 );
+
+					geode->addDrawable( patch.GetGeometry().get() );
+				}
+				else
+					if ( data_vis[ i ].m_iSize == 512 )
+					{
+						GeometryTexturePatch patch( data_vis[ i ].m_iX , 
+							data_vis[ i ].m_iY , 65 , 
+							data_vis[ i ].m_iSize , m_ImageIndex.get()
+							, 1 , 30 );
+
+						geode->addDrawable( patch.GetGeometry().get() );
+					}
+					else
+						if ( data_vis[ i ].m_iSize == 2048 )
+						{
+							GeometryTexturePatch2 patch( data_vis[ i ].m_iX , 
+								data_vis[ i ].m_iY , 68 , 
+								data_vis[ i ].m_iSize , m_ImageIndex.get()
+								, 1 , -32 );
+
+							geode->addDrawable( patch.GetGeometry().get() );
+						}
+						//else
+						//{
+						//	std::cout << "65536 ";
+						//}
 
 				//добавить геометрию в сцену
 				group->addChild( geode.get() );
@@ -108,4 +142,50 @@ void DynamicGroupUpdateCallback::UpdateKof()
 	}
 
 	++iCount;
+}
+
+void DynamicGroupUpdateCallback::UpdateStatistic()
+{
+	//обновить статистику
+
+	//вернуть ссылку на массив видимых патчей
+	const std::vector< dataPatch > &data_vis = m_VisiblePatchArray.GetVisibleArray();
+
+	if ( data_vis.size() > 0 )
+	{
+		std::map< int , int > _Statistic;
+
+		//перебрать все видимые узлы
+		for( int i = 0 ; i < data_vis.size() ; ++i )
+			_Statistic[ data_vis[ i ].m_iSize ]++;
+
+		if ( m_Statistic.empty() )
+			m_Statistic = _Statistic;
+
+		bool bUpdate = false;
+		std::map< int , int > ::iterator it = _Statistic.begin();
+		while( it != _Statistic.end() )
+		{
+			if ( m_Statistic[ it->first ] < it->second )
+			{
+				m_Statistic[ it->first ] = it->second;
+				bUpdate = true;
+			}
+
+			++it;
+		}
+
+		if ( bUpdate )
+		{
+
+			std::map< int , int > ::iterator it = m_Statistic.begin();
+			while( it != m_Statistic.end() )
+			{
+				std::cout << it->first << "-" << it->second << "\t";
+
+				++it;
+			}
+			std::cout << "\n";
+		}
+	}
 }
