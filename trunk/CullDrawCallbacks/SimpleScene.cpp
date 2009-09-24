@@ -4,6 +4,7 @@
 
 #include <osg/Geode>
 #include <osg/ShapeDrawable>
+#include <osgDB/ReadFile>
 
 SimpleScene::SimpleScene( osg::Camera *_pCamera )
 {
@@ -11,6 +12,10 @@ SimpleScene::SimpleScene( osg::Camera *_pCamera )
 
 	//инициализировать геометрию
 	InitGeom();
+
+	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
+
+	m_rootNode->addChild( model.get() );
 
 	m_rootNode->setCullCallback( new CullCallback( "node callback: " ) );
 
@@ -29,7 +34,7 @@ void SimpleScene::InitGeom()
 
 	geode->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(0.0f,0.0f,0.0f),1.0f)));
 
-	m_rootNode->addChild( geode );
+//	m_rootNode->addChild( geode );
 
 	// Don't throw away single-vertex primitives.
 	osg::BoundingBox bbox( -50, -50, -50, 50, 50, 50);

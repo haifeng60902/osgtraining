@@ -35,11 +35,15 @@ void CullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 		//обновить информацию о плоскостях отсечения
 		UpdateFrustum( *Pr , *MV );
 
+		/*
 		if ( BoxVisible( osg::Vec3(-1,-1,-1) , osg::Vec3(1,1,1) ) )
 			std::cout << "1 ";
 		else
 			std::cout << "0 ";
-		
+		*/
+		std::cout << MV->operator()(3,0) << " "
+			<< MV->operator()(3,1) << " "
+			<< MV->operator()(3,2) << "\n";
 
 		//нужно ли создавать фрустум?
 		bool bFrustum = DynamicFrustum::Instance().IsCreateFrustum();
