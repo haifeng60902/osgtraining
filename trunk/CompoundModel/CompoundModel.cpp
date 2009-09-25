@@ -83,7 +83,7 @@ void CompoundModel::CreateBigModel( const osg::Vec3Array *_v
 
 //////////////////////////////////////////////////////////////////////////
 	for ( int j = 0 ; j < NUM_COPY ; ++j )
-		for ( int i = 0 ; i < _v->size() / 4 ; ++i )
+		for ( int i = 0 ; i < _v->size() ; ++i )
 		{
 			v->push_back( osg::Vec4( _v->at( i ).x(), _v->at( i ).y(), _v->at( i ).z() 
 				, (float)j / (float)NUM_COPY + 1.0 / 256.0 ) );
@@ -97,7 +97,7 @@ void CompoundModel::CreateBigModel( const osg::Vec3Array *_v
 
 //////////////////////////////////////////////////////////////////////////
 	for ( int j = 0 ; j < NUM_COPY ; ++j )
-		for ( int i = 0 ; i < _n->size() / 4 ; ++i )
+		for ( int i = 0 ; i < _n->size() ; ++i )
 			n->push_back( _n->at( i ) );
 //////////////////////////////////////////////////////////////////////////
 
@@ -108,7 +108,7 @@ void CompoundModel::CreateBigModel( const osg::Vec3Array *_v
 
 //////////////////////////////////////////////////////////////////////////
 	for ( int j = 0 ; j < NUM_COPY ; ++j )
-		for ( int i = 0 ; i < _tc0->size() / 4 ; ++i )
+		for ( int i = 0 ; i < _tc0->size() ; ++i )
 			tc->push_back( _tc0->at( i ) );
 //////////////////////////////////////////////////////////////////////////
 
@@ -210,7 +210,7 @@ void CompoundModel::AddCity( osg::ref_ptr< osg::Geometry > _geom )
 {
 	//добавить город
 
-	for ( int i = 0 ; i < NUM_COPY / 2 ; ++i )
+	for ( int i = 0 ; i < NUM_COPY ; ++i )
 	{
 		// Add the Geometry (Drawable) to a Geode and
 		// return the Geode.
