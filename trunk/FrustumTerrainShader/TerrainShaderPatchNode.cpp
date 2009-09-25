@@ -1,5 +1,7 @@
 #include "TerrainShaderPatchNode.h"
 
+#include "DynamicGroupUpdateCallback.h"
+
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 
@@ -25,6 +27,9 @@ void TerrainShaderPatchNode::InitTerrainNode()
 
 	//добавить шейдер
 	AddShader();
+
+	//задать обратный вызов обновлени€
+	m_rootNode->setUpdateCallback( new DynamicGroupUpdateCallback );
 }
 
 void TerrainShaderPatchNode::AddShader()
@@ -49,7 +54,7 @@ void TerrainShaderPatchNode::AddShader()
 	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
 
 	//добавление uniform'а дл€ задани€ смещени€ патча
-	ss->addUniform( new osg::Uniform( "posOffset" , osg::Vec3( 0,0,0) ) );
+	ss->addUniform( new osg::Uniform( "posOffset" , osg::Vec3( 0.0f ,0.0f , 0.0f ) ) );
 }
 
 void TerrainShaderPatchNode::LoadShaderSource( osg::Shader* shader, const std::string& fileName )

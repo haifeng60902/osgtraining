@@ -2,12 +2,12 @@
 #define _DYNAMIC_GROUP_UPDATE_CALLBACK_H_
 
 #include "VisiblePatchArray.h"
+#include "DynamicGroupLevel0512Node.h"
+#include "DynamicGroupLevel1024Node.h"
+#include "DynamicGroupLevel2048Node.h"
 
 #include <osg/NodeCallback>
 #include <osg/Geode>
-#include <osg/Referenced>
-#include <osg/ref_ptr>
-#include <osg/Image>
 
 #include <map>
 
@@ -20,27 +20,20 @@ public:
 	virtual void operator()( osg::Node* node, osg::NodeVisitor* nv );
 
 private:
-	//поиск максимального размера патча
-	int FindMax();
 
-	//обновить коэффициенты из файла
-	void UpdateKof();
+	//сбросить состояния динамически формируемых узлов
+	void ResetChilds();
 
-	//обновить статистику
-	void UpdateStatistic();
+	//добавить сформированных потомков в корневой узел
+	void AddChilds( osg::ref_ptr< osg::Group > group );
 
 	//класс формирующий массив видимых патчей
 	VisiblePatchArray m_VisiblePatchArray;
 
-	//изображение содержащие индексы
-	osg::ref_ptr<osg::Image> m_ImageIndex;
-
-	//масштаб и смещение
-	double m_dAdd;
-	double m_dScale;
-
-	//статистика
-	std::map< int , int > m_Statistic;
+	//узлы отвечающие за динамическое формирование патчей
+	DynamicGroupLevel0512Node m_Node512;
+	DynamicGroupLevel1024Node m_Node1024;
+	DynamicGroupLevel2048Node m_Node2048;
 };
 
 #endif	//_DYNAMIC_GROUP_UPDATE_CALLBACK_H_
