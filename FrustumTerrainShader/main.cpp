@@ -1,11 +1,11 @@
-//#include "TerrainNode.h"
+#include "TerrainNode.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
 int main()
 {
-//	osg::ref_ptr< TerrainNode > terrain = new TerrainNode;
+	osg::ref_ptr< TerrainNode > terrain = new TerrainNode;
 
 	// Create a Viewer.
 	osgViewer::Viewer viewer;

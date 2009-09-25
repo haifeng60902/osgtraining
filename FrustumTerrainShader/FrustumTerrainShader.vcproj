@@ -183,7 +183,43 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\dataPatch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicGroupUpdateCallback.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FrustumSingleton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FrustumSingleton.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Singleton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainCullCallback.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainCullCallback.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainNode.h"
 				>
 			</File>
 			<File
@@ -192,6 +228,14 @@
 			</File>
 			<File
 				RelativePath=".\TerrainShaderPatchNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VisiblePatchArray.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VisiblePatchArray.h"
 				>
 			</File>
 		</Filter>
