@@ -227,11 +227,43 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GeometryTexturePatch16.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch16.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GeometryTexturePatch2.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\GeometryTexturePatch2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch32.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch32.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch4.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch4.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch8.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeometryTexturePatch8.h"
 				>
 			</File>
 			<File
