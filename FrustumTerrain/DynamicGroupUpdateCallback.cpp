@@ -6,6 +6,10 @@
 #include "GeometryTexturePatch.h"
 #include "GeometryTexturePatch1.h"
 #include "GeometryTexturePatch2.h"
+#include "GeometryTexturePatch4.h"
+#include "GeometryTexturePatch8.h"
+#include "GeometryTexturePatch16.h"
+#include "GeometryTexturePatch32.h"
 
 #include <osgDB/ReadFile>
 
@@ -32,10 +36,10 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 	m_VisiblePatchArray.Update();
 
 	//обновить коэффициенты из файла
-	UpdateKof();
+//	UpdateKof();
 
 	//обновить статистику
-	//UpdateStatistic();
+	UpdateStatistic();
 
 	osg::ref_ptr< osg::Group > group = dynamic_cast< osg::Group* >( node );
 
@@ -46,7 +50,7 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 
 		if ( !data_vis.empty() )
 		{
-			FindMax();
+			//FindMax();
 			//std::cout << data_vis.size() << "-" << FindMax() << " ";
 
 			//очистить всех детей
@@ -67,7 +71,7 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 					GeometryTexturePatch1 patch( data_vis[ i ].m_iX , 
 						data_vis[ i ].m_iY , 66 , 
 						data_vis[ i ].m_iSize , m_ImageIndex.get()
-						, 1 , -32 );
+						, 2 , -64 );	//1 -32
 
 					geode->addDrawable( patch.GetGeometry().get() );
 				}
@@ -87,10 +91,50 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 							GeometryTexturePatch2 patch( data_vis[ i ].m_iX , 
 								data_vis[ i ].m_iY , 68 , 
 								data_vis[ i ].m_iSize , m_ImageIndex.get()
-								, 1 , -32 );
+								, 2 , -64 );
 
 							geode->addDrawable( patch.GetGeometry().get() );
 						}
+						else
+							if ( data_vis[ i ].m_iSize == 4096 )
+							{
+								GeometryTexturePatch4 patch( data_vis[ i ].m_iX , 
+									data_vis[ i ].m_iY , 64 + 8, 
+									data_vis[ i ].m_iSize , m_ImageIndex.get()
+									, 2 , -128 );
+
+								geode->addDrawable( patch.GetGeometry().get() );
+							}
+							else
+								if ( data_vis[ i ].m_iSize == 8192 )
+								{
+									GeometryTexturePatch8 patch( data_vis[ i ].m_iX , 
+										data_vis[ i ].m_iY , 64 + 16, 
+										data_vis[ i ].m_iSize , m_ImageIndex.get()
+										, 2 , -128 );
+
+									geode->addDrawable( patch.GetGeometry().get() );
+								}
+								else
+									if ( data_vis[ i ].m_iSize == 16384 )
+									{
+										GeometryTexturePatch16 patch( data_vis[ i ].m_iX , 
+											data_vis[ i ].m_iY , 64 + 32, 
+											data_vis[ i ].m_iSize , m_ImageIndex.get()
+											, 2 , -128 );
+
+										geode->addDrawable( patch.GetGeometry().get() );
+									}
+									else
+										if ( data_vis[ i ].m_iSize == 32768 )
+										{
+											GeometryTexturePatch32 patch( data_vis[ i ].m_iX , 
+												data_vis[ i ].m_iY , 64 + 64, 
+												data_vis[ i ].m_iSize , m_ImageIndex.get()
+												, 2 , -128 );
+
+											geode->addDrawable( patch.GetGeometry().get() );
+										}
 						//else
 						//{
 						//	std::cout << "65536 ";
