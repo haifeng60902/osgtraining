@@ -307,6 +307,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TerrainShaderPatchNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TerrainShaderPatchNode.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TerrainSimplePatchNode.cpp"
 				>
 			</File>
@@ -326,6 +334,14 @@
 		<Filter
 			Name="glsl"
 			>
+			<File
+				RelativePath=".\glsl\only_geom.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\only_geom.vert"
+				>
+			</File>
 			<File
 				RelativePath=".\glsl\terrain.frag"
 				>
