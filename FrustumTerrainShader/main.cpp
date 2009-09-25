@@ -16,9 +16,9 @@ int main()
 	//	viewer.addEventHandler( new KeyboardHandler );
 
 	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsPerspective( 112.5, 1050.0 / 1680.0 , 1.0 , 30000.0 );
+	viewer.getCamera()->setProjectionMatrixAsPerspective( 45, 1050.0 / 1680.0 , 1.0 , 30000.0 );
 
-//	viewer.setSceneData( terrain->getRootNode().get() );
+	viewer.setSceneData( terrain->getRootNode().get() );
 
 	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 

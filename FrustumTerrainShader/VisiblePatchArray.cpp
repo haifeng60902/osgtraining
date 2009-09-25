@@ -24,9 +24,9 @@ void VisiblePatchArray::Update()
 	//вернуть положение наблюдателя
 	m_Pos = FrustumSingleton::Instance().GetViewPos();
 
-	//std::cout << m_Pos.x() << " "
-	//	<< m_Pos.y() << " "
-		//<< m_Pos.z() << ";  ";
+//	std::cout << m_Pos.x() << " "
+//		<< m_Pos.y() << " "
+//		<< m_Pos.z() << ";  ";
 
 	//заполнить данными корневой патч
 	FillRootPatch();

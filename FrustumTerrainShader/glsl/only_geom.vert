@@ -1,4 +1,4 @@
-varying vec3 posOffset;
+uniform vec3 posOffset;
 
 void main()
 {
