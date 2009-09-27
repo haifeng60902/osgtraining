@@ -49,6 +49,9 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 				case 2048:
 					m_Node2048.AddPatch( data_vis[ i ].m_iX , data_vis[ i ].m_iY );
 					break;
+				case 4096:
+					m_Node4096.AddPatch( data_vis[ i ].m_iX , data_vis[ i ].m_iY );
+					break;
 				default:
 					break;
 				}
@@ -66,6 +69,7 @@ void DynamicGroupUpdateCallback::ResetChilds()
 	m_Node512.ResetRootNode();
 	m_Node1024.ResetRootNode();
 	m_Node2048.ResetRootNode();
+	m_Node4096.ResetRootNode();
 }
 
 void DynamicGroupUpdateCallback::AddChilds( osg::ref_ptr< osg::Group > group )
@@ -74,6 +78,7 @@ void DynamicGroupUpdateCallback::AddChilds( osg::ref_ptr< osg::Group > group )
 	group->addChild( m_Node512.getRootNode().get() );
 	group->addChild( m_Node1024.getRootNode().get() );
 	group->addChild( m_Node2048.getRootNode().get() );
+	group->addChild( m_Node4096.getRootNode().get() );
 
 	//вывести количество узлов для отрисовки
 	m_Node512.PrintSize();
