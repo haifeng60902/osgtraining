@@ -5,6 +5,7 @@
 #include "DynamicGroupLevel0512Node.h"
 #include "DynamicGroupLevel1024Node.h"
 #include "DynamicGroupLevel2048Node.h"
+#include "DynamicGroupLevel4096Node.h"
 
 #include <osg/NodeCallback>
 #include <osg/Geode>
@@ -34,6 +35,7 @@ private:
 	DynamicGroupLevel0512Node m_Node512;
 	DynamicGroupLevel1024Node m_Node1024;
 	DynamicGroupLevel2048Node m_Node2048;
+	DynamicGroupLevel4096Node m_Node4096;
 };
 
 #endif	//_DYNAMIC_GROUP_UPDATE_CALLBACK_H_

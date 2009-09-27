@@ -211,6 +211,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DynamicGroupLevel4096Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicGroupLevel4096Node.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicGroupLevel8192Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicGroupLevel8192Node.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DynamicGroupUpdateCallback.cpp"
 				>
 			</File>
