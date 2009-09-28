@@ -29,7 +29,7 @@ void TerrainShaderPatchNode::InitTerrainNode()
 	AddShader();
 
 	//задать обратный вызов обновления
-	m_rootNode->setUpdateCallback( new DynamicGroupUpdateCallback );
+	m_rootNode->setUpdateCallback( new DynamicGroupUpdateCallback( m_unfVisPos.get()) );
 }
 
 void TerrainShaderPatchNode::AddShader()
@@ -55,6 +55,14 @@ void TerrainShaderPatchNode::AddShader()
 
 	//добавление uniform'а для задания смещения патча
 	ss->addUniform( new osg::Uniform( "posOffset" , osg::Vec3( 0.0f ,0.0f , 0.0f ) ) );
+
+	//добавление uniform'ов для задания основного и вспомогательных цветов
+	ss->addUniform( new osg::Uniform( "colorP" , osg::Vec3( 0.0f ,0.0f , 0.0f ) ) );
+	ss->addUniform( new osg::Uniform( "colorS" , osg::Vec3( 0.0f ,0.0f , 0.0f ) ) );
+
+	//положение наблюдателя
+	m_unfVisPos = new osg::Uniform( "posVis" , osg::Vec3( 0.0f ,0.0f , 0.0f ) );
+	ss->addUniform( m_unfVisPos.get() );
 }
 
 void TerrainShaderPatchNode::LoadShaderSource( osg::Shader* shader, const std::string& fileName )

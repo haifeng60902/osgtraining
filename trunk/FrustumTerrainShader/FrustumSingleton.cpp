@@ -1,6 +1,7 @@
 #include "FrustumSingleton.h"
 
-FrustumSingleton::FrustumSingleton()
+FrustumSingleton::FrustumSingleton() : m_CullVis( NULL )
+, m_bProj( true )
 {
 	//создать и выделить память под 8 точек, определяющих view frustum
 	vOrig = new osg::Vec3Array;
@@ -122,4 +123,34 @@ bool FrustumSingleton::BoxVisible( const osg::Vec3 &minn , const osg::Vec3 &maxx
 		return false;
 	}
 	return true;
+}
+
+bool FrustumSingleton::IsCullVis()
+{
+	//проверка, задан ли osgUtil::CullVisitor
+	if ( m_CullVis == NULL )
+		return false;
+
+	return true;
+}
+
+void FrustumSingleton::ProcessCullVis()
+{
+	//обработать данные osgUtil::CullVisitor
+
+	if ( m_CullVis != NULL )
+	{
+		//данные о матрице проекции обновляются один раз
+		//if ( m_bProj )
+		//{
+			UpdateProjection( *m_CullVis->getProjectionMatrix() );
+			m_bProj = false;
+		//}
+
+		//обновить плоскости отсечения камеры
+		UpdateFrustum( osg::Matrix( *m_CullVis->getModelViewMatrix() ) );
+
+		//задать положение наблюдателя
+		SetViewPos( m_CullVis->getViewPoint() );
+	}
 }

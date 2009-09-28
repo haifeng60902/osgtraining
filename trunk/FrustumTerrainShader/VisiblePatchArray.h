@@ -35,6 +35,12 @@ private:
 	//проверка расстояния
 	bool DistAppropriate( const dataPatch &patch );
 
+	//проверка расстояния
+	bool CompareDist( const dataPatch &patch );
+
+	//другой алгоритм разбиения
+	void Devision( const dataPatch &patch );
+
 	//вектор данных о видимых патчах
 	std::vector< dataPatch > m_vVisible;
 

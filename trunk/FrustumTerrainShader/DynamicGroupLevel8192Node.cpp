@@ -6,8 +6,8 @@
 
 DynamicGroupLevel8192Node::DynamicGroupLevel8192Node() : m_iCount( 0 )
 {
-	//зарезервировать память для 32 узлов
-	m_vData.resize( 32 );
+	//зарезервировать память для 128 узлов
+	m_vData.resize( 128 );
 
 	//группа узлов
 	m_rootNode = new osg::Group;
@@ -29,7 +29,10 @@ void DynamicGroupLevel8192Node::InitGeodes()
 		m_vData[ i ].m_Geode = new osg::Geode;
 
 		//добавить uniform
-		m_vData[ i ].m_Uniform = new osg::Uniform( "posOffset" , osg::Vec3( 0,0,0) );
+		m_vData[ i ].m_unfOffset = new osg::Uniform( m_vData[ i ].m_sOffset.c_str() , osg::Vec3( 0,0,0) );
+		m_vData[ i ].m_unfColorP = new osg::Uniform( m_vData[ i ].m_sColorP.c_str() , osg::Vec3( 0,0,0 ) );
+		m_vData[ i ].m_unfColorS = new osg::Uniform( m_vData[ i ].m_sColorS.c_str() , osg::Vec3( 1,1,0 ) );
+		m_vData[ i ].m_unfDist = new osg::Uniform( m_vData[ i ].m_sDist.c_str() , 8192.0f * DIST_SCALE );
 
 		//добавить геометрию в i'ый узел
 		AddGeometry( i );
@@ -81,7 +84,10 @@ void DynamicGroupLevel8192Node::SetupShaderParam( int i )
 	osg::StateSet* ss = m_vData[ i ].m_Geode->getOrCreateStateSet();
 
 	//добавление uniform'а для задания смещения патча
-	ss->addUniform( m_vData[ i ].m_Uniform.get() );
+	ss->addUniform( m_vData[ i ].m_unfOffset.get() );
+	ss->addUniform( m_vData[ i ].m_unfColorP.get() );
+	ss->addUniform( m_vData[ i ].m_unfColorS.get() );
+	ss->addUniform( m_vData[ i ].m_unfDist.get() );
 }
 
 osg::ref_ptr<osg::Vec3Array> DynamicGroupLevel8192Node::CreateVertexArray( int x , int y , int sizeC , int scaleC )
@@ -187,7 +193,7 @@ void DynamicGroupLevel8192Node::AddPatch( float x , float y )
 	//добавить патч геометрии из буффера в корневой узел
 
 	//обновить данные в uniform'e
-	m_vData[ m_iCount ].m_Uniform->set( osg::Vec3( x , y , 0.0f ) );
+	m_vData[ m_iCount ].m_unfOffset->set( osg::Vec3( x , y , 0.0f ) );
 
 	//добавить очередной узел из буффера
 	m_rootNode->addChild( m_vData[ m_iCount ].m_Geode.get() );

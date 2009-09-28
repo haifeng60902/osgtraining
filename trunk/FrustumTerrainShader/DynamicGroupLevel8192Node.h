@@ -1,6 +1,8 @@
 #ifndef _DYNAMIC_GROUP_LEVEL_8192_NODE_H_
 #define _DYNAMIC_GROUP_LEVEL_8192_NODE_H_
 
+#include "dataVisPatch.h"
+
 #include <osg/Group>
 #include <osg/Geode>
 #include <osg/Referenced>
@@ -11,14 +13,6 @@
 class DynamicGroupLevel8192Node : public osg::Referenced
 {
 public:
-	struct Data
-	{
-		//геометри€ патча
-		osg::ref_ptr< osg::Geode > m_Geode;
-
-		//uniform дл€ динамического обновлени€
-		osg::ref_ptr< osg::Uniform > m_Uniform;
-	};
 
 	DynamicGroupLevel8192Node();
 
@@ -58,7 +52,7 @@ private:
 	osg::ref_ptr< osg::Group > m_rootNode;
 
 	//вектор геометрий
-	std::vector< Data > m_vData;
+	std::vector< dataVisPatch > m_vData;
 
 	//счетчик добавл€емых узлов
 	int m_iCount;

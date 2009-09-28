@@ -1,6 +1,8 @@
 #ifndef _DYNAMIC_GROUP_LEVEL_0512_NODE_H_
 #define _DYNAMIC_GROUP_LEVEL_0512_NODE_H_
 
+#include "dataVisPatch.h"
+
 #include <osg/Group>
 #include <osg/Geode>
 #include <osg/Referenced>
@@ -11,15 +13,7 @@
 class DynamicGroupLevel0512Node : public osg::Referenced
 {
 public:
-	struct Data
-	{
-		//геометрия патча
-		osg::ref_ptr< osg::Geode > m_Geode;
-
-		//uniform для динамического обновления
-		osg::ref_ptr< osg::Uniform > m_Uniform;
-	};
-
+	
 	DynamicGroupLevel0512Node();
 
 	//вернуть узел содержащий землю
@@ -58,7 +52,7 @@ private:
 	osg::ref_ptr< osg::Group > m_rootNode;
 
 	//вектор геометрий
-	std::vector< Data > m_vData;
+	std::vector< dataVisPatch > m_vData;
 
 	//счетчик добавляемых узлов
 	int m_iCount;

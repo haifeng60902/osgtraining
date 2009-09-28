@@ -1,13 +1,13 @@
-#include "DynamicGroupLevel2048Node.h"
+#include "DynamicGroupLevel16384Node.h"
 
 #include <osg/Geometry>
 
 #include <iostream>
 
-DynamicGroupLevel2048Node::DynamicGroupLevel2048Node() : m_iCount( 0 )
+DynamicGroupLevel16384Node::DynamicGroupLevel16384Node() : m_iCount( 0 )
 {
-	//зарезервировать память для 128 узлов
-	m_vData.resize( 128 );
+	//зарезервировать память для 64 узлов
+	m_vData.resize( 64 );
 
 	//группа узлов
 	m_rootNode = new osg::Group;
@@ -19,7 +19,7 @@ DynamicGroupLevel2048Node::DynamicGroupLevel2048Node() : m_iCount( 0 )
 	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
 }
 
-void DynamicGroupLevel2048Node::InitGeodes()
+void DynamicGroupLevel16384Node::InitGeodes()
 {
 	//инициализировать геометрию патчей земной поверхности
 
@@ -30,9 +30,9 @@ void DynamicGroupLevel2048Node::InitGeodes()
 
 		//добавить uniform
 		m_vData[ i ].m_unfOffset = new osg::Uniform( m_vData[ i ].m_sOffset.c_str() , osg::Vec3( 0,0,0) );
-		m_vData[ i ].m_unfColorP = new osg::Uniform( m_vData[ i ].m_sColorP.c_str() , osg::Vec3( 0,1,0 ) );
-		m_vData[ i ].m_unfColorS = new osg::Uniform( m_vData[ i ].m_sColorS.c_str() , osg::Vec3( 1,0,0 ) );
-		m_vData[ i ].m_unfDist = new osg::Uniform( m_vData[ i ].m_sDist.c_str() , 2048.0f * DIST_SCALE );
+		m_vData[ i ].m_unfColorP = new osg::Uniform( m_vData[ i ].m_sColorP.c_str() , osg::Vec3( 1,1,0 ) );
+		m_vData[ i ].m_unfColorS = new osg::Uniform( m_vData[ i ].m_sColorS.c_str() , osg::Vec3( 0.5,0.25,0 ) );
+		m_vData[ i ].m_unfDist = new osg::Uniform( m_vData[ i ].m_sDist.c_str() , 16384.0f * DIST_SCALE );
 
 		//добавить геометрию в i'ый узел
 		AddGeometry( i );
@@ -44,14 +44,14 @@ void DynamicGroupLevel2048Node::InitGeodes()
 	}
 }
 
-void DynamicGroupLevel2048Node::ResetRootNode()
+void DynamicGroupLevel16384Node::ResetRootNode()
 {
 	//удалить всех потомков корневого узла
 	m_iCount = 0;
 	m_rootNode->removeChildren( 0 , m_rootNode->getNumChildren() );
 }
 
-void DynamicGroupLevel2048Node::AddGeometry( int i )
+void DynamicGroupLevel16384Node::AddGeometry( int i )
 {
 	//добавить геометрию в i'ый узел
 
@@ -59,12 +59,12 @@ void DynamicGroupLevel2048Node::AddGeometry( int i )
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
 
 	//создать массив вершин
-	geom->setVertexArray( CreateVertexArray( 0 , 0 , 68 , 2048 ).get() );
+	geom->setVertexArray( CreateVertexArray( 0 , 0 , 64 + 32 , 16384 ).get() );
 
 	std::vector< unsigned int > m_vIndex;
 
 	//заполнить вектор индексами
-	FillIndexVector( m_vIndex , 68 );
+	FillIndexVector( m_vIndex , 64 + 32 );
 
 	geom->addPrimitiveSet( new osg::DrawElementsUInt(
 		osg::PrimitiveSet::TRIANGLE_STRIP, m_vIndex.size() , &m_vIndex[ 0 ] ) );
@@ -76,7 +76,7 @@ void DynamicGroupLevel2048Node::AddGeometry( int i )
 	m_vData[ i ].m_Geode->addDrawable( geom.get() );
 }
 
-void DynamicGroupLevel2048Node::SetupShaderParam( int i )
+void DynamicGroupLevel16384Node::SetupShaderParam( int i )
 {
 	//настроить параметры необходимые в шейдере
 
@@ -90,16 +90,16 @@ void DynamicGroupLevel2048Node::SetupShaderParam( int i )
 	ss->addUniform( m_vData[ i ].m_unfDist.get() );
 }
 
-osg::ref_ptr<osg::Vec3Array> DynamicGroupLevel2048Node::CreateVertexArray( int x , int y , int sizeC , int scaleC )
+osg::ref_ptr<osg::Vec3Array> DynamicGroupLevel16384Node::CreateVertexArray( int x , int y , int sizeC , int scaleC )
 {
 
 	//создать массив вершин
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 
-	float kof = (float)scaleC / (float)( sizeC - 4 );
+	float kof = (float)scaleC / (float)( sizeC - 32 );
 
 	//номер ячейки в которой будет сдвиг
-	int iQuad = ( sizeC - 4 ) / 4 + 1;
+	int iQuad = ( sizeC - 32 ) / 32 + 1;
 
 	//смещение по Y
 	int iY = 0;
@@ -132,7 +132,7 @@ osg::ref_ptr<osg::Vec3Array> DynamicGroupLevel2048Node::CreateVertexArray( int x
 	return v.get();
 }
 
-void DynamicGroupLevel2048Node::FillIndexVector( std::vector< unsigned int > &m_vIndex , int sizeC )
+void DynamicGroupLevel16384Node::FillIndexVector( std::vector< unsigned int > &m_vIndex , int sizeC )
 {
 	//заполнить вектор индексами
 	//заполнить вектор индексами
@@ -188,7 +188,7 @@ void DynamicGroupLevel2048Node::FillIndexVector( std::vector< unsigned int > &m_
 	}
 }
 
-void DynamicGroupLevel2048Node::AddPatch( float x , float y )
+void DynamicGroupLevel16384Node::AddPatch( float x , float y )
 {
 	//добавить патч геометрии из буффера в корневой узел
 
@@ -201,7 +201,7 @@ void DynamicGroupLevel2048Node::AddPatch( float x , float y )
 	++m_iCount;
 }
 
-void DynamicGroupLevel2048Node::PrintSize()
+void DynamicGroupLevel16384Node::PrintSize()
 {
 	//вывести количество узлов для отрисовки
 	std::cout << m_rootNode->getNumChildren() << " ";

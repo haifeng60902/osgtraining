@@ -62,7 +62,10 @@ void VisiblePatchArray::Process()
 			//определение видимости патча
 			if ( PatchVisible( m_vTemp0[ i ] ) )
 				//разбить на следующих уровень
-				ProcessPatch( m_vTemp0[ i ] );
+				//ProcessPatch( m_vTemp0[ i ] );
+
+				//другой алгоритм разбиения
+				Devision( m_vTemp0[ i ] );
 		}
 
 		//очистить вектор
@@ -78,8 +81,8 @@ void VisiblePatchArray::Process()
 bool VisiblePatchArray::PatchVisible( const dataPatch &patch )
 {
 	//определение видимости патча
-	return FrustumSingleton::Instance().BoxVisible( osg::Vec3( patch.m_iX , patch.m_iY , 0 ) , 
-		osg::Vec3( patch.m_iX + patch.m_iSize , patch.m_iY + patch.m_iSize , 3000 ) );
+	return FrustumSingleton::Instance().BoxVisible( osg::Vec3( patch.m_iX , patch.m_iY , -10000 ) , 
+		osg::Vec3( patch.m_iX + patch.m_iSize , patch.m_iY + patch.m_iSize , 10000 ) );
 }
 
 void VisiblePatchArray::ProcessPatch( const dataPatch &patch )
@@ -104,13 +107,40 @@ void VisiblePatchArray::ProcessPatch( const dataPatch &patch )
 	}
 }
 
-//проверка расстояния
+void VisiblePatchArray::Devision( const dataPatch &patch )
+{
+	//другой алгоритм разбиения
+	bool bOk = CompareDist( patch );
+
+	if ( bOk )
+	{
+		if ( patch.m_iSize == 512 )
+			m_vVisible.push_back( patch );
+		else
+		{
+			dataPatch downPatch;
+			downPatch.m_iX = patch.m_iX;
+			downPatch.m_iY = patch.m_iY;
+			downPatch.m_iSize = patch.m_iSize / 2;
+			m_vTemp1.push_back( downPatch );	//1 патч
+
+			downPatch.m_iX = patch.m_iX + downPatch.m_iSize;
+			m_vTemp1.push_back( downPatch );	//2 патч
+
+			downPatch.m_iY = patch.m_iY + downPatch.m_iSize;
+			m_vTemp1.push_back( downPatch );	//3 патч
+
+			downPatch.m_iX = patch.m_iX;
+			m_vTemp1.push_back( downPatch );	//4 патч
+		}
+	}
+	else
+		m_vVisible.push_back( patch );
+}
+
 bool VisiblePatchArray::DistAppropriate( const dataPatch &patch )
 {
-	//патч такого размера надо еще разбивать на потомков
-	//if ( patch.m_iSize > 32768 )
-	//	return false;
-
+//проверка расстояния
 //////////////////////////////////////////////////////////////////////////
 	std::vector< dataPatch > vTemp;
 
@@ -132,14 +162,10 @@ bool VisiblePatchArray::DistAppropriate( const dataPatch &patch )
 
 	for ( int i = 0 ; i < 4 ; ++i )
 	{
-		osg::Vec3 vec_dist( vTemp[ i ].m_iX + vTemp[ i ].m_iSize * 0.5 - m_Pos.x() , 
-			vTemp[ i ].m_iY + vTemp[ i ].m_iSize * 0.5 - m_Pos.y(), -m_Pos.z() );
-
-		double dist = sqrt( vec_dist.x() * vec_dist.x() + vec_dist.y() * vec_dist.y() + vec_dist.z() * vec_dist.z() );
-
-		double radius = vTemp[ i ].m_iSize * 2.0;
-
-		if ( dist < radius )
+		//проверка расстояния
+		bool bOK = CompareDist( vTemp[ i ] );
+		//bool bOK = CompareDist( patch );
+		if (  bOK )
 		{
 			if ( patch.m_iSize == 512 )
 			{
@@ -157,4 +183,41 @@ bool VisiblePatchArray::DistAppropriate( const dataPatch &patch )
 	m_vVisible.push_back( patch );
 
 	return true;
+}
+
+bool VisiblePatchArray::CompareDist( const dataPatch &patch )
+{
+	//проверка расстояния до 4-х углов патча, если расстояние до 1-ого из углов
+	//меньше двойного радиуса, то узел необходимо продолжать разбивать на более мелкие узлы
+	osg::Vec3 vec_dist0( patch.m_iX - m_Pos.x() , 
+		patch.m_iY - m_Pos.y(), 0 );
+
+	osg::Vec3 vec_dist1( patch.m_iX + patch.m_iSize - m_Pos.x() , 
+		patch.m_iY - m_Pos.y(), 0 );
+
+	osg::Vec3 vec_dist2( patch.m_iX + patch.m_iSize - m_Pos.x() , 
+		patch.m_iY + patch.m_iSize - m_Pos.y(), 0 );
+
+	osg::Vec3 vec_dist3( patch.m_iX - m_Pos.x() , 
+		patch.m_iY + patch.m_iSize - m_Pos.y(), 0 );
+
+	double dist0 = vec_dist0.length();
+	double dist1 = vec_dist1.length();
+	double dist2 = vec_dist2.length();
+	double dist3 = vec_dist3.length();
+
+	double radius = patch.m_iSize * 2.0;
+
+	bool bOK0 = false, bOK1 = false , bOK2 = false , bOK3 = false;
+
+	if ( dist0 < radius )
+		bOK0 = true;
+	if ( dist1 < radius )
+		bOK1 = true;
+	if ( dist2 < radius )
+		bOK2 = true;
+	if ( dist3 < radius )
+		bOK3 = true;
+
+	return ( bOK0 || bOK1 || bOK2 || bOK3 );
 }
