@@ -1,5 +1,5 @@
-#ifndef _DYNAMIC_GROUP_LEVEL_4096_NODE_H_
-#define _DYNAMIC_GROUP_LEVEL_4096_NODE_H_
+#ifndef _DYNAMIC_GROUP_LEVEL_32768_NODE_H_
+#define _DYNAMIC_GROUP_LEVEL_32768_NODE_H_
 
 #include "dataVisPatch.h"
 
@@ -10,11 +10,22 @@
 
 #include <vector>
 
-class DynamicGroupLevel4096Node : public osg::Referenced
+class DynamicGroupLevel32768Node : public osg::Referenced
 {
 public:
+	struct Data
+	{
+		//геометрия патча
+		osg::ref_ptr< osg::Geode > m_Geode;
 
-	DynamicGroupLevel4096Node();
+		//uniform для динамического обновления
+		osg::ref_ptr< osg::Uniform > m_Uniform;
+
+		//uniform для динамического задания цвета
+		osg::ref_ptr< osg::Uniform > m_UniformColor;
+	};
+
+	DynamicGroupLevel32768Node();
 
 	//вернуть узел содержащий землю
 	osg::ref_ptr< osg::Group > getRootNode() { return m_rootNode.get(); }
@@ -58,4 +69,4 @@ private:
 	int m_iCount;
 };
 
-#endif	//_DYNAMIC_GROUP_LEVEL_4096_NODE_H_
+#endif	//_DYNAMIC_GROUP_LEVEL_32768_NODE_H_

@@ -2,6 +2,7 @@
 #define _TERRAIN_CULL_CALLBACK_H_
 
 #include <osg/NodeCallback>
+#include <osgUtil/CullVisitor>
 
 class TerrainCullCallback : public osg::NodeCallback
 {

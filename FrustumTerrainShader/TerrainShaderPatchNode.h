@@ -25,6 +25,9 @@ private:
 	// load source from a file.
 	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
 
+	//uniform для задания положения наблюдателя
+	osg::ref_ptr< osg::Uniform > m_unfVisPos;
+
 	//корневой узел
 	osg::ref_ptr< osg::Group > m_rootNode;
 };

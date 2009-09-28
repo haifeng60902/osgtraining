@@ -2,8 +2,6 @@
 
 #include "FrustumSingleton.h"
 
-#include <osgUtil/CullVisitor>
-
 TerrainCullCallback::TerrainCullCallback() : m_bProj( true )
 {
 
@@ -19,7 +17,8 @@ void TerrainCullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	// first update subgraph to make sure objects are all moved into position
 	traverse(node,nv);
 
-	osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
+	/*
+	osgUtil::CullVisitor* cv = dynamic_cast< osgUtil::CullVisitor* >( nv );
 	if (cv)
 	{
 		//данные о матрице проекции обновляются один раз
@@ -28,11 +27,12 @@ void TerrainCullCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 			FrustumSingleton::Instance().UpdateProjection( *cv->getProjectionMatrix() );
 			m_bProj = false;
 		}
-		
+
 		//обновить плоскости отсечения камеры
 		FrustumSingleton::Instance().UpdateFrustum( osg::Matrix::inverse( *cv->getModelViewMatrix() ) );
 
 		//задать положение наблюдателя
 		FrustumSingleton::Instance().SetViewPos( cv->getViewPoint() );
 	}
+	*/
 }

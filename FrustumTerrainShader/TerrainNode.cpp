@@ -1,6 +1,6 @@
 #include "TerrainNode.h"
 
-#include "TerrainCullCallback.h"
+//#include "TerrainCullCallback.h"
 
 #include <osg/BoundingBox>
 #include <osg/PolygonMode>
@@ -12,6 +12,9 @@ TerrainNode::TerrainNode()
 
 	//инициализировать корневой узел земли
 	InitTerrainNode();
+
+	//динамически меняемый узел
+	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
 }
 
 TerrainNode::~TerrainNode()
@@ -28,7 +31,7 @@ void TerrainNode::InitTerrainNode()
 	m_rootNode->setInitialBound( bbox );
 
 	//задать класс вычисления области видимости
-	m_rootNode->setCullCallback( new TerrainCullCallback );
+	//m_rootNode->setCullCallback( new TerrainCullCallback );
 
 	m_TerrainShaderPatchNode = new TerrainShaderPatchNode;
 
@@ -40,5 +43,5 @@ void TerrainNode::InitTerrainNode()
 
 	osg::PolygonMode* polymode = new osg::PolygonMode;
 	polymode->setMode( osg::PolygonMode::FRONT_AND_BACK , osg::PolygonMode::LINE );
-	state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
+	//state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
 }

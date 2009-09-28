@@ -5,6 +5,7 @@
 
 #include <osg/Matrix>
 #include <osg/Array>
+#include <osgUtil/CullVisitor>
 
 class FrustumSingleton : public Singleton< FrustumSingleton >
 {
@@ -27,6 +28,15 @@ public:
 	//вернуть положение наблюдателя
 	osg::Vec3 GetViewPos() const { return m_Pos; };
 
+	//задать параметры камеры
+	void SetCullVis( osgUtil::CullVisitor* _CullVis ){ m_CullVis = _CullVis; };
+
+	//проверка, задан ли osgUtil::CullVisitor
+	bool IsCullVis();
+
+	//обработать данные osgUtil::CullVisitor
+	void ProcessCullVis();
+
 private:
 
 	//вычислить плоскости отсечения
@@ -34,6 +44,9 @@ private:
 
 	//вычислить уравнение плоскости по трем точкам
 	osg::Vec4 MakePlane( osg::Vec3 P1 , osg::Vec3 P2 , osg::Vec3 P3 );
+
+	//указатель на параметры камеры
+	osgUtil::CullVisitor* m_CullVis;
 
 	//исходный массив точек
 	osg::ref_ptr< osg::Vec3Array > vOrig;
@@ -46,6 +59,9 @@ private:
 
 	//положение наблюдателя
 	osg::Vec3 m_Pos;
+
+	//расчет матрицы проекции выполнить один раз
+	bool m_bProj;
 };
 
 #endif	//_FRUSTUM_SINGLETON_H_

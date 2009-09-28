@@ -187,6 +187,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dataVisPatch.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DynamicGroupLevel0512Node.cpp"
 				>
 			</File>
@@ -203,11 +207,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DynamicGroupLevel16384Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicGroupLevel16384Node.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DynamicGroupLevel2048Node.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\DynamicGroupLevel2048Node.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicGroupLevel32768Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DynamicGroupLevel32768Node.h"
 				>
 			</File>
 			<File
