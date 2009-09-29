@@ -40,13 +40,10 @@ private:
 	void SetupShaderParam( int i );
 
 	//заполнить вектор индексами
-	void FillIndexVector( std::vector< unsigned int > &m_vIndex , int sizeC );
+	void FillIndexVector( std::vector< unsigned short > &m_vIndex , int sizeC );
 
 	//создать массив вершин
 	osg::ref_ptr<osg::Vec3Array> CreateVertexArray( int x , int y , int sizeC , int scaleC );
-
-	//индексы, общие для всех узлов
-	std::vector< unsigned int > m_vIndex;
 
 	//корневой узел
 	osg::ref_ptr< osg::Group > m_rootNode;
