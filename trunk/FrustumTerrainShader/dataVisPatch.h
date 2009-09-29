@@ -5,7 +5,7 @@
 #include <osg/Uniform>
 
 #define DIST_SCALE 3.9f
-#define GEOM_DIV 8
+#define GEOM_DIV 1
 
 struct dataVisPatch
 {
