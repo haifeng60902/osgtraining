@@ -61,13 +61,13 @@ void DynamicGroupLevel4096Node::AddGeometry( int i )
 	//создать массив вершин
 	geom->setVertexArray( CreateVertexArray( 0 , 0 , 64 + 8 , 4096 ).get() );
 
-	std::vector< unsigned int > m_vIndex;
+	std::vector< unsigned short > m_vIndex;
 
 	//заполнить вектор индексами
 	FillIndexVector( m_vIndex , 64 + 8 );
 
-	geom->addPrimitiveSet( new osg::DrawElementsUInt(
-		osg::PrimitiveSet::TRIANGLE_STRIP, m_vIndex.size() , &m_vIndex[ 0 ] ) );
+	geom->addPrimitiveSet( new osg::DrawElementsUShort(
+		osg::PrimitiveSet::TRIANGLE_STRIP, m_vIndex.size() / GEOM_DIV , &m_vIndex[ 0 ] ) );
 
 	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	geom->setInitialBound( bbox );
@@ -133,7 +133,7 @@ osg::ref_ptr<osg::Vec3Array> DynamicGroupLevel4096Node::CreateVertexArray( int x
 	return v.get();
 }
 
-void DynamicGroupLevel4096Node::FillIndexVector( std::vector< unsigned int > &m_vIndex , int sizeC )
+void DynamicGroupLevel4096Node::FillIndexVector( std::vector< unsigned short > &m_vIndex , int sizeC )
 {
 	//заполнить вектор индексами
 	//заполнить вектор индексами
