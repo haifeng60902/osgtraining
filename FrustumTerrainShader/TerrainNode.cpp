@@ -43,5 +43,5 @@ void TerrainNode::InitTerrainNode()
 
 	osg::PolygonMode* polymode = new osg::PolygonMode;
 	polymode->setMode( osg::PolygonMode::FRONT_AND_BACK , osg::PolygonMode::LINE );
-	//state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
+	state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
 }
