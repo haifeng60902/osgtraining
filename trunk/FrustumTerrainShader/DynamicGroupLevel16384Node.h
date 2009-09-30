@@ -54,7 +54,7 @@ private:
 	void FillIndexVector( std::vector< unsigned short > &m_vIndex , int sizeC );
 
 	//создать массив вершин
-	osg::ref_ptr<osg::Vec3Array> CreateVertexArray( int x , int y , int sizeC , int scaleC );
+	osg::ref_ptr<osg::Vec4Array> CreateVertexArray( int x , int y , int sizeC , int scaleC );
 
 	//корневой узел
 	osg::ref_ptr< osg::Group > m_rootNode;

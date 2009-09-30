@@ -20,7 +20,7 @@ int main()
 	//	viewer.addEventHandler( new KeyboardHandler );
 
 	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsPerspective( 45 , 1050.0 / 1680.0 , 1.0 , 30000.0 );
+	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0 , 1050.0 / 1680.0 , 1.0 , 30000.0 );
 	//viewer.getCamera()->setProjectionMatrixAsPerspective( 112.5 , 1024.0 / 1280.0 , 1.0 , 30000.0 );
 
 	viewer.setSceneData( terrain->getRootNode().get() );

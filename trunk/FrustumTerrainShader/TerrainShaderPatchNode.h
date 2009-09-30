@@ -19,8 +19,20 @@ private:
 	//инициализировать корневой узел земли
 	void InitTerrainNode();
 
+	//добавить текстуру с картой высот
+	void AddTextureHeightmap();
+
+	//добавить текстуру с индексами
+	void AddTextureIndex();
+
+	//добавить составную текстуру
+	void AddTexturePatches();
+
 	//добавить шейдер в узел
 	void AddShader();
+
+	//настроить uniform'ы
+	void SetupUniforms( osg::StateSet* ss );
 
 	// load source from a file.
 	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
