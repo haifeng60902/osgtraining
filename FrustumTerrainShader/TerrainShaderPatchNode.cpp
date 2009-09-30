@@ -56,8 +56,8 @@ void TerrainShaderPatchNode::AddTextureHeightmap()
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
 	tex0->setImage( image0.get() );
 
-	tex0->setFilter( osg::Texture::MIN_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
-	tex0->setFilter( osg::Texture::MAG_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
+	tex0->setFilter( osg::Texture::MIN_FILTER,osg::Texture::LINEAR );
+	tex0->setFilter( osg::Texture::MAG_FILTER,osg::Texture::LINEAR );
 	tex0->setWrap( osg::Texture::WRAP_S , osg::Texture::REPEAT ); 
 	tex0->setWrap( osg::Texture::WRAP_T , osg::Texture::REPEAT ); 
 
