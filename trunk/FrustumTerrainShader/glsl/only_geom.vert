@@ -33,17 +33,19 @@ void main()
 		position += vec4( posOffset.xyz , 0.0 );
 	}
 	
-	vec4 tex0 = texture2D( u_texture0 , position.xy / 262144.0 );
+	//calc hight map
+	vec2 texCoord0 = ( position.xy / 262144.0 * 2.0 );// * ( 1.0 - 1.0 / 1024.0 ) + 1.0 / 2048.0;
+	vec4 tex0 = texture2D( u_texture0 , texCoord0 );
 	
 	//fill texcoords
-	vec2 texCoord1 = ( gl_Vertex.zw * 512.0 + posOffset.xy ) / 262144.0 * 512.0;
-	vec4 texOffset = texture2D( u_texture1 , texCoord1 ) * 16.0;
-	vec4 texAdd = gl_Vertex / fKofScale * 0.125;
+	vec2 texCoord1 = ( gl_Vertex.zw * 32.0 * fKofScale + posOffset.xy ) / 262144.0;
+	vec4 texOffset = texture2D( u_texture1 , texCoord1 ) * 255.0 / 16.0;
+	vec4 texAdd = gl_Vertex.xyzw * fKofScale / 512.0 - gl_Vertex.zwxy;
 	
 	gl_TexCoord[0] = texOffset + texAdd * 256.0 / 4096.0;
 	
 	//scale height
-	position.z = tex0.r * 3000.0;
+	position.z = tex0.g * 1500.0;
 	
 	gl_Position = gl_ModelViewProjectionMatrix * position;
 }
