@@ -12,6 +12,7 @@ struct dataVisPatch
 	dataVisPatch() : m_sOffset( "posOffset" )
 		, m_sColorP( "colorP" )
 		, m_sColorS( "colorS" )
+		, m_sKofScale( "fKofScale" )
 		, m_sDist( "dist" )
 	{};
 
@@ -27,6 +28,9 @@ struct dataVisPatch
 	//uniform для задания вспомогательного цвета
 	osg::ref_ptr< osg::Uniform > m_unfColorS;
 
+	//uniform для задания коэффициента масштабирования
+	osg::ref_ptr< osg::Uniform > m_unfKofScale;
+
 	//uniform для задания расстояния
 	osg::ref_ptr< osg::Uniform > m_unfDist;
 
@@ -38,6 +42,9 @@ struct dataVisPatch
 
 	//имя переменной вспомогательного цвета
 	std::string m_sColorS;
+
+	//имя переменной для масштабирования координат
+	std::string m_sKofScale;
 
 	//имя переменной расстояния
 	std::string m_sDist;

@@ -32,6 +32,7 @@ void DynamicGroupLevel1024Node::InitGeodes()
 		m_vData[ i ].m_unfOffset = new osg::Uniform( m_vData[ i ].m_sOffset.c_str() , osg::Vec3( 0,0,0) );
 		m_vData[ i ].m_unfColorP = new osg::Uniform( m_vData[ i ].m_sColorP.c_str() , osg::Vec3( 0,0,1 ) );
 		m_vData[ i ].m_unfColorS = new osg::Uniform( m_vData[ i ].m_sColorS.c_str() , osg::Vec3( 0,1,0 ) );
+		m_vData[ i ].m_unfKofScale = new osg::Uniform( m_vData[ i ].m_sKofScale.c_str() , 16.0f );
 		m_vData[ i ].m_unfDist = new osg::Uniform( m_vData[ i ].m_sDist.c_str() , 1024.0f * DIST_SCALE );
 
 		//добавить геометрию в i'ый узел
@@ -87,15 +88,18 @@ void DynamicGroupLevel1024Node::SetupShaderParam( int i )
 	ss->addUniform( m_vData[ i ].m_unfOffset.get() );
 	ss->addUniform( m_vData[ i ].m_unfColorP.get() );
 	ss->addUniform( m_vData[ i ].m_unfColorS.get() );
+	ss->addUniform( m_vData[ i ].m_unfKofScale.get() );
 	ss->addUniform( m_vData[ i ].m_unfDist.get() );
 }
 
-osg::ref_ptr<osg::Vec3Array> DynamicGroupLevel1024Node::CreateVertexArray( int x , int y , int sizeC , int scaleC )
+osg::ref_ptr<osg::Vec4Array> DynamicGroupLevel1024Node::CreateVertexArray( int x , int y , int sizeC , int scaleC )
 {
 	//создать массив вершин
-	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
+	osg::ref_ptr<osg::Vec4Array> v = new osg::Vec4Array;
 
+	//kof = 16.0f
 	float kof = (float)scaleC / (float)( sizeC - 2 );
+	kof = 1.0;
 
 	//номер ячейки в которой будет сдвиг
 	int iHalf = ( sizeC - 2 ) / 2 + 1;
@@ -118,7 +122,7 @@ osg::ref_ptr<osg::Vec3Array> DynamicGroupLevel1024Node::CreateVertexArray( int x
 			if ( j == iHalf )
 				++fX;
 
-			v->push_back( osg::Vec3( x + ( j - fX ) * kof , y + ( i - fY ) * kof , 0 ) );
+			v->push_back( osg::Vec4( x + ( j - fX ) * kof , y + ( i - fY ) * kof , fX , fY ) );
 		}
 	}
 
