@@ -141,6 +141,7 @@ void TerrainShaderPatchNode::SetupUniforms( osg::StateSet* ss )
 {
 	//настроить uniform'ы
 
+	/*
 	//добавление uniform'а для задания смещения патча
 	ss->addUniform( new osg::Uniform( "posOffset" , osg::Vec3( 0.0f ,0.0f , 0.0f ) ) );
 
@@ -150,11 +151,10 @@ void TerrainShaderPatchNode::SetupUniforms( osg::StateSet* ss )
 
 	//коэффициент масштабирования координат
 	ss->addUniform( new osg::Uniform( "fKofScale" , 1.0f ) );
-
+*/
 	//положение наблюдателя
 	m_unfVisPos = new osg::Uniform( "posVis" , osg::Vec3( 0.0f ,0.0f , 0.0f ) );
 	ss->addUniform( m_unfVisPos.get() );
-
 	//добавление uniform'ов для работы с текстурными модулями
 	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
 	ss->addUniform( new osg::Uniform( "u_texture1" , 1 ) );

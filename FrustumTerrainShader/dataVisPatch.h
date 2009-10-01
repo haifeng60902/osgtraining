@@ -14,6 +14,8 @@ struct dataVisPatch
 		, m_sColorS( "colorS" )
 		, m_sKofScale( "fKofScale" )
 		, m_sDist( "dist" )
+		, m_sTexCoordScale( "fTexCoordScale" )
+		, m_sTexCoordAdd( "fTexCoordAdd" )
 	{};
 
 	//геометрия патча
@@ -34,6 +36,12 @@ struct dataVisPatch
 	//uniform для задания расстояния
 	osg::ref_ptr< osg::Uniform > m_unfDist;
 
+	//uniform для для масштабирования текстурных координат
+	osg::ref_ptr< osg::Uniform > m_unfTexCoordScale;
+
+	//uniform для для для смещения текстурных координат
+	osg::ref_ptr< osg::Uniform > m_unfTexCoordAdd;
+
 	//имя переменной смещения
 	std::string m_sOffset;
 
@@ -48,6 +56,12 @@ struct dataVisPatch
 
 	//имя переменной расстояния
 	std::string m_sDist;
+
+	//имя переменной для масштабирования текстурных координат
+	std::string m_sTexCoordScale;
+
+	//имя переменной для смещения текстурных координат
+	std::string m_sTexCoordAdd;
 };
 
 #endif	//_DATA_VIS_PATCH_H_
