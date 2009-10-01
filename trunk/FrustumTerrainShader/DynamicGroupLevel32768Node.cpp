@@ -34,6 +34,8 @@ void DynamicGroupLevel32768Node::InitGeodes()
 		m_vData[ i ].m_unfColorS = new osg::Uniform( m_vData[ i ].m_sColorS.c_str() , osg::Vec3( 1,1,1 ) );
 		m_vData[ i ].m_unfKofScale = new osg::Uniform( m_vData[ i ].m_sKofScale.c_str() , 512.0f );
 		m_vData[ i ].m_unfDist = new osg::Uniform( m_vData[ i ].m_sDist.c_str() , 32768.0f * DIST_SCALE );
+		m_vData[ i ].m_unfTexCoordAdd = new osg::Uniform( m_vData[ i ].m_sTexCoordAdd.c_str() , 2.0f );
+		m_vData[ i ].m_unfTexCoordScale = new osg::Uniform( m_vData[ i ].m_sTexCoordScale.c_str() , -128.0f );
 
 		//добавить геометрию в i'ый узел
 		AddGeometry( i );
@@ -90,6 +92,8 @@ void DynamicGroupLevel32768Node::SetupShaderParam( int i )
 	ss->addUniform( m_vData[ i ].m_unfColorS.get() );
 	ss->addUniform( m_vData[ i ].m_unfKofScale.get() );
 	ss->addUniform( m_vData[ i ].m_unfDist.get() );
+	ss->addUniform( m_vData[ i ].m_unfTexCoordAdd.get() );
+	ss->addUniform( m_vData[ i ].m_unfTexCoordScale.get() );
 }
 
 osg::ref_ptr<osg::Vec4Array> DynamicGroupLevel32768Node::CreateVertexArray( int x , int y , int sizeC , int scaleC )

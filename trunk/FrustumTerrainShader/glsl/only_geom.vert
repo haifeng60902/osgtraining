@@ -7,10 +7,17 @@ uniform vec3 colorS;
 uniform float dist;
 uniform float fKofScale;
 
+//modification final texture coord for fix visual artifacts
+uniform float fTexCoordAdd;
+uniform float fTexCoordScale;
+
 void main()
 {
 	vec4 position = gl_Vertex * fKofScale;
 	position.w = 1.0;
+	
+	//modification for texture coordinat correction
+	vec4 texCoordMod = position;
 	
 	position += vec4( posOffset.xyz, 0.0 );
 	
@@ -30,6 +37,9 @@ void main()
 			floor( gl_Vertex.y * 0.5 ) * 2.0 * fKofScale ,
 			0.0 , 1.0 );
 			
+		//modification for texture coordinat correction
+		texCoordMod = position;
+			
 		position += vec4( posOffset.xyz , 0.0 );
 	}
 	
@@ -38,11 +48,13 @@ void main()
 	vec4 tex0 = texture2D( u_texture0 , texCoord0 );
 	
 	//fill texcoords
-	vec2 texCoord1 = ( gl_Vertex.zw * 32.0 * fKofScale + posOffset.xy ) / 262144.0;
+	vec2 texCoord1 = ( gl_Vertex.zw * 512.0 + posOffset.xy ) / 262144.0;
 	vec4 texOffset = texture2D( u_texture1 , texCoord1 ) * 255.0 / 16.0;
-	vec4 texAdd = gl_Vertex.xyzw * fKofScale / 512.0 - gl_Vertex.zwxy;
 	
-	gl_TexCoord[0] = texOffset + texAdd * 256.0 / 4096.0;
+	// texAdd change from 0..1 few times
+	vec4 texAdd = ( texCoordMod / 512.0 - gl_Vertex.zwxy ) * ( 1.0 - fTexCoordScale / 8192.0);
+	
+	gl_TexCoord[0] = texOffset + texAdd * 256.0 / 4096.0 + fTexCoordAdd / 8192.0;
 	
 	//scale height
 	position.z = tex0.g * 1500.0;
