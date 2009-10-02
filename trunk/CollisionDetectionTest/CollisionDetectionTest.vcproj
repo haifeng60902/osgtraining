@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="osgd.lib osgViewerd.lib osgDBd.lib osgUtild.lib"
+				AdditionalDependencies="osgd.lib osgViewerd.lib osgDBd.lib osgUtild.lib osgGAd.lib"
 				OutputFile="$(ProjectName)d.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OSG_LIB_PATH)"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="osg.lib osgViewer.lib osgDB.lib osgUtil.lib"
+				AdditionalDependencies="osg.lib osgViewer.lib osgDB.lib osgUtil.lib osgGA.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(OSG_LIB_PATH)"
@@ -183,7 +183,31 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\CollisionDetectionScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CollisionDetectionScene.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Mi17UpdClbk.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Mi17UpdClbk.h"
+				>
+			</File>
+			<File
+				RelativePath=".\osgIsectorHAT.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\osgIsectorHAT.h"
 				>
 			</File>
 		</Filter>
