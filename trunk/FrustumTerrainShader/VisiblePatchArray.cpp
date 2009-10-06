@@ -20,19 +20,21 @@ void VisiblePatchArray::Update()
 
 	//очищаем результат предыдущих вычислений
 	m_vVisible.clear();
+	m_vVisible512.clear();
 
 	//вернуть положение наблюдателя
 	m_Pos = FrustumSingleton::Instance().GetViewPos();
-
-//	std::cout << m_Pos.x() << " "
-//		<< m_Pos.y() << " "
-//		<< m_Pos.z() << ";  ";
 
 	//заполнить данными корневой патч
 	FillRootPatch();
 
 	//обработать данные о видимости патчей
 	Process();
+
+	//обработать данные о видимости патчей имеющих размер только 512м
+	Process512();
+
+	std::cout << "  v" << m_vVisible.size() << "    512v" << m_vVisible512.size();
 }
 
 void VisiblePatchArray::FillRootPatch()
@@ -74,8 +76,36 @@ void VisiblePatchArray::Process()
 		//поменять местами
 		m_vTemp0.swap( m_vTemp1 );
 	}
+}
 
-	//std::cout << m_vVisible.size() << " ";
+void VisiblePatchArray::Process512()
+{
+	//обработать данные о видимости патчей имеющих размер только 512м
+
+	//очистить результат предыдущих вычислений
+	m_vTemp0.clear();
+	m_vTemp1.clear();
+
+	//начать определение видимости патчей 512м с результатов предыдущего шага
+	m_vTemp0 = m_vVisible;
+
+	while( !m_vTemp0.empty() )
+	{
+		for ( int i = 0 ; i < m_vTemp0.size() ; ++i )
+		{
+			//определение видимости патча
+			if ( PatchVisible( m_vTemp0[ i ] ) )
+				
+				//алгоритм разбиения только на патчи по 512м
+				Devision512( m_vTemp0[ i ] );
+		}
+
+		//очистить вектор
+		m_vTemp0.clear();
+
+		//поменять местами
+		m_vTemp0.swap( m_vTemp1 );
+	}
 }
 
 bool VisiblePatchArray::PatchVisible( const dataPatch &patch )
@@ -136,6 +166,30 @@ void VisiblePatchArray::Devision( const dataPatch &patch )
 	}
 	else
 		m_vVisible.push_back( patch );
+}
+
+void VisiblePatchArray::Devision512( const dataPatch &patch )
+{
+	//алгоритм разбиения только на патчи по 512м
+	if ( patch.m_iSize == 512 )
+		m_vVisible512.push_back( patch );
+	else
+	{
+		dataPatch downPatch;
+		downPatch.m_iX = patch.m_iX;
+		downPatch.m_iY = patch.m_iY;
+		downPatch.m_iSize = patch.m_iSize / 2;
+		m_vTemp1.push_back( downPatch );	//1 патч
+
+		downPatch.m_iX = patch.m_iX + downPatch.m_iSize;
+		m_vTemp1.push_back( downPatch );	//2 патч
+
+		downPatch.m_iY = patch.m_iY + downPatch.m_iSize;
+		m_vTemp1.push_back( downPatch );	//3 патч
+
+		downPatch.m_iX = patch.m_iX;
+		m_vTemp1.push_back( downPatch );	//4 патч
+	}
 }
 
 bool VisiblePatchArray::DistAppropriate( const dataPatch &patch )
