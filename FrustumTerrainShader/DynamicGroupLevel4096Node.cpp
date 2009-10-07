@@ -70,7 +70,7 @@ void DynamicGroupLevel4096Node::AddGeometry( int i )
 	FillIndexVector( m_vIndex , 64 + 8 );
 
 	geom->addPrimitiveSet( new osg::DrawElementsUShort(
-		osg::PrimitiveSet::TRIANGLE_STRIP, m_vIndex.size() / GEOM_DIV , &m_vIndex[ 0 ] ) );
+		osg::PrimitiveSet::TRIANGLE_STRIP, m_vIndex.size() / GEOM_DIV - 2 , &m_vIndex[ 0 ] ) );
 
 	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	geom->setInitialBound( bbox );
