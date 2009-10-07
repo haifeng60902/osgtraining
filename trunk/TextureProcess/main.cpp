@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include <fstream>
 
 std::map< dataRGB , int > res;
 std::map< dataRGB , int > resNom;
@@ -95,6 +96,10 @@ int main()
 	imageBig->allocateImage( 4096, 4096, 1, GL_RGB, GL_UNSIGNED_BYTE);
 	unsigned char *_dataBig = imageBig->data();
 
+	// поток для записи файла
+	std::ofstream m_out;
+	m_out.open( "list_textures.log" , std::ios::out | std::ios::binary);
+
 	//заполнение вспомогательного map для удобного нахождения индекса цвета
 	std::map< dataRGB , int >::iterator itN = resNom.begin();
 	while( itN != resNom.end() )
@@ -106,10 +111,15 @@ int main()
 		std::string file = rgb2FileName( rgb );
 
 		//вставка изображения в нужное место
-		PutImageInProperPlace( file , ind , _dataBig );
+		//PutImageInProperPlace( file , ind , _dataBig );
+
+		//формирование строки лога
+		m_out << ind << " " << file << " " << ind % 16 << "," << ind / 16 << "\n";
 
 		++itN;
 	}
+
+	m_out.close();
 
 	osgDB::writeImageFile( *imageBig , "big.bmp" );
 }
