@@ -1,9 +1,10 @@
 #include "TerrainNode.h"
 
-//#include "TerrainCullCallback.h"
-
 #include <osg/BoundingBox>
 #include <osg/PolygonMode>
+#include <osg/Image>
+#include <osg/Texture2D>
+#include <osgDB/ReadFile>
 
 TerrainNode::TerrainNode()
 {
@@ -12,6 +13,9 @@ TerrainNode::TerrainNode()
 
 	//инициализировать корневой узел земли
 	InitTerrainNode();
+
+	//добавить текстуру с картой высот
+	AddTextureHeightmap();
 
 	//динамически меняемый узел
 	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
@@ -44,4 +48,27 @@ void TerrainNode::InitTerrainNode()
 	osg::PolygonMode* polymode = new osg::PolygonMode;
 	polymode->setMode( osg::PolygonMode::FRONT_AND_BACK , osg::PolygonMode::LINE );
 	//state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
+}
+
+void TerrainNode::AddTextureHeightmap()
+{
+	//добавить текстуру с картой высот
+	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
+
+	// Load the texture image
+	osg::ref_ptr<osg::Image> image0 =
+		osgDB::readImageFile( "terHightmap.bmp" );
+
+	// Attach the image in a Texture2D object
+	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
+	tex0->setImage( image0.get() );
+
+	tex0->setFilter( osg::Texture::MIN_FILTER,osg::Texture::LINEAR );
+	tex0->setFilter( osg::Texture::MAG_FILTER,osg::Texture::LINEAR );
+	tex0->setWrap( osg::Texture::WRAP_S , osg::Texture::REPEAT ); 
+	tex0->setWrap( osg::Texture::WRAP_T , osg::Texture::REPEAT ); 
+
+	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
+	// both on texture unit 0.
+	state->setTextureAttributeAndModes( 0, tex0.get() , osg::StateAttribute::ON );
 }
