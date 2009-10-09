@@ -78,6 +78,9 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 			AddChilds( group.get() );
 		}
 	}
+
+	// first update subgraph to make sure objects are all moved into position
+	traverse(node,nv);
 }
 
 void DynamicGroupUpdateCallback::UpdateShaderPos()
