@@ -1,7 +1,7 @@
 #ifndef _DYNAMIC_GROUP_UPDATE_CALLBACK_H_
 #define _DYNAMIC_GROUP_UPDATE_CALLBACK_H_
 
-#include "VisiblePatchArray.h"
+#include "../VisiblePatchArray.h"
 #include "DynamicGroupLevel0512Node.h"
 #include "DynamicGroupLevel1024Node.h"
 #include "DynamicGroupLevel2048Node.h"

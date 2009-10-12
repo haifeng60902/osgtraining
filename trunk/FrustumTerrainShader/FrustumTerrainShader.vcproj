@@ -187,74 +187,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dataVisPatch.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel0512Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel0512Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel1024Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel1024Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel16384Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel16384Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel2048Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel2048Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel32768Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel32768Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel4096Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel4096Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel8192Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupLevel8192Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupUpdateCallback.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicGroupUpdateCallback.h"
-				>
-			</File>
-			<File
 				RelativePath=".\FrustumSingleton.cpp"
 				>
 			</File>
@@ -295,14 +227,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TerrainShaderPatchNode.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TerrainShaderPatchNode.h"
-				>
-			</File>
-			<File
 				RelativePath=".\VisiblePatchArray.cpp"
 				>
 			</File>
@@ -310,6 +234,86 @@
 				RelativePath=".\VisiblePatchArray.h"
 				>
 			</File>
+			<Filter
+				Name="TerrainShader"
+				>
+				<File
+					RelativePath=".\TerrainShader\dataVisPatch.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel0512Node.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel0512Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel1024Node.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel1024Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel16384Node.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel16384Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel2048Node.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel2048Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel32768Node.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel32768Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel4096Node.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel4096Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel8192Node.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupLevel8192Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupUpdateCallback.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\DynamicGroupUpdateCallback.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\TerrainShaderPatchNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TerrainShader\TerrainShaderPatchNode.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="glsl"
