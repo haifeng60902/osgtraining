@@ -61,6 +61,8 @@ void TerrainShaderPatchNode::AddTextureIndex()
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 1.
 	state->setTextureAttributeAndModes( 1 , tex0.get() , osg::StateAttribute::ON );
+
+	tex0->setUnRefImageDataAfterApply( true );
 }
 
 void TerrainShaderPatchNode::AddTexturePatches()
@@ -84,6 +86,8 @@ void TerrainShaderPatchNode::AddTexturePatches()
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 2.
 	state->setTextureAttributeAndModes( 2, tex0.get() , osg::StateAttribute::ON );
+
+	tex0->setUnRefImageDataAfterApply( true );
 }
 
 void TerrainShaderPatchNode::AddShader()

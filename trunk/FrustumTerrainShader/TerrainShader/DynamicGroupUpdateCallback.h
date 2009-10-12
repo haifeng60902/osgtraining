@@ -1,7 +1,6 @@
 #ifndef _DYNAMIC_GROUP_UPDATE_CALLBACK_H_
 #define _DYNAMIC_GROUP_UPDATE_CALLBACK_H_
 
-#include "../VisiblePatchArray.h"
 #include "DynamicGroupLevel0512Node.h"
 #include "DynamicGroupLevel1024Node.h"
 #include "DynamicGroupLevel2048Node.h"
@@ -36,9 +35,6 @@ private:
 
 	//обновить статистику
 	void UpdateStatistic();
-
-	//класс формирующий массив видимых патчей
-	VisiblePatchArray m_VisiblePatchArray;
 
 	//узлы отвечающие за динамическое формирование патчей
 	DynamicGroupLevel0512Node m_Node512;

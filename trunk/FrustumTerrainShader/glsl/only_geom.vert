@@ -44,7 +44,7 @@ void main()
 	}
 	
 	//calc hight map
-	vec2 texCoord0 = ( position.xy / 262144.0 * 2.0 ) * ( 1.0 - 1.0 / 1024.0 ) + 1.0 / 2048.0;
+	vec2 texCoord0 = ( position.xy / 262144.0 ) * ( 1.0 - 1.0 / 1024.0 ) + 1.0 / 2048.0;
 	vec4 tex0 = texture2D( u_texture0 , texCoord0 );
 	
 	//fill texcoords

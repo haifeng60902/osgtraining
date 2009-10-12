@@ -19,9 +19,6 @@ private:
 	//инициализировать корневой узел земли
 	void InitTerrainNode();
 
-	//добавить текстуру с картой высот
-	void AddTextureHeightmap();
-
 	//добавить текстуру с индексами
 	void AddTextureIndex();
 
