@@ -34,9 +34,7 @@ void TerrainNode::InitTerrainNode()
 	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	m_rootNode->setInitialBound( bbox );
 
-	//задать класс вычисления области видимости
-	//m_rootNode->setCullCallback( new TerrainCullCallback );
-
+	//класс отвечающий за формирование и вывод земной поверхности
 	m_TerrainShaderPatchNode = new TerrainShaderPatchNode;
 
 	//добавить узел ратчей
@@ -71,4 +69,6 @@ void TerrainNode::AddTextureHeightmap()
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 0.
 	state->setTextureAttributeAndModes( 0, tex0.get() , osg::StateAttribute::ON );
+
+	tex0->setUnRefImageDataAfterApply( true );
 }

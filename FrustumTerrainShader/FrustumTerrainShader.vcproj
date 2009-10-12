@@ -203,22 +203,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TerrainBuildingNode.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TerrainBuildingNode.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TerrainCullCallback.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TerrainCullCallback.h"
-				>
-			</File>
-			<File
 				RelativePath=".\TerrainNode.cpp"
 				>
 			</File>
@@ -311,6 +295,18 @@
 				</File>
 				<File
 					RelativePath=".\TerrainShader\TerrainShaderPatchNode.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="BuildingShader"
+				>
+				<File
+					RelativePath=".\BuildingShader\BuildingShaderPatchNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\BuildingShader\BuildingShaderPatchNode.h"
 					>
 				</File>
 			</Filter>

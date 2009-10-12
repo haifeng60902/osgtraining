@@ -3,11 +3,14 @@
 
 #include "dataPatch.h"
 
+#include "Singleton.h"
+
 #include <osg/Vec3>
 
 #include <vector>
 
-class VisiblePatchArray
+//класс формирующий массив видимых патчей
+class VisiblePatchArray : public Singleton< VisiblePatchArray >
 {
 public:
 	VisiblePatchArray();

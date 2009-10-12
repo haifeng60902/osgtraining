@@ -2,6 +2,7 @@
 
 #include "../dataPatch.h"
 #include "../FrustumSingleton.h"
+#include "../VisiblePatchArray.h"
 
 #include <iostream>
 #include <fstream>
@@ -20,7 +21,7 @@ DynamicGroupUpdateCallback::~DynamicGroupUpdateCallback()
 void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* nv )
 {
 	//сформировать массив данных о видимых патчах
-	m_VisiblePatchArray.Update();
+	VisiblePatchArray::Instance().Update();
 
 	//обновить положение наблюдателя для корректной работы шейдера
 	UpdateShaderPos();
@@ -33,7 +34,7 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 	if ( group )
 	{
 		//вернуть ссылку на массив видимых патчей
-		const std::vector< dataPatch > &data_vis = m_VisiblePatchArray.GetVisibleArray();
+		const std::vector< dataPatch > &data_vis = VisiblePatchArray::Instance().GetVisibleArray();
 
 		if ( !data_vis.empty() )
 		{
@@ -122,7 +123,7 @@ void DynamicGroupUpdateCallback::UpdateStatistic()
 	//обновить статистику
 
 	//вернуть ссылку на массив видимых патчей
-	const std::vector< dataPatch > &data_vis = m_VisiblePatchArray.GetVisibleArray();
+	const std::vector< dataPatch > &data_vis = VisiblePatchArray::Instance().GetVisibleArray();
 
 	if ( data_vis.size() > 0 )
 	{
