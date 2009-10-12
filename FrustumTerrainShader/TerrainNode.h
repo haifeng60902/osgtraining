@@ -1,7 +1,7 @@
 #ifndef _TERRAIN_NODE_H_
 #define _TERRAIN_NODE_H_
 
-#include "TerrainShaderPatchNode.h"
+#include "TerrainShader/TerrainShaderPatchNode.h"
 
 #include <osg/Group>
 #include <osg/Referenced>

@@ -1,7 +1,7 @@
 #include "DynamicGroupUpdateCallback.h"
 
-#include "dataPatch.h"
-#include "FrustumSingleton.h"
+#include "../dataPatch.h"
+#include "../FrustumSingleton.h"
 
 #include <iostream>
 #include <fstream>
