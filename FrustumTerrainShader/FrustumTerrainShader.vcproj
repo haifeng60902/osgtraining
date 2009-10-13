@@ -199,6 +199,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PatchInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PatchInfo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Singleton.h"
 				>
 			</File>
@@ -307,6 +315,18 @@
 				</File>
 				<File
 					RelativePath=".\BuildingShader\BuildingShaderPatchNode.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="binData"
+				>
+				<File
+					RelativePath=".\binData\binPatch.h"
+					>
+				</File>
+				<File
+					RelativePath=".\binData\enumTypes.h"
 					>
 				</File>
 			</Filter>
