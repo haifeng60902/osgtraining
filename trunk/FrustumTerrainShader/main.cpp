@@ -1,6 +1,7 @@
 #include "TerrainNode.h"
 
 #include "FrustumSingleton.h"
+#include "PatchInfo.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
@@ -9,6 +10,9 @@
 
 int main()
 {
+	//инициализировать данные о содержимом патчей
+	PatchInfo::Instance().InitPatchData();
+
 	osg::ref_ptr< TerrainNode > terrain = new TerrainNode;
 
 	// Create a Viewer.

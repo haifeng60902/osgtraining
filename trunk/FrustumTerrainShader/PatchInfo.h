@@ -10,10 +10,12 @@ public:
 	PatchInfo();
 	~PatchInfo();
 
+	//инициализировать данные о содержимом патчей
+	void InitPatchData();
 private:
+
 	//тайлы сгрупированны 16 на 16
 	binPatch m_binPatch[16][16];
-
 };
 
 #endif	//_PATCH_INFO_H_
