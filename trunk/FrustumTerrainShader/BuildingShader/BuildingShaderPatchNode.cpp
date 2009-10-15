@@ -1,5 +1,7 @@
 #include "BuildingShaderPatchNode.h"
 
+#include "DynamicHouseUpdateCallback.h"
+
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 #include <osg/Image>
@@ -29,7 +31,7 @@ void BuildingShaderPatchNode::InitBuildingNode()
 	AddShader();
 
 	//задать обратный вызов обновления
-	//m_rootNode->setUpdateCallback( new DynamicGroupUpdateCallback( m_unfVisPos.get()) );
+	m_rootNode->setUpdateCallback( new DynamicHouseUpdateCallback );
 }
 
 void BuildingShaderPatchNode::AddShader()

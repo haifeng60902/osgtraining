@@ -14,8 +14,18 @@ TerrainNode::TerrainNode()
 	//инициализировать корневой узел земли
 	InitTerrainNode();
 
+	//инициализировать корневой узел строений
+	InitBuildingNode();
+
 	//добавить текстуру с картой высот
 	AddTextureHeightmap();
+
+	//добавить режим отображения 
+	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
+
+	osg::PolygonMode* polymode = new osg::PolygonMode;
+	polymode->setMode( osg::PolygonMode::FRONT_AND_BACK , osg::PolygonMode::LINE );
+	//state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
 
 	//динамически меняемый узел
 	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
@@ -30,7 +40,7 @@ void TerrainNode::InitTerrainNode()
 {
 	//инициализировать корневой узел земли
 
-	// определение ограничивающего объема, размер земли 1024км(в 1 км - 1024 метра), максимальная высота 500м
+	// определение ограничивающего объема, размер земли 256км(в 1 км - 1024 метра), максимальная высота 500м
 	osg::BoundingBox bbox( 0, 0, 0, 512 * 512 , 512 * 512 , 64 );
 	m_rootNode->setInitialBound( bbox );
 
@@ -39,13 +49,17 @@ void TerrainNode::InitTerrainNode()
 
 	//добавить узел ратчей
 	m_rootNode->addChild( m_TerrainShaderPatchNode->getRootNode().get() );
+}
 
-	//добавить режим отображения 
-	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
+void TerrainNode::InitBuildingNode()
+{
+	//инициализировать корневой узел строений
 
-	osg::PolygonMode* polymode = new osg::PolygonMode;
-	polymode->setMode( osg::PolygonMode::FRONT_AND_BACK , osg::PolygonMode::LINE );
-	//state->setAttributeAndModes( polymode, osg::StateAttribute::ON );
+	//класс отвечающий за формирование и вывод земной поверхности
+	m_BuildingShaderPatchNode = new BuildingShaderPatchNode;
+
+	//добавить узел со строениями
+	m_rootNode->addChild( m_BuildingShaderPatchNode->getRootNode().get() );
 }
 
 void TerrainNode::AddTextureHeightmap()
