@@ -317,6 +317,14 @@
 					RelativePath=".\BuildingShader\BuildingShaderPatchNode.h"
 					>
 				</File>
+				<File
+					RelativePath=".\BuildingShader\DynamicHouseUpdateCallback.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\BuildingShader\DynamicHouseUpdateCallback.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="binData"
