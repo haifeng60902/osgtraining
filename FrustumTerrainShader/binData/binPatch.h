@@ -40,13 +40,16 @@ struct binTree
 	double m_dS;
 };
 
+typedef std::map< int , std::vector< binTree > > tMapTree;
+typedef std::map< int , std::vector< binHouse > > tMapHouse;
+
 struct binPatch
 {
 	//ключом является тип дерева в данном узле, а значением - сколько деревьев и их характеристики
-	std::map< int , std::vector< binTree > > m_mapTree;
+	tMapTree m_mapTree;
 
 	//ключом является тип дома в данном узле, а значением - сколько домов и их характеристики
-	std::map< int , std::vector< binHouse > > m_mapHouse;
+	tMapHouse m_mapHouse;
 };
 
 #endif	//_BIN_PATCH_H_
