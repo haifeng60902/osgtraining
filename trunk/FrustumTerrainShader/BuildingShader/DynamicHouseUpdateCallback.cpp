@@ -33,6 +33,7 @@ void DynamicHouseUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 	{
 		int a = 1;
 	}
+
 	// first update subgraph to make sure objects are all moved into position
 	traverse(node,nv);
 }

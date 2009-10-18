@@ -325,6 +325,14 @@
 					RelativePath=".\BuildingShader\DynamicHouseUpdateCallback.h"
 					>
 				</File>
+				<File
+					RelativePath=".\BuildingShader\SimplyShaderHause.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\BuildingShader\SimplyShaderHause.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="binData"
