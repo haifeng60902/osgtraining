@@ -16,6 +16,9 @@ BuildingShaderPatchNode::BuildingShaderPatchNode()
 
 	//динамически меняемый узел
 	m_rootNode->setDataVariance( osg::Object::DYNAMIC );
+
+	osg::BoundingBox bbox( 0, 0, 0, 256.0 * 1024.0 , 256.0 * 1024.0 , 64 );
+	m_rootNode->setInitialBound( bbox );
 }
 
 BuildingShaderPatchNode::~BuildingShaderPatchNode()
@@ -56,7 +59,7 @@ void BuildingShaderPatchNode::AddShader()
 	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
 
 	//настроить uniform'ы
-	//SetupUniforms( ss );
+	SetupUniforms( ss );
 }
 
 void BuildingShaderPatchNode::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -71,4 +74,13 @@ void BuildingShaderPatchNode::LoadShaderSource( osg::Shader* shader, const std::
 	{
 		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
 	}
+}
+
+void BuildingShaderPatchNode::SetupUniforms( osg::StateSet* ss )
+{
+	//настроить uniform'ы
+
+	//добавление uniform'ов для работы с текстурными модулями
+	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+	ss->addUniform( new osg::Uniform( "u_texture2" , 2 ) );
 }

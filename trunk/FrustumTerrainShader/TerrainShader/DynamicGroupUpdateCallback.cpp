@@ -27,7 +27,7 @@ void DynamicGroupUpdateCallback::operator()( osg::Node* node, osg::NodeVisitor* 
 	UpdateShaderPos();
 
 	//обновить статистику
-	UpdateStatistic();
+	//UpdateStatistic();
 
 	osg::ref_ptr< osg::Group > group = dynamic_cast< osg::Group* >( node );
 
