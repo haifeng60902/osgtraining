@@ -1,4 +1,4 @@
-uniform sampler2D u_texture0;
+uniform sampler2D u_texture2;
 uniform sampler2D u_texture1;
 uniform vec3 posOffset;
 uniform vec3 posVis;
@@ -44,8 +44,8 @@ void main()
 	}
 	
 	//calc hight map
-	vec2 texCoord0 = ( position.xy / 262144.0 ) * ( 1.0 - 1.0 / 1024.0 ) + 1.0 / 2048.0;
-	vec4 tex0 = texture2D( u_texture0 , texCoord0 );
+	vec2 texCoord2 = ( position.xy / 262144.0 ) * ( 1.0 - 1.0 / 1024.0 ) + 1.0 / 2048.0;
+	vec4 tex2 = texture2D( u_texture2 , texCoord2 );
 	
 	//fill texcoords
 	vec2 texCoord1 = ( gl_Vertex.zw * 512.0 + posOffset.xy ) / 262144.0;
@@ -57,7 +57,7 @@ void main()
 	gl_TexCoord[0] = texOffset + texAdd * 256.0 / 4096.0 + fTexCoordAdd / 8192.0;
 	
 	//scale height
-	position.z = tex0.g * 1500.0;
+	position.z = tex2.g * 1500.0;
 	
 	gl_Position = gl_ModelViewProjectionMatrix * position;
 }

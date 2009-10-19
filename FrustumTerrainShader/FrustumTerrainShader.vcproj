@@ -351,6 +351,14 @@
 			Name="glsl"
 			>
 			<File
+				RelativePath=".\glsl\building_geom.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\building_geom.vert"
+				>
+			</File>
+			<File
 				RelativePath=".\glsl\only_geom.frag"
 				>
 			</File>

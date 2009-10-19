@@ -2,6 +2,7 @@
 
 #include "FrustumSingleton.h"
 #include "PatchInfo.h"
+#include "binData/enumTypes.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
@@ -10,8 +11,10 @@
 
 int main()
 {
+//////////////////////////////////////////////////////////////////////////
 	//инициализировать данные о содержимом патчей
 	PatchInfo::Instance().InitPatchData();
+//////////////////////////////////////////////////////////////////////////
 
 	osg::ref_ptr< TerrainNode > terrain = new TerrainNode;
 

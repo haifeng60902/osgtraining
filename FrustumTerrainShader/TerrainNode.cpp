@@ -72,17 +72,17 @@ void TerrainNode::AddTextureHeightmap()
 		osgDB::readImageFile( "terHightmap.bmp" );
 
 	// Attach the image in a Texture2D object
-	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
-	tex0->setImage( image0.get() );
+	osg::ref_ptr<osg::Texture2D> tex2 = new osg::Texture2D;
+	tex2->setImage( image0.get() );
 
-	tex0->setFilter( osg::Texture::MIN_FILTER,osg::Texture::LINEAR );
-	tex0->setFilter( osg::Texture::MAG_FILTER,osg::Texture::LINEAR );
-	tex0->setWrap( osg::Texture::WRAP_S , osg::Texture::REPEAT ); 
-	tex0->setWrap( osg::Texture::WRAP_T , osg::Texture::REPEAT ); 
+	tex2->setFilter( osg::Texture::MIN_FILTER,osg::Texture::LINEAR );
+	tex2->setFilter( osg::Texture::MAG_FILTER,osg::Texture::LINEAR );
+	tex2->setWrap( osg::Texture::WRAP_S , osg::Texture::REPEAT ); 
+	tex2->setWrap( osg::Texture::WRAP_T , osg::Texture::REPEAT ); 
 
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 0.
-	state->setTextureAttributeAndModes( 0, tex0.get() , osg::StateAttribute::ON );
+	state->setTextureAttributeAndModes( 2, tex2.get() , osg::StateAttribute::ON );
 
-	tex0->setUnRefImageDataAfterApply( true );
+	tex2->setUnRefImageDataAfterApply( true );
 }

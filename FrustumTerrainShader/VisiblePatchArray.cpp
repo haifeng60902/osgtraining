@@ -34,7 +34,7 @@ void VisiblePatchArray::Update()
 	//обработать данные о видимости патчей имеющих размер только 512м
 	Process512();
 
-	std::cout << "  v" << m_vVisible.size() << "    512v" << m_vVisible512.size();
+	//std::cout << "  v" << m_vVisible.size() << "    512v" << m_vVisible512.size();
 }
 
 void VisiblePatchArray::FillRootPatch()
