@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="windows-1251" ?>
+<root>
+  <houses>
+    <house id="0" name="dd.flt"/>
+    <house id="1" name="dd.flt"/>
+  </houses>
+  <patches>
+    <patch id="0" name="CtCtCt.bmp">
+      <houses>
+        <house id="0" x="0" y="0" r="0"/>
+        <house id="0" x="0" y="0" r="0"/>
+      </houses>
+      <trees>
+        <tree id="0" x="0" y="0" r="0" s="1"/>
+      </trees>
+    </patch>
+  </patches>
+</root>
