@@ -25,12 +25,9 @@ void PatchInfo::InitPatchData()
 	m_binPatch[ 1 ][ 3 ].m_mapHouse[ SCHOOL_106 ].push_back( _house );
 
 	m_ModelCache[ SCHOOL_106 ] = osgDB::readNodeFile( "06/255-106-0.flt" );
-	m_ModelCache[ SCHOOL_106 ]->setCullingActive( false );
 
 	// определение ограничивающего объема, размер земли 256км(в 1 км - 1024 метра), максимальная высота 500м
 	osg::BoundingBox bbox( 0, 0, 0, 256.0 * 1024.0 , 256.0 * 1024.0 , 64 );
-	m_ModelCache[ SCHOOL_106 ]->setInitialBound( bbox );
-
 
 	osg::Group* group = dynamic_cast< osg::Group* >( m_ModelCache[ SCHOOL_106 ].get() );
 
@@ -40,16 +37,12 @@ void PatchInfo::InitPatchData()
 		unsigned int numDr = group->getNumChildren();
 
 		osg::Group *node = dynamic_cast< osg::Group* >( group->getChild( 0 ) );
-		node->setInitialBound( bbox );
-		node->setCullingActive( false );
-
+	
 		//получить количество Drawable узлов
 		unsigned int numDr1 = node->getNumChildren();
 
 		osg::Geode *node1 = dynamic_cast< osg::Geode* >( node->getChild( 0 ) );
-		node1->setInitialBound( bbox );
-		node1->setCullingActive( false );
-
+		
 		osg::Geometry *mtDrawable = dynamic_cast< osg::Geometry* >( node1->getDrawable( 0 ) );
 		mtDrawable->setInitialBound( bbox );
 
