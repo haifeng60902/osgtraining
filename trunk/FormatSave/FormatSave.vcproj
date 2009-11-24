@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(OSG_INCLUDE_PATH)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,7 +61,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="osgViewerd.lib osgDBd.lib osgd.lib osgGAd.lib"
+				OutputFile="$(ProjectName)d.exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(OSG_LIB_PATH)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -115,6 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="$(OSG_INCLUDE_PATH)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -133,7 +138,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="osgViewer.lib osgDB.lib osg.lib osgGA.lib"
+				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(OSG_LIB_PATH)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
