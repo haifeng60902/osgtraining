@@ -21,7 +21,7 @@ int main()
 	//добавить модель земной поверхности
 	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile( "ball.osg" );
 
-	bool res = osgDB::writeNodeFile( *root , "test.3ds" ); 
+	bool res = osgDB::writeNodeFile( *root , "test.stl" ); 
 
 	viewer.setSceneData( root.get() );
 
