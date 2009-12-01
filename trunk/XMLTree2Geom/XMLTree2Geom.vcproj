@@ -187,44 +187,64 @@
 				>
 			</File>
 			<Filter
-				Name="ticpp"
+				Name="Singletons"
 				>
-				<File
-					RelativePath=".\ticpp\ticpp.cpp"
+			</Filter>
+			<Filter
+				Name="xml"
+				>
+				<Filter
+					Name="ticpp"
 					>
-				</File>
-				<File
-					RelativePath=".\ticpp\ticpp.h"
+					<File
+						RelativePath=".\xml\ticpp\ticpp.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\ticpp.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\ticpprc.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\tinystr.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\tinystr.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\tinyxml.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\tinyxml.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\tinyxmlerror.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xml\ticpp\tinyxmlparser.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="xmlRoot"
 					>
-				</File>
-				<File
-					RelativePath=".\ticpp\ticpprc.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ticpp\tinystr.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ticpp\tinystr.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ticpp\tinyxml.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ticpp\tinyxml.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ticpp\tinyxmlerror.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ticpp\tinyxmlparser.cpp"
-					>
-				</File>
+					<File
+						RelativePath=".\xml\xmlRoot\xmlTmpl.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="bin"
+				>
 			</Filter>
 		</Filter>
 	</Files>
