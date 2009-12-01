@@ -84,6 +84,8 @@ void TransGeomNode2VertArray::ProcessDrawableNode( const osg::Geometry *mtDrawab
 	//привести указатель к типу vec3f
 	m_N3 = dynamic_cast< const osg::Vec3Array* >( n );
 
+	osg::Geometry::AttributeBinding attr = mtDrawable->getNormalBinding();
+
 	//привести указатель к типу vec4f
 	const osg::Vec4Array *c4 = dynamic_cast< const osg::Vec4Array* >( c );
 
@@ -338,16 +340,17 @@ void TransGeomNode2VertArray::SaveVertex( const osg::Vec3Array *v3 , const osg::
 	//запомнить вершину в формируемом массиве
 
 	osg::Vec3d _ver( (*v3)[ ind ][ 0 ] , (*v3)[ ind ][ 1 ] , (*v3)[ ind ][ 2 ]);
+	osg::Vec3d _nor( (*n3)[ ind ][ 0 ] , (*n3)[ ind ][ 1 ] , (*n3)[ ind ][ 2 ]);
 
-	_ver = _ver * m_Matrix;
+	//_ver = _ver * m_Matrix;
 
 	m_vVer.push_back( _ver.x() );
 	m_vVer.push_back( _ver.y() );
 	m_vVer.push_back( _ver.z() );
 
-//	m_vVer.push_back( (*v3)[ ind ][ 0 ] );
-//	m_vVer.push_back( (*v3)[ ind ][ 1 ] );
-//	m_vVer.push_back( (*v3)[ ind ][ 2 ] );
+	m_vNor.push_back( _nor.x() );
+	m_vNor.push_back( _nor.y() );
+	m_vNor.push_back( _nor.z() );
 }
 
 void TransGeomNode2VertArray::ProcessIndex( const osg::Vec3Array *v3 , const osg::Vec3Array *n3 , int ind0 , int ind1 , int ind2 )

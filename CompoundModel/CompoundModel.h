@@ -2,6 +2,7 @@
 #define _COMPOUND_MODEL_H_
 
 #include "CompoundUpdateCallback.h"
+#include "TransGeomNode2VertArray.h"
 
 #include <osg/Group>
 #include <osg/Referenced>
@@ -23,8 +24,8 @@ private:
 	void InitNode();
 
 	//создание из 1 модели нескольких копий
-	void CreateBigModel( const osg::Vec3Array *_v 
-		, const osg::Vec3Array *_n
+	void CreateBigModel( const TransGeomNode2VertArray::tVrtDtd &_v 
+		, const TransGeomNode2VertArray::tVrtDtd &_n
 		, const osg::Vec2Array *_tc0 );
 
 	//добавить текстуру

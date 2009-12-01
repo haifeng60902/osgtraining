@@ -59,15 +59,15 @@ void CompoundModel::InitNode()
 	converter->apply( *model.get() );
 
 	//создание из 1 модели нескольких копий
-	CreateBigModel( converter->GetVertex() 
-		, converter->GetNormals()
+	CreateBigModel( converter->GetVert() 
+		, converter->GetNorm()
 		, converter->GetTexCoord0() );
 
 	//m_rootNode->addChild( model.get() );
 }
 
-void CompoundModel::CreateBigModel( const osg::Vec3Array *_v 
-										 , const osg::Vec3Array *_n
+void CompoundModel::CreateBigModel( const TransGeomNode2VertArray::tVrtDtd &_v 
+										 , const TransGeomNode2VertArray::tVrtDtd &_n
 										 , const osg::Vec2Array *_tc0 )
 {
 	//создание из 1 модели нескольких копий
@@ -83,9 +83,9 @@ void CompoundModel::CreateBigModel( const osg::Vec3Array *_v
 
 //////////////////////////////////////////////////////////////////////////
 	for ( int j = 0 ; j < NUM_COPY ; ++j )
-		for ( int i = 0 ; i < _v->size() ; ++i )
+		for ( int i = 0 ; i < _v.size() ; i += 3 )
 		{
-			v->push_back( osg::Vec4( _v->at( i ).x(), _v->at( i ).y(), _v->at( i ).z() 
+			v->push_back( osg::Vec4( _v[ i ] , _v[ i + 1 ], _v[ i + 2 ] 
 				, (float)j / (float)NUM_COPY + 1.0 / 256.0 ) );
 		}
 //////////////////////////////////////////////////////////////////////////
@@ -97,8 +97,8 @@ void CompoundModel::CreateBigModel( const osg::Vec3Array *_v
 
 //////////////////////////////////////////////////////////////////////////
 	for ( int j = 0 ; j < NUM_COPY ; ++j )
-		for ( int i = 0 ; i < _n->size() ; ++i )
-			n->push_back( _n->at( i ) );
+		for ( int i = 0 ; i < _n.size() ; i += 3 )
+			n->push_back( osg::Vec3( _n[ i ] , _n[ i + 1 ] , _n[ i + 2 ] ) );
 //////////////////////////////////////////////////////////////////////////
 
 	// Create a Vec2Array of texture coordinates for texture unit 0
