@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_ST)&quot;;./ticpp;&quot;c:\Work\OpenSceneGraph-2.8.1\OpenSceneGraph\include\&quot;"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_ST)&quot;;&quot;c:\Work\OpenSceneGraph-2.8.1\OpenSceneGraph\include\&quot;;./xml/ticpp/;./xml/xmlRoot/;./bin/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(OSG_INCLUDE_ST)"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_ST)&quot;;./xml/ticpp/;./xml/xmlRoot/;./bin/"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -189,6 +189,18 @@
 			<Filter
 				Name="Singletons"
 				>
+				<File
+					RelativePath=".\Singletons\Singleton.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Singletons\xmlTree.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Singletons\xmlTree.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="xml"
@@ -240,11 +252,35 @@
 						RelativePath=".\xml\xmlRoot\xmlTmpl.h"
 						>
 					</File>
+					<Filter
+						Name="xmlBranch"
+						>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlBranch\xmlBranch.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlBranch\xmlBranchLoad.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlBranch\xmlBranchLoad.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlBranch\xmlBranchSave.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="bin"
 				>
+				<File
+					RelativePath=".\bin\binBranch.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
