@@ -60,4 +60,6 @@ void main()
 	position.z = tex2.g * 1500.0;
 	
 	gl_Position = gl_ModelViewProjectionMatrix * position;
+	
+	gl_TexCoord[1] = gl_Vertex * 0.5;
 }

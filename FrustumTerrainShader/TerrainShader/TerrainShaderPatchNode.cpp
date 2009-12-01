@@ -36,6 +36,9 @@ void TerrainShaderPatchNode::InitTerrainNode()
 	//добавить составную текстуру
 	AddTexturePatches();
 
+	//добавить текстуру для микроландшафта
+	AddMicroTexture( "grass_green-01_df_.dds" , 3 );
+
 	//задать обратный вызов обновления
 	m_rootNode->setUpdateCallback( new DynamicGroupUpdateCallback( m_unfVisPos.get()) );
 }
@@ -78,8 +81,8 @@ void TerrainShaderPatchNode::AddTexturePatches()
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
 	tex0->setImage( image0.get() );
 
-	tex0->setFilter( osg::Texture::MIN_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
-	tex0->setFilter( osg::Texture::MAG_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
+	tex0->setFilter( osg::Texture::MIN_FILTER,osg::Texture::NEAREST );
+	tex0->setFilter( osg::Texture::MAG_FILTER,osg::Texture::NEAREST );
 	tex0->setWrap( osg::Texture::WRAP_S , osg::Texture::CLAMP ); 
 	tex0->setWrap( osg::Texture::WRAP_T , osg::Texture::CLAMP ); 
 
@@ -126,6 +129,11 @@ void TerrainShaderPatchNode::SetupUniforms( osg::StateSet* ss )
 	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
 	ss->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
 	ss->addUniform( new osg::Uniform( "u_texture2" , 2 ) );
+
+	ss->addUniform( new osg::Uniform( "u_texture3" , 3 ) );
+	ss->addUniform( new osg::Uniform( "u_texture4" , 4 ) );
+	ss->addUniform( new osg::Uniform( "u_texture5" , 5 ) );
+	ss->addUniform( new osg::Uniform( "u_texture6" , 6 ) );
 }
 
 void TerrainShaderPatchNode::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -140,4 +148,27 @@ void TerrainShaderPatchNode::LoadShaderSource( osg::Shader* shader, const std::s
 	{
 		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
 	}
+}
+
+void TerrainShaderPatchNode::AddMicroTexture( std::string _sFile , int _iMod )
+{
+	//добавить текстуру для микроландшафта
+	osg::StateSet* state = m_rootNode->getOrCreateStateSet();
+
+	// Load the texture image
+	osg::ref_ptr<osg::Image> image =
+		osgDB::readImageFile( _sFile.c_str() );
+
+	// Attach the image in a Texture2D object
+	osg::ref_ptr<osg::Texture2D> tex = new osg::Texture2D;
+	tex->setImage( image.get() );
+
+	tex->setFilter( osg::Texture::MIN_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
+	tex->setFilter( osg::Texture::MAG_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR );
+	tex->setWrap( osg::Texture::WRAP_S , osg::Texture::REPEAT ); 
+	tex->setWrap( osg::Texture::WRAP_T , osg::Texture::REPEAT ); 
+
+	state->setTextureAttributeAndModes( _iMod , tex.get() , osg::StateAttribute::ON );
+
+	tex->setUnRefImageDataAfterApply( true );
 }
