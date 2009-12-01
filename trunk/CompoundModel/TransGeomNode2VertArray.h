@@ -21,6 +21,7 @@ public:
 
 	//получить результат обработки узлов
 	tVrtDtd& GetVert(){ return m_vVer; };
+	tVrtDtd& GetNorm(){ return m_vNor; };
 
 	//получение не обработанных данных геометрии
 	const osg::Vec3Array *GetVertex(){ return m_V3; };
