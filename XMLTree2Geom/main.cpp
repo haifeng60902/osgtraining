@@ -1,8 +1,8 @@
-#include "ticpp.h"
-
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
- 
+
+#include "ticpp.h"
+
 int main()
 {
 
@@ -20,7 +20,7 @@ int main()
 		for ( child = child.begin( doc.FirstChildElement() ); child != child.end(); child++ )
 		{
 			std::string sFile;
-			child->GetAttribute( "texture" , &sFile );
+			child->GetAttribute( "texture" , &sFile , false );
 			int a = 1;
 		}
 
@@ -29,7 +29,7 @@ int main()
 		for ( childF = childF.begin( doc.FirstChildElement() ); childF != childF.end(); childF++ )
 		{
 			std::string sFile;
-			childF->GetAttribute( "texture" , &sFile );
+			childF->GetAttribute( "texture" , &sFile , false );
 			int a = 1;
 		}
 
