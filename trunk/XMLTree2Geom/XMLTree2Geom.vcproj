@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_ST)&quot;;&quot;c:\Work\OpenSceneGraph-2.8.1\OpenSceneGraph\include\&quot;;./xml/ticpp/;./xml/xmlRoot/;./bin/"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_ST)&quot;;&quot;c:\Work\OpenSceneGraph-2.8.1\OpenSceneGraph\include\&quot;;./xml/ticpp/;./xml/xmlRoot/;./bin/;./Singletons/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

@@ -14,8 +14,11 @@ public:
 	void ParseXml( ticpp::Node* pNode , binBranch *_data );
 
 private:
-	//перейти к настройкам приложения
+	//перейти к узлу branch
 	void DecodeSettings( ticpp::Node* pNode );
+
+	//считать данные LOD'ов
+	void DecodeLODs( ticpp::Element* pLODs );
 
 	binBranch *m_pData;
 };
