@@ -2,12 +2,16 @@
 #define _BIN_BRANCH_H_
 
 #include <vector>
+#include <string>
 
 typedef std::vector< float > tVecVertex;
 typedef std::vector< unsigned short > tVecIndex;
 
 struct binBranchGeom
 {
+	binBranchGeom() : m_fAlfa( 0.0f)
+	{};
+
 	//координаты вершин: 3 значения на вершину
 	tVecVertex m_vVertex;
 
@@ -19,6 +23,9 @@ struct binBranchGeom
 
 	//индексы вершин для режима TRIANGLE_STRIP
 	tVecIndex m_vIndex;
+
+	//значения альфа-теста
+	float m_fAlfa;
 };
 
 //набор геометрий для LOD'ов
@@ -28,6 +35,9 @@ struct binBranch
 {
 	//LOD'ы ствола
 	tVecBranch m_vBranch;
+
+	//имя файла с текстурой ствола
+	std::string m_sTexture;
 };
 
 #endif	//_BIN_BRANCH_H_
