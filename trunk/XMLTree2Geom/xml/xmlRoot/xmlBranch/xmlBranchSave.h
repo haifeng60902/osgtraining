@@ -13,6 +13,8 @@ public:
 	//получить xml тег с сформированными данными
 	ticpp::Node* GetXmlData( const binBranch &_data );
 
+private:
+	const binBranch *m_pData;
 };
 
 #endif	//_XML_BRANCH_SAVE_H_
