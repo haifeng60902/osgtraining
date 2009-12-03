@@ -20,6 +20,9 @@ private:
 	//считать данные LOD'ов
 	void DecodeLODs( ticpp::Element* pLODs );
 
+	//считать координаты точки
+	void DecodePoint( ticpp::Element* pVertex , int i );
+
 	binBranch *m_pData;
 };
 

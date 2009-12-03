@@ -59,6 +59,10 @@ void xmlBranchLoad::DecodeLODs( ticpp::Element* pLODs )
 		{
 			int iNum = -1;
 			pLOD->GetAttribute( m_BranchNames.m_sNum , &iNum );
+			pLOD->GetAttribute( m_BranchNames.m_sAlfaTest , &m_pData->m_vBranch[ iNum ].m_fAlfa );
+
+			//считать координаты точки
+			DecodePoint( pLOD->FirstChildElement( m_BranchNames.m_sVertexs ) , iNum );
 		}
 
 	}
@@ -67,5 +71,30 @@ void xmlBranchLoad::DecodeLODs( ticpp::Element* pLODs )
 		//If any function has an error, execution will enter here.
 		//	Report the error
 		std::cout << ex.what();
+	}
+}
+
+void xmlBranchLoad::DecodePoint( ticpp::Element* pVertex , int i )
+{
+	//считать координаты точки
+	int iNum = 0;
+	pVertex->GetAttribute( m_BranchNames.m_sNum , &iNum );
+	m_pData->m_vBranch[ i ].m_vVertex.resize( iNum * 3 );
+	ticpp::Iterator< ticpp::Element > pPoint( m_BranchNames.m_sPoint );
+	for ( pPoint = pPoint.begin( pVertex ); pPoint != pPoint.end(); pPoint++ )
+	{
+		float fX = 0.0f , fY = 0.0f , fZ = 0.0f;		//координаты вершины
+		float fnX = 0.0f , fnY = 0.0f , fnZ = 0.0f;		//нормаль вершины
+		float fS = 0.0f , fT = 0.0f;					//текстурные координаты
+
+		//считываем координаты вершины
+		pPoint->GetAttribute( m_BranchNames.m_sX , &fX );
+		pPoint->GetAttribute( m_BranchNames.m_sY , &fY );
+		pPoint->GetAttribute( m_BranchNames.m_sZ , &fZ );
+
+		//нормаль
+		pPoint->GetAttribute( m_BranchNames.m_snX , &fnX );
+		pPoint->GetAttribute( m_BranchNames.m_snY , &fnY );
+		pPoint->GetAttribute( m_BranchNames.m_snZ , &fnZ );
 	}
 }
