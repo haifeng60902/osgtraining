@@ -23,6 +23,18 @@ private:
 	//считать координаты точки
 	void DecodePoint( ticpp::Element* pVertex , int i );
 
+	//считать индексы
+	void DecodeStrips( ticpp::Element* pStrips , int i );
+
+	//извлечь координаты вершины
+	void DecodeVertex( ticpp::Iterator< ticpp::Element > pPoint , tVecVertex *pVertex );
+
+	//извлечь координаты нормали
+	void DecodeNormal( ticpp::Iterator< ticpp::Element > pPoint , tVecVertex *pNormal );
+
+	//извлечь текстурные координаты
+	void DecodeTexCoord( ticpp::Iterator< ticpp::Element > pPoint , tVecVertex *pTexCoord );
+
 	binBranch *m_pData;
 };
 
