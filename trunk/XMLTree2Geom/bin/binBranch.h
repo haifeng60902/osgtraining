@@ -6,6 +6,7 @@
 
 typedef std::vector< float > tVecVertex;
 typedef std::vector< unsigned short > tVecIndex;
+typedef std::vector< tVecIndex > tVecVecIndex;
 
 struct binBranchGeom
 {
@@ -22,7 +23,7 @@ struct binBranchGeom
 	tVecVertex m_vTexCoord;
 
 	//индексы вершин дл€ режима TRIANGLE_STRIP
-	tVecIndex m_vIndex;
+	tVecVecIndex m_vvIndex;
 
 	//значени€ альфа-теста
 	float m_fAlfa;

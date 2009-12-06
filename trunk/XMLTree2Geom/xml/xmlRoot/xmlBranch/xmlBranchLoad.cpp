@@ -63,6 +63,9 @@ void xmlBranchLoad::DecodeLODs( ticpp::Element* pLODs )
 
 			//считать координаты точки
 			DecodePoint( pLOD->FirstChildElement( m_BranchNames.m_sVertexs ) , iNum );
+
+			//считать индексы
+			DecodeStrips( pLOD->FirstChildElement( m_BranchNames.m_sStrips ) , iNum );
 		}
 
 	}
@@ -79,22 +82,79 @@ void xmlBranchLoad::DecodePoint( ticpp::Element* pVertex , int i )
 	//считать координаты точки
 	int iNum = 0;
 	pVertex->GetAttribute( m_BranchNames.m_sNum , &iNum );
-	m_pData->m_vBranch[ i ].m_vVertex.resize( iNum * 3 );
 	ticpp::Iterator< ticpp::Element > pPoint( m_BranchNames.m_sPoint );
 	for ( pPoint = pPoint.begin( pVertex ); pPoint != pPoint.end(); pPoint++ )
 	{
-		float fX = 0.0f , fY = 0.0f , fZ = 0.0f;		//координаты вершины
-		float fnX = 0.0f , fnY = 0.0f , fnZ = 0.0f;		//нормаль вершины
-		float fS = 0.0f , fT = 0.0f;					//текстурные координаты
+		//извлечь координаты вершины
+		DecodeVertex( pPoint , &m_pData->m_vBranch[ i ].m_vVertex );
 
-		//считываем координаты вершины
-		pPoint->GetAttribute( m_BranchNames.m_sX , &fX );
-		pPoint->GetAttribute( m_BranchNames.m_sY , &fY );
-		pPoint->GetAttribute( m_BranchNames.m_sZ , &fZ );
+		//извлечь координаты нормали
+		DecodeNormal( pPoint , &m_pData->m_vBranch[ i ].m_vNormal );
 
-		//нормаль
-		pPoint->GetAttribute( m_BranchNames.m_snX , &fnX );
-		pPoint->GetAttribute( m_BranchNames.m_snY , &fnY );
-		pPoint->GetAttribute( m_BranchNames.m_snZ , &fnZ );
+		//извлечь текстурные координаты
+		DecodeTexCoord( pPoint , &m_pData->m_vBranch[ i ].m_vTexCoord );
+	}
+}
+
+void xmlBranchLoad::DecodeVertex( ticpp::Iterator< ticpp::Element > pPoint 
+								 , tVecVertex *pVertex )
+{
+	//извлечь координаты вершины
+	float fX = 0.0f , fY = 0.0f , fZ = 0.0f;		//координаты вершины
+
+	//считываем координаты вершины
+	pPoint->GetAttribute( m_BranchNames.m_sX , &fX );
+	pPoint->GetAttribute( m_BranchNames.m_sY , &fY );
+	pPoint->GetAttribute( m_BranchNames.m_sZ , &fZ );
+
+	//запоминаем в векторе
+	pVertex->push_back( fX );
+	pVertex->push_back( fY );
+	pVertex->push_back( fZ );
+}
+
+void xmlBranchLoad::DecodeNormal( ticpp::Iterator< ticpp::Element > pPoint 
+								 , tVecVertex *pNormal )
+{
+	//извлечь координаты нормали
+	float fnX = 0.0f , fnY = 0.0f , fnZ = 0.0f;		//нормаль вершины
+
+	//нормаль
+	pPoint->GetAttribute( m_BranchNames.m_snX , &fnX );
+	pPoint->GetAttribute( m_BranchNames.m_snY , &fnY );
+	pPoint->GetAttribute( m_BranchNames.m_snZ , &fnZ );
+
+	//запоминаем в векторе
+	pNormal->push_back( fnX );
+	pNormal->push_back( fnY );
+	pNormal->push_back( fnZ );
+}
+
+void xmlBranchLoad::DecodeTexCoord( ticpp::Iterator< ticpp::Element > pPoint 
+					, tVecVertex *pTexCoord )
+{
+	//извлечь текстурные координаты
+	float fS = 0.0f , fT = 0.0f;
+
+	//считываем текстурные координаты
+	pPoint->GetAttribute( m_BranchNames.m_sS , &fS );
+	pPoint->GetAttribute( m_BranchNames.m_sT , &fT );
+
+	//запоминаем в векторе
+	pTexCoord->push_back( fS );
+	pTexCoord->push_back( fT );
+}
+
+void xmlBranchLoad::DecodeStrips( ticpp::Element* pStrips , int i )
+{
+	//считать индексы
+	int iNum = 0;
+	pStrips->GetAttribute( m_BranchNames.m_sNum , &iNum );
+	m_pData->m_vBranch[ iNum ].m_vvIndex.resize( iNum );
+	pStrips->FirstChildElement( m_BranchNames.m_sStrip );
+	pStrips->GetAttribute( m_BranchNames.m_sNum , &iNum );
+	ticpp::Iterator< ticpp::Element > pPoint( m_BranchNames.m_sPoint );
+	//for ( pPoint = pPoint.begin( pVertex ); pPoint != pPoint.end(); pPoint++ )
+	{
 	}
 }
