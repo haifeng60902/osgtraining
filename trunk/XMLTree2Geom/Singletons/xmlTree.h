@@ -6,6 +6,7 @@
 
 #include "xmlTmpl.h"
 #include "xmlBranch/xmlBranch.h"
+#include "xmlFronds/xmlFronds.h"
 
 #include <string>
 
@@ -24,11 +25,15 @@ public:
 	//получить доступ к данным ствола
 	binBranch &GetBranch(){ return m_xmlBranch.GetData(); };
 
+	//получить доступ к данным веток
+	binFronds &GetFronds(){ return m_xmlFronds.GetData(); };
+
 private:
 	//инициализировать дочерние данные
 	void InitChild( ticpp::Node* pNode );
 
 	xmlTmpl< binBranch , xmlBranchLoad , xmlBranchSave > m_xmlBranch;	//данные о стволе
+	xmlTmpl< binFronds , xmlFrondsLoad , xmlFrondsSave > m_xmlFronds;	//данные о ветках
 
 	//имя файла xml
 	std::string m_sFileName;

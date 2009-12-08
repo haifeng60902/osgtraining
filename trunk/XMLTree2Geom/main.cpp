@@ -1,6 +1,7 @@
 #include "xmlTree.h"
 
 #include "osgNodeBranch.h"
+#include "osgNodeFronds.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
@@ -12,8 +13,13 @@ int main()
 	xmlTree::Instance().Init( "tree.xml" );
 	//////////////////////////////////////////////////////////////////////////
 
+	//загрузка и сохранение ствола
 	osgNodeBranch branch;
 	branch.LODSave();
+
+	//загрузка и сохранение веток
+	osgNodeFronds fronds;
+	fronds.LODSave();
 
 	// Create a Viewer.
 	osgViewer::Viewer viewer;
