@@ -21,6 +21,9 @@ public:
 	//завершение работы
 	void Close();
 
+	//получить доступ к данным ствола
+	binBranch &GetBranch(){ return m_xmlBranch.GetData(); };
+
 private:
 	//инициализировать дочерние данные
 	void InitChild( ticpp::Node* pNode );
