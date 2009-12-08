@@ -4,7 +4,6 @@
 #include <osg/Referenced>
 #include <osg/ref_ptr>
 #include <osg/Geode>
-#include <osg/lod>
 
 class osgNodeFronds
 {
