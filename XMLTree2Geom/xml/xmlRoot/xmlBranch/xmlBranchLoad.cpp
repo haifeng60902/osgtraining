@@ -149,12 +149,25 @@ void xmlBranchLoad::DecodeStrips( ticpp::Element* pStrips , int i )
 {
 	//считать индексы
 	int iNum = 0;
+
+	//считать сколько полосок
 	pStrips->GetAttribute( m_BranchNames.m_sNum , &iNum );
-	m_pData->m_vBranch[ iNum ].m_vvIndex.resize( iNum );
-	pStrips->FirstChildElement( m_BranchNames.m_sStrip );
-	pStrips->GetAttribute( m_BranchNames.m_sNum , &iNum );
-	ticpp::Iterator< ticpp::Element > pPoint( m_BranchNames.m_sPoint );
-	//for ( pPoint = pPoint.begin( pVertex ); pPoint != pPoint.end(); pPoint++ )
+	m_pData->m_vBranch[ i ].m_vvIndex.resize( iNum );
+	ticpp::Iterator< ticpp::Element > pStrip( m_BranchNames.m_sStrip );
+
+	int iNom = 0;
+
+	//перебрать все полоски треугольников
+	for ( pStrip = pStrip.begin( pStrips ); pStrip != pStrip.end(); pStrip++ )
 	{
+		ticpp::Iterator< ticpp::Element > pInd( m_BranchNames.m_sInd );
+		for ( pInd = pInd.begin( &( *pStrip ) ); pInd != pInd.end(); pInd++ )
+		{
+			int iVal = 0;
+			pInd->GetAttribute( m_BranchNames.m_sVal , &iVal );
+			m_pData->m_vBranch[ i ].m_vvIndex[ iNom ].push_back( iVal );
+		}
+
+		++iNom;
 	}
 }
