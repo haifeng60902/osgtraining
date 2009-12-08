@@ -39,4 +39,5 @@ void xmlTree::InitChild( ticpp::Node* pNode )
 {
 	//инициализировать дочерние данные
 	m_xmlBranch.Init( pNode );
+	m_xmlFronds.Init( pNode );
 }

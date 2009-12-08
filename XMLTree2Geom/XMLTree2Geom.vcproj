@@ -280,6 +280,34 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="xmlFronds"
+						>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlFronds\xmlFronds.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlFronds\xmlFrondsLoad.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlFronds\xmlFrondsLoad.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlFronds\xmlFrondsNames.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlFronds\xmlFrondsSave.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlFronds\xmlFrondsSave.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
@@ -287,6 +315,10 @@
 				>
 				<File
 					RelativePath=".\bin\binBranch.h"
+					>
+				</File>
+				<File
+					RelativePath=".\bin\binFronds.h"
 					>
 				</File>
 			</Filter>
@@ -302,6 +334,14 @@
 					</File>
 					<File
 						RelativePath=".\osg\nodes\osgNodeBranch.h"
+						>
+					</File>
+					<File
+						RelativePath=".\osg\nodes\osgNodeFronds.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\osg\nodes\osgNodeFronds.h"
 						>
 					</File>
 				</Filter>
