@@ -41,5 +41,4 @@ struct binFronds
 	std::string m_sTexture;
 };
 
-
 #endif	//_BIN_FRONDS_H_

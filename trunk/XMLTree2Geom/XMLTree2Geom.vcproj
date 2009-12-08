@@ -308,6 +308,34 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="xmlLeaf"
+						>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlLeaf\xmlLeaf.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlLeaf\xmlLeafLoad.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlLeaf\xmlLeafLoad.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlLeaf\xmlLeafNames.h"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlLeaf\xmlLeafSave.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\xml\xmlRoot\xmlLeaf\xmlLeafSave.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
@@ -319,6 +347,10 @@
 				</File>
 				<File
 					RelativePath=".\bin\binFronds.h"
+					>
+				</File>
+				<File
+					RelativePath=".\bin\binLeaf.h"
 					>
 				</File>
 			</Filter>
@@ -342,6 +374,14 @@
 					</File>
 					<File
 						RelativePath=".\osg\nodes\osgNodeFronds.h"
+						>
+					</File>
+					<File
+						RelativePath=".\osg\nodes\osgNodeLeaf.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\osg\nodes\osgNodeLeaf.h"
 						>
 					</File>
 				</Filter>

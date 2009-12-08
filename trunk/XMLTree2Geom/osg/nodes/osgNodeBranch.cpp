@@ -14,8 +14,6 @@
 #include <osg/Node>
 #include <osg/Group>
 #include <osg/Drawable>
-#include <osg/BoundingBox>
-#include <osg/BoundingSphere>
 
 #include <sstream>
 
