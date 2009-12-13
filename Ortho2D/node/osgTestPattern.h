@@ -10,7 +10,7 @@ public:
 	~osgTestPattern();
 
 	//вернуть узел с геометрией
-	osg::ref_ptr< osg::Group > GetNode(){ return m_Group.get(); };
+	osg::ref_ptr< osg::Geode > GetNode(){ return m_Geode.get(); };
 
 private:
 	//создать геометрию
@@ -18,6 +18,8 @@ private:
 
 	//геометрия узла
 	osg::ref_ptr< osg::Group > m_Group;
+
+	osg::ref_ptr< osg::Geode > m_Geode;
 };
 
 #endif	//_OSG_TEST_PATTERN_H_
