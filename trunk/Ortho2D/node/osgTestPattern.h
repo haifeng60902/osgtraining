@@ -16,6 +16,9 @@ private:
 	//создать геометрию
 	void CreateGeom();
 
+	//добавить текстуру
+	void AddTexture();
+
 	//геометрия узла
 	osg::ref_ptr< osg::Group > m_Group;
 
