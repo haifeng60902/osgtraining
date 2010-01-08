@@ -199,6 +199,18 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="glsl"
+			>
+			<File
+				RelativePath=".\glsl\ortho.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\ortho.vert"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

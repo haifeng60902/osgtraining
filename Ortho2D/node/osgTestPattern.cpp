@@ -14,6 +14,9 @@ osgTestPattern::osgTestPattern()
 	//создать геометрию
 	CreateGeom();
 
+	//добавить шейдер
+	AddShader();
+
 	//добавить текстуру
 	AddTexture();
 }
@@ -68,7 +71,7 @@ void osgTestPattern::AddTexture()
 	osg::StateSet* state = m_Geode->getOrCreateStateSet();
 
 	// Load the texture image
-	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "blackANDwhite.png" );
+	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "blackANDwhite.bmp" );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
@@ -82,7 +85,43 @@ void osgTestPattern::AddTexture()
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 0.
 	state->setTextureAttributeAndModes( 0, tex0.get() , osg::StateAttribute::ON );
-	state->setMode( GL_LIGHTING, osg::StateAttribute::OFF |
-		osg::StateAttribute::OVERRIDE );
 
+	state->setMode( GL_BLEND , osg::StateAttribute::OFF ); 
+}
+
+void osgTestPattern::AddShader()
+{
+	//добавить шейдер в сцену
+	osg::StateSet* ss = m_Geode->getOrCreateStateSet();
+
+	//создать экземпл€р программы
+	osg::Program* program = new osg::Program;
+	program->setName( "microshader" );
+
+	osg::Shader *VertObj = new osg::Shader( osg::Shader::VERTEX );
+	osg::Shader *FragObj = new osg::Shader( osg::Shader::FRAGMENT );
+	program->addShader( VertObj );
+	program->addShader( FragObj );
+
+	LoadShaderSource( VertObj , "glsl/ortho.vert" );
+	LoadShaderSource( FragObj , "glsl/ortho.frag" );
+
+	ss->setAttributeAndModes( program, osg::StateAttribute::ON );
+
+	//добавление uniform'ов дл€ работы с текстурными модул€ми
+	ss->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+}
+
+void osgTestPattern::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
+{
+	// load source from a file.
+	std::string fqFileName = osgDB::findDataFile(fileName);
+	if( fqFileName.length() != 0 )
+	{
+		shader->loadShaderSourceFromFile( fqFileName.c_str() );
+	}
+	else
+	{
+		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
+	}
 }

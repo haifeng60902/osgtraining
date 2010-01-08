@@ -2,6 +2,7 @@
 #define _OSG_TEST_PATTERN_H_
 
 #include <osg/Geode>
+#include <osg/Program>
 
 class osgTestPattern
 {
@@ -18,6 +19,12 @@ private:
 
 	//добавить текстуру
 	void AddTexture();
+
+	//добавить шейдер в сцену
+	void AddShader(); 
+
+	// load source from a file.
+	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
 
 	//геометрия узла
 	osg::ref_ptr< osg::Group > m_Group;
