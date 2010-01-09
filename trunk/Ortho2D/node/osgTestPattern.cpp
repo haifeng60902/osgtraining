@@ -37,10 +37,10 @@ void osgTestPattern::CreateGeom()
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	geom->setVertexArray( v.get() );
 
-	v->push_back( osg::Vec3( -255.5 , -255.5 , 0 ) );
-	v->push_back( osg::Vec3( 255.5 , -255.5 , 0 ) );
-	v->push_back( osg::Vec3( 255.5 , 255.5 , 0 ) );
-	v->push_back( osg::Vec3( -255.5 , 255.5 , 0 ) );
+	v->push_back( osg::Vec3( 0.0 , 0.0 , 0 ) );
+	v->push_back( osg::Vec3( 512.0 , 0.0 , 0 ) );
+	v->push_back( osg::Vec3( 512.0 , 512.0 , 0 ) );
+	v->push_back( osg::Vec3( 0.0 , 512.0 , 0 ) );
 	
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -71,7 +71,7 @@ void osgTestPattern::AddTexture()
 	osg::StateSet* state = m_Geode->getOrCreateStateSet();
 
 	// Load the texture image
-	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "blackANDwhite.bmp" );
+	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "blackANDwhite.png" );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
