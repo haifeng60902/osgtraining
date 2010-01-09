@@ -1,5 +1,7 @@
 #include "osgTestPattern.h"
 
+#include "../binDef.h"
+
 #include <osg/Geometry>
 #include <osg/Image>
 #include <osgDB/ReadFile>
@@ -38,9 +40,9 @@ void osgTestPattern::CreateGeom()
 	geom->setVertexArray( v.get() );
 
 	v->push_back( osg::Vec3( 0.0 , 0.0 , 0 ) );
-	v->push_back( osg::Vec3( 512.0 , 0.0 , 0 ) );
-	v->push_back( osg::Vec3( 512.0 , 512.0 , 0 ) );
-	v->push_back( osg::Vec3( 0.0 , 512.0 , 0 ) );
+	v->push_back( osg::Vec3( WIN_W , 0.0 , 0 ) );
+	v->push_back( osg::Vec3( WIN_W , WIN_H , 0 ) );
+	v->push_back( osg::Vec3( 0.0 , WIN_H , 0 ) );
 	
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -52,11 +54,12 @@ void osgTestPattern::CreateGeom()
 	// and attach it to the geom.
 	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
 	geom->setTexCoordArray( 0, tc.get() );
-	double dO = 1.0 / 1024.0;
-	tc->push_back( osg::Vec2( 0.0 + dO, 0.0 + dO) );
-	tc->push_back( osg::Vec2( 1.0 - dO, 0.0 + dO ) );
-	tc->push_back( osg::Vec2( 1.0 - dO, 1.0 - dO ) );
-	tc->push_back( osg::Vec2( 0.0 + dO, 1.0 - dO ) );
+	double dW = 1.0 / ( 1024.0f * 2.0f );
+	double dH = 1.0 / ( WIN_H * 2.0f );
+	tc->push_back( osg::Vec2( 0.0 + dW, 0.0 + dH ) );
+	tc->push_back( osg::Vec2( 1.0 - dW, 0.0 + dH ) );
+	tc->push_back( osg::Vec2( 1.0 - dW, 1.0 - dH ) );
+	tc->push_back( osg::Vec2( 0.0 + dW, 1.0 - dH ) );
 	
 	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS , 0, v->size() ) );
 
@@ -71,14 +74,16 @@ void osgTestPattern::AddTexture()
 	osg::StateSet* state = m_Geode->getOrCreateStateSet();
 
 	// Load the texture image
-	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "blackANDwhite.png" );
+	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "640x480.bmp" );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
 	tex0->setFilter(osg::Texture::MIN_FILTER,osg::Texture::NEAREST);
 	tex0->setFilter(osg::Texture::MAG_FILTER,osg::Texture::NEAREST);
 	tex0->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP_TO_EDGE); 
-	tex0->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP_TO_EDGE); 
+	tex0->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP_TO_EDGE);
+
+	tex0->setResizeNonPowerOfTwoHint( false );
 
 	tex0->setImage( image0.get() );
 
