@@ -17,7 +17,7 @@ int main()
 	//настройка камеры
 	//viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 600.0/ 1024.0 , 1.0 , 35000.0 );
 	viewer.setUpViewInWindow(40, 40, 512, 512 );
-	viewer.getCamera()->setProjectionMatrixAsOrtho( -256 , 256 , -256, 256 , 1.0 , 200.0 );
+	viewer.getCamera()->setProjectionMatrixAsOrtho( 0.0 , 512.0 , 0.0 , 512.0 , 1.0 , 200.0 );
 
 	// set viewport
 	//viewer.getCamera()->setViewport(0,0,640,480); 
