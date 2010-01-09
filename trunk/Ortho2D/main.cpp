@@ -1,5 +1,7 @@
 #include "osgTestPattern.h"
 
+#include "binDef.h"
+
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgDB/ReadFile>
@@ -16,8 +18,8 @@ int main()
 
 	//настройка камеры
 	//viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, 600.0/ 1024.0 , 1.0 , 35000.0 );
-	viewer.setUpViewInWindow(40, 40, 512, 512 );
-	viewer.getCamera()->setProjectionMatrixAsOrtho( 0.0 , 512.0 , 0.0 , 512.0 , 1.0 , 200.0 );
+	viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
+	viewer.getCamera()->setProjectionMatrixAsOrtho( 0.0 , WIN_W , 0.0 , WIN_H , 1.0 , 200.0 );
 
 	// set viewport
 	//viewer.getCamera()->setViewport(0,0,640,480); 
