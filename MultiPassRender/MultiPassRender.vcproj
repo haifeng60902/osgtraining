@@ -201,6 +201,14 @@
 					RelativePath=".\node\CameraUpdateCallback.h"
 					>
 				</File>
+				<File
+					RelativePath=".\node\UfoManipulator.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\node\UfoManipulator.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
