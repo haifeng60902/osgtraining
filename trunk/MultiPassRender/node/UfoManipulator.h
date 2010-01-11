@@ -36,39 +36,37 @@ public:
 
 	virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
-        /** Get the keyboard and mouse usage of this manipulator.*/
-        virtual void getUsage(osg::ApplicationUsage& usage) const;
+	/** Get the keyboard and mouse usage of this manipulator.*/
+	virtual void getUsage(osg::ApplicationUsage& usage) const;
 
     protected:
 
-        virtual ~UfoManipulator();
+	virtual ~UfoManipulator();
 
-        /** Reset the internal GUIEvent stack.*/
-        void flushMouseEventStack();
-        /** Add the current mouse GUIEvent to internal stack.*/
-        void addMouseEvent(const osgGA::GUIEventAdapter& ea);
+	/** Reset the internal GUIEvent stack.*/
+	void flushMouseEventStack();
+	/** Add the current mouse GUIEvent to internal stack.*/
+	void addMouseEvent(const osgGA::GUIEventAdapter& ea);
 
-        void computePosition(const osg::Vec3& eye,const osg::Vec3& lv,const osg::Vec3& up);
+	void computePosition(const osg::Vec3& eye,const osg::Vec3& lv,const osg::Vec3& up);
 
-        /** For the give mouse movement calculate the movement of the camera.
-            Return true is camera has moved and a redraw is required.*/
-        bool calcMovement();
-
-
-        // Internal event stack comprising last three mouse events.
-        osg::ref_ptr<const osgGA::GUIEventAdapter> m_GaT1;
-        osg::ref_ptr<const osgGA::GUIEventAdapter> m_GaT0;
-
-        osg::ref_ptr<osg::Node>       m_Node;
-
-        float m_fModelScale;
-        float m_fVelocity;
-
-        osg::Vec3   m_v3Eye;
-        osg::Quat   m_qRotation;
-        float       m_fDistance;
+	/** For the give mouse movement calculate the movement of the camera.
+		Return true is camera has moved and a redraw is required.*/
+	bool calcMovement();
 
 
+	// Internal event stack comprising last three mouse events.
+	osg::ref_ptr<const osgGA::GUIEventAdapter> m_GaT1;
+	osg::ref_ptr<const osgGA::GUIEventAdapter> m_GaT0;
+
+	osg::ref_ptr<osg::Node>       m_Node;
+
+	float m_fModelScale;
+	float m_fVelocity;
+
+	osg::Vec3   m_v3Eye;
+	osg::Quat   m_qRotation;
+	float       m_fDistance;
 };
 
 #endif	//_UFO_MANIPULATOR_H_

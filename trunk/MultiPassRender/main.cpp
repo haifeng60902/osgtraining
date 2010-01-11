@@ -1,5 +1,6 @@
 #include "binDef.h"
 #include "CameraUpdateCallback.h"
+#include "UfoManipulator.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
@@ -13,7 +14,7 @@ int main()
 	osgViewer::Viewer viewer;
 
 	// add the stats handler
-	viewer.addEventHandler( new osgViewer::StatsHandler );
+	//viewer.addEventHandler( new osgViewer::StatsHandler );
 
 	//размер окна
 	viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
@@ -28,7 +29,10 @@ int main()
 
 	float fY = 0.0f;
 
-	viewer.getCamera()->setUpdateCallback( new CameraUpdateCallback() );
+	//viewer.getCamera()->setUpdateCallback( new CameraUpdateCallback() );
+
+	// set up the camera manipulation with out custom manipultor
+	viewer.setCameraManipulator( new UfoManipulator() );
 
 	// Display, and main loop.
 	while (!viewer.done())
@@ -37,7 +41,7 @@ int main()
 		mtTr.makeRotate( osg::DegreesToRadians( -90.0 ) , 1, 0 , 0 );
 		
 		//задать явно смещение
-		viewer.getCamera()->setViewMatrix( mtTr );
+		//viewer.getCamera()->setViewMatrix( mtTr );
 
 		viewer.frame();
 
@@ -45,5 +49,6 @@ int main()
 
 		//std::cout << fY << " ";
 	}
+
 	//viewer.run();
 }

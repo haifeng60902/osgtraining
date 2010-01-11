@@ -1,5 +1,10 @@
 #include "UfoManipulator.h"
 
+using namespace osg;
+using namespace osgGA;
+
+#include <iostream>
+
 UfoManipulator::UfoManipulator()
 {
 	m_fModelScale = 0.01f;
@@ -107,7 +112,8 @@ bool UfoManipulator::handle( const GUIEventAdapter& ea , GUIActionAdapter& us )
 			}
 		case(GUIEventAdapter::FRAME):
 			addMouseEvent(ea);
-			if (calcMovement()) us.requestRedraw();
+			if (calcMovement()) 
+				us.requestRedraw();
 			return true;
 
 		case(GUIEventAdapter::RESIZE):
@@ -118,4 +124,118 @@ bool UfoManipulator::handle( const GUIEventAdapter& ea , GUIActionAdapter& us )
 		default:
 			return false;
 	}
+}
+
+void UfoManipulator::getUsage(osg::ApplicationUsage& usage) const
+{
+	usage.addKeyboardMouseBinding("Flight: Space","Reset the viewing position to home");
+	usage.addKeyboardMouseBinding("Flight: q","Automatically yaw when banked (default)");
+	usage.addKeyboardMouseBinding("Flight: a","No yaw when banked");
+}
+
+void UfoManipulator::flushMouseEventStack()
+{
+	m_GaT1 = NULL;
+	m_GaT0 = NULL;
+}
+
+void UfoManipulator::addMouseEvent(const GUIEventAdapter& ea)
+{
+	m_GaT1 = m_GaT0;
+	m_GaT0 = &ea;
+}
+
+void UfoManipulator::computePosition(const osg::Vec3& eye , const osg::Vec3& lv , const osg::Vec3& up )
+{
+	osg::Vec3 f(lv);
+	f.normalize();
+	osg::Vec3 s(f^up);
+	s.normalize();
+	osg::Vec3 u(s^f);
+	u.normalize();
+
+	osg::Matrixd rotation_matrix(s[0],     u[0],     -f[0],     0.0f,
+		s[1],     u[1],     -f[1],     0.0f,
+		s[2],     u[2],     -f[2],     0.0f,
+		0.0f,     0.0f,     0.0f,      1.0f);
+
+	m_v3Eye = eye;
+	m_fDistance = lv.length();
+	m_qRotation = rotation_matrix.getRotate().inverse();
+}
+
+bool UfoManipulator::calcMovement()
+{
+	//_camera->setFusionDistanceMode(osg::Camera::PROPORTIONAL_TO_SCREEN_DISTANCE);
+
+	// return if less then two events have been added.
+	if ( m_GaT0.get() == NULL || m_GaT1.get() == NULL )
+		return false;
+
+
+	double dt = m_GaT0->getTime() - m_GaT1->getTime();
+
+	if ( dt < 0.0f )
+	{
+		notify(INFO) << "warning dt = "<< dt << std::endl;
+		dt = 0.0f;
+	}
+
+	unsigned int buttonMask = m_GaT1->getButtonMask();
+	if ( buttonMask == GUIEventAdapter::LEFT_MOUSE_BUTTON )
+		// pan model.
+		m_fVelocity += dt * m_fModelScale * 0.05f;
+
+	else 
+		if ( buttonMask == GUIEventAdapter::MIDDLE_MOUSE_BUTTON ||
+				buttonMask == ( GUIEventAdapter::LEFT_MOUSE_BUTTON | GUIEventAdapter::RIGHT_MOUSE_BUTTON ) )
+			m_fVelocity = 0.0f;
+		else 
+			if (buttonMask==GUIEventAdapter::RIGHT_MOUSE_BUTTON)
+				m_fVelocity -= dt * m_fModelScale * 0.05f;
+
+	float dx = m_GaT0->getXnormalized();
+	float dy = m_GaT0->getYnormalized();
+
+	//std::cout << dx << "\t\t" << dy << "\t\t" << dt << ";\n";
+	if ( ( dt < 0.01 ) || ( dt > 0.02 ) )
+		std::cout << dt << "\n";
+
+	// osg::notify(osg::NOTICE)<<"dx = "<<dx<<" dy = "<<dy<<"dt = "<<dt<<std::endl;
+
+	// mew - flag to reverse mouse-control mapping
+	if( getenv( "OSGHANGGLIDE_REVERSE_CONTROLS" ) )
+	{
+		dx = -dx;
+		dy = -dy;
+	}
+
+	osg::Matrixd rotation_matrix;
+	rotation_matrix.makeRotate( m_qRotation );
+
+	osg::Vec3 up = osg::Vec3( 0.0f , 1.0f , 0.0 ) * rotation_matrix;
+	osg::Vec3 lv = osg::Vec3( 0.0f , 0.0f , -1.0f ) * rotation_matrix;
+
+	osg::Vec3 sv = lv^up;
+	sv.normalize();
+
+	float pitch = -inDegrees(dy*75.0f*dt);
+	float roll = inDegrees(dx*50.0f*dt);
+
+	osg::Quat delta_rotate;
+
+	osg::Quat roll_rotate;
+	osg::Quat pitch_rotate;
+
+	pitch_rotate.makeRotate(pitch,sv.x(),sv.y(),sv.z());
+	roll_rotate.makeRotate(roll,lv.x(),lv.y(),lv.z());
+
+	delta_rotate = pitch_rotate*roll_rotate;
+
+	lv *= ( m_fVelocity * dt );
+
+	m_v3Eye += lv;
+	m_qRotation = m_qRotation * delta_rotate;
+
+	return true;
 }
