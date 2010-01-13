@@ -21,7 +21,7 @@ int main()
 	viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
 
 	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, WIN_W / WIN_H , 1.0 , 35000.0 );
+	viewer.getCamera()->setProjectionMatrixAsOrtho( 0.0 , WIN_W , 0.0 , WIN_H , 1.0 , 200.0 );
 
 	//osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
 	//osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
@@ -40,10 +40,16 @@ int main()
 	//viewer.setCameraManipulator( new UfoManipulator() );
 
 	// Display, and main loop.
-	//while (!viewer.done())
-	//{
-	//	viewer.frame();
-	//}
+	while (!viewer.done())
+	{
+		osg::Matrix mtTr;
+		mtTr.makeTranslate( 0, 0 , -100 );
+		
+		//задать явно смещение
+		viewer.getCamera()->setViewMatrix( mtTr );
 
-	viewer.run();
+		viewer.frame();
+	}
+
+	//viewer.run();
 }
