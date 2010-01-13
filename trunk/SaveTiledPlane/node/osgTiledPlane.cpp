@@ -42,6 +42,14 @@ void osgTiledPlane::CreateGeom()
 	geom->setNormalBinding( osg::Geometry::BIND_OVERALL );
 	n->push_back( osg::Vec3( 0.f, 0.f, 1.f ) );
 
+
+	// Create an array for the single normal.
+	osg::ref_ptr< osg::Vec3Array > c = new osg::Vec3Array;
+	geom->setColorArray( c.get() );
+	geom->setColorBinding( osg::Geometry::BIND_OVERALL );
+	c->push_back( osg::Vec3( 1.f, 1.f, 1.f ) );
+
+
 	// Create a Vec2Array of texture coordinates for texture unit 0
 	// and attach it to the geom.
 	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
@@ -51,9 +59,9 @@ void osgTiledPlane::CreateGeom()
 	//в текстура имеет размер 1024 на 1024 и покрывает площадь 512м,
 	//следовательно текстурные координаты надо умножать на 2, 98304 * 2 = 196608.0
 	tc->push_back( osg::Vec2( 0.0 , 0.0 ) );
-	tc->push_back( osg::Vec2( 196608.0 , 0.0 ) );
-	tc->push_back( osg::Vec2( 196608.0 , 196608.0 ) );
-	tc->push_back( osg::Vec2( 0.0 , 196608.0 ) );
+	tc->push_back( osg::Vec2( 24 , 0.0 ) );
+	tc->push_back( osg::Vec2( 24 , 24 ) );
+	tc->push_back( osg::Vec2( 0.0 , 24 ) );
 
 	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS , 0, v->size() ) );
 
@@ -82,5 +90,8 @@ void osgTiledPlane::AddTexture()
 	state->setTextureAttributeAndModes( 0, tex0.get() , osg::StateAttribute::ON );
 
 	//выключаем освещение
-	state->setMode( GL_LIGHTING , osg::StateAttribute::OFF );
+	state->setMode( GL_LIGHTING , osg::StateAttribute::OFF |
+		osg::StateAttribute::PROTECTED );
+
+	state->setMode( GL_BLEND , osg::StateAttribute::OFF );  
 }
