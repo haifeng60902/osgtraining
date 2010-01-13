@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-//#define ORTHO2D
+#define ORTHO2D
 
 int main()
 {
