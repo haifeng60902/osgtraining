@@ -18,10 +18,10 @@ void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	{
 		osg::Matrix mtTr , mtRtX , mtRtZ;
 		mtRtX.makeRotate( osg::DegreesToRadians( -90.0 ) , 1, 0 , 0 );
-		mtRtZ.makeRotate(  fY , 0, 0 , 1 );
+		mtRtZ.makeRotate(  osg::DegreesToRadians( -60.0 ) , 0, 0 , 1 );
 		mtTr.makeTranslate( 0 , 0 , -15 );
 
-		fY -= 0.001;
+		fY -= 0.01;
 
 		std::cout << fY << " ";
 

@@ -126,7 +126,7 @@ void osgTexturePlane::AddCamera()
 	osg::StateSet* state = m_Group->getOrCreateStateSet();
 
 	//определить текстуру
-	state->setTextureAttributeAndModes(0, texture,osg::StateAttribute::ON);
+	state->setTextureAttributeAndModes( 0 , texture , osg::StateAttribute::ON );
 
 	//выключаем освещение
 	state->setMode( GL_LIGHTING , osg::StateAttribute::OFF );
@@ -136,7 +136,7 @@ void osgTexturePlane::AddCamera()
 	osg::Camera* camera = new osg::Camera;
 
 	// set up the background color and clear mask.
-	camera->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ));
+	camera->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ) );
 	camera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//настройка камеры
