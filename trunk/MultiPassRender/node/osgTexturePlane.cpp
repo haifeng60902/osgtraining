@@ -139,6 +139,9 @@ void osgTexturePlane::AddCamera()
 	camera->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ) );
 	camera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//osg::DisplaySettings ds;
+	//ds.setMinimumNumAlphaBits( 16 );
+
 	//настройка камеры
 	camera->setProjectionMatrixAsPerspective( 45.0, WIN_W / WIN_H , 1.0 , 35000.0 );
 
@@ -152,7 +155,7 @@ void osgTexturePlane::AddCamera()
 	camera->setRenderOrder( osg::Camera::PRE_RENDER );
  
 	// tell the camera to use OpenGL frame buffer object where supported.
-	camera->setRenderTargetImplementation( osg::Camera::FRAME_BUFFER_OBJECT );
+	camera->setRenderTargetImplementation( osg::Camera::FRAME_BUFFER );
 
 	// attach the texture and use it as the color buffer.
 	camera->attach(osg::Camera::COLOR_BUFFER, texture, 
