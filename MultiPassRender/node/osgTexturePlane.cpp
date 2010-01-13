@@ -1,5 +1,7 @@
 #include "osgTexturePlane.h"
 
+#include "../binDef.h"
+
 #include "CameraUpdateCallback.h"
 
 #include <osg/Geometry>
@@ -39,10 +41,10 @@ void osgTexturePlane::CreateGeom()
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	m_Geom->setVertexArray( v.get() );
 
-	v->push_back( osg::Vec3( -1 , 0 , -1 ) );
-	v->push_back( osg::Vec3( 1 , 0 , -1 ) );
-	v->push_back( osg::Vec3( 1 , 0 , 1 ) );
-	v->push_back( osg::Vec3( -1 , 0 , 1 ) );
+	v->push_back( osg::Vec3( 0.0 , 0.0 , 0 ) );
+	v->push_back( osg::Vec3( WIN_W , 0.0 , 0 ) );
+	v->push_back( osg::Vec3( WIN_W , WIN_H , 0 ) );
+	v->push_back( osg::Vec3( 0.0 , WIN_H , 0 ) );
 
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -62,11 +64,12 @@ void osgTexturePlane::CreateGeom()
 	// and attach it to the geom.
 	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
 	m_Geom->setTexCoordArray( 0, tc.get() );
-
-	tc->push_back( osg::Vec2( 0.0 , 0.0 ) );
-	tc->push_back( osg::Vec2( 1 , 0.0 ) );
-	tc->push_back( osg::Vec2( 1 , 1 ) );
-	tc->push_back( osg::Vec2( 0.0 , 1 ) );
+	double dW = 1.0 / ( 768.0f * 2.0f );
+	double dH = 1.0 / ( 512.0f * 2.0f );
+	tc->push_back( osg::Vec2( 0.0 + dW, 0.0 + dH ) );
+	tc->push_back( osg::Vec2( 1.0 - dW, 0.0 + dH ) );
+	tc->push_back( osg::Vec2( 1.0 - dW, 1.0 - dH ) );
+	tc->push_back( osg::Vec2( 0.0 + dW, 1.0 - dH ) );
 
 	m_Geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS , 0, v->size() ) );
 
@@ -106,10 +109,14 @@ void osgTexturePlane::AddCamera()
 
 	//первый этап, создание текстуры в которую будет происходить отображение
 	osg::Texture2D* texture = new osg::Texture2D;
-	texture->setTextureSize( 512 , 512 );
+	texture->setTextureSize( WIN_W , WIN_H );
 	texture->setInternalFormat(GL_RGBA);
-	texture->setFilter(osg::Texture2D::MIN_FILTER,osg::Texture2D::LINEAR);
-	texture->setFilter(osg::Texture2D::MAG_FILTER,osg::Texture2D::LINEAR);
+	texture->setFilter(osg::Texture::MIN_FILTER,osg::Texture::NEAREST);
+	texture->setFilter(osg::Texture::MAG_FILTER,osg::Texture::NEAREST);
+	texture->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP_TO_EDGE); 
+	texture->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP_TO_EDGE);
+
+	texture->setResizeNonPowerOfTwoHint( false );
 
 //////////////////////////////////////////////////////////////////////////
 	//настройка состояния узла
@@ -133,13 +140,13 @@ void osgTexturePlane::AddCamera()
 	camera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//настройка камеры
-	camera->setProjectionMatrixAsPerspective( 45.0, 1.0 , 1.0 , 35000.0 );
+	camera->setProjectionMatrixAsPerspective( 45.0, WIN_W / WIN_H , 1.0 , 35000.0 );
 
 	// set view
 	camera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 
 	// set viewport
-	camera->setViewport( 0 , 0 , 512 , 512 );
+	camera->setViewport( 0 , 0 , WIN_W , WIN_H );
 
 	// set the camera to render before the main camera.
 	camera->setRenderOrder( osg::Camera::PRE_RENDER );
