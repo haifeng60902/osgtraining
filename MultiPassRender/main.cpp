@@ -2,6 +2,8 @@
 #include "CameraUpdateCallback.h"
 #include "UfoManipulator.h"
 #include "osgTexturePlane.h"
+#include "KeyboardHandler.h"
+#include "binEvents.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
@@ -9,15 +11,22 @@
 
 #include <iostream>
 
-#define ORTHO2D
+//#define ORTHO2D
 
 int main()
 {
+	binEvents ff;
+
 	// Create a Viewer.
 	osgViewer::Viewer viewer;
 
 	// add the stats handler
 	//viewer.addEventHandler( new osgViewer::StatsHandler );
+
+	osg::ref_ptr< KeyboardHandler > keyboard = new KeyboardHandler;
+
+	// add the pick handler
+	viewer.addEventHandler( keyboard.get() );
 
 	//размер окна
 	//viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
