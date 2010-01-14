@@ -20,7 +20,8 @@ int main()
 	//viewer.addEventHandler( new osgViewer::StatsHandler );
 
 	//размер окна
-	viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
+	//viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
+	viewer.setUpViewOnSingleScreen( 0 );
 
 #ifdef ORTHO2D
 	//настройка камеры
