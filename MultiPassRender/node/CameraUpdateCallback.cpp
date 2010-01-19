@@ -18,32 +18,33 @@ void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	osg::Camera* cam = dynamic_cast< osg::Camera* >( node );
 	if ( cam )
 	{
-		osg::Matrix mtTr , mtRtX , mtRtZ;
-		mtRtX.makeRotate( osg::DegreesToRadians( -90.0 ) , 1, 0 , 0 );
-		//mtRtZ.makeRotate(  osg::DegreesToRadians( -60.0 ) , 0, 0 , 1 );
-		mtRtZ.makeRotate(  fY , 0, 0 , 1 );
-		mtTr.makeTranslate( 0 , 0 , -15 );	
+		//обработать вращения
+		ProcessRotate();
 
-		fY -= 0.01;
+		//обработать перемещение
+		ProcessMove();
 
-		//std::cout << fY << " ";
+		osg::Matrix mtTr , mtRtX , mtRtY;
+		mtRtX.makeRotate( osg::DegreesToRadians( m_v3Rot.x() ) , 1, 0 , 0 );
+		mtRtY.makeRotate(  osg::DegreesToRadians( m_v3Rot.y() ) , 0, 1 , 0 );
+		mtTr.makeTranslate( m_v3Pos );	
 
 		//задать явно смещение
-		cam->setViewMatrix( mtRtZ * mtRtX * mtTr );
+		cam->setViewMatrix( mtTr * mtRtY * mtRtX );
 	}
 
 	traverse(node,nv);
 }
 
-void CameraUpdateCallback::ProcessKeyboard()
+void CameraUpdateCallback::ProcessRotate()
 {
-	//обработать состояние клавиатуры
+	//обработать вращения
 
 	//получить доступ к состоянию клавиатуры
 	binEvents &mEvents = KeyboardState::Instance().GetEvents();
 
-	m_v3Rot.z() = m_v3Rot.z() + mEvents.m_dX * 10.0;
-	m_v3Rot.x() = m_v3Rot.x() + mEvents.m_dY * 10.0;
+	m_v3Rot.y() = m_v3Rot.y() + mEvents.m_dX * 0.5;
+	m_v3Rot.x() = m_v3Rot.x() - mEvents.m_dY * 0.5;
 
 	//ограничение диапазона углов
 	if ( m_v3Rot.x() > 360.0 )
@@ -51,4 +52,54 @@ void CameraUpdateCallback::ProcessKeyboard()
 	else
 		if ( m_v3Rot.x() < -360.0 )
 			m_v3Rot.x() += 360.0;
+
+	if ( m_v3Rot.y() > 360.0 )
+		m_v3Rot.y() -= 360.0;
+	else
+		if ( m_v3Rot.y() < -360.0 )
+			m_v3Rot.y() += 360.0;
+
+}
+
+void CameraUpdateCallback::ProcessMove()
+{
+	//обработать перемещение
+
+	//получить доступ к состоянию клавиатуры
+	binEvents &mEvents = KeyboardState::Instance().GetEvents();
+	if ( mEvents.m_bLeft )
+		//перемещение камеры вперед
+		MoveForward();
+	else
+		if ( mEvents.m_bRight )
+			//перемещение камеры назад
+			MoveForward();
+}
+
+void CameraUpdateCallback::MoveForward()
+{
+	//перемещение камеры вперед
+	double dY = -sin( osg::DegreesToRadians( m_v3Rot.x() ) );
+	double nD = sqrt( 1.0 - dY * dY );
+
+	double dX = nD * sin( m_v3Rot.y() );
+	double dZ = -nD * cos( m_v3Rot.y() );
+
+	m_v3Pos.x() += dX * 0.01;
+	m_v3Pos.y() += dY * 0.01;
+	m_v3Pos.z() += dZ * 0.01;
+}
+
+void CameraUpdateCallback::MoveBackward()
+{
+	//перемещение камеры назад
+	double dY = sin( osg::DegreesToRadians( m_v3Rot.x() ) );
+	double nD = sqrt( 1.0 - dY * dY );
+
+	double dX = -nD * sin( m_v3Rot.y() );
+	double dZ = nD * cos( m_v3Rot.y() );
+
+	m_v3Pos.x() += dX * 0.01;
+	m_v3Pos.y() += dY * 0.01;
+	m_v3Pos.z() += dZ * 0.01;
 }

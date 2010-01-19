@@ -13,8 +13,17 @@ public:
 
 private:
 
-	//обработать состояние клавиатуры
-	void ProcessKeyboard();
+	//обработать вращения
+	void ProcessRotate();
+
+	//обработать перемещение
+	void ProcessMove();
+
+	//перемещение камеры вперед
+	void MoveForward();
+
+	//перемещение камеры назад
+	void MoveBackward();
 
 	osg::Vec3 m_v3Pos;			//позиция камеры в 3D пространстве
 	osg::Vec3 m_v3Rot;			//углы поворота камеры вокруг осей X,Y,Z

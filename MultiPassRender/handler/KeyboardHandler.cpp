@@ -27,6 +27,12 @@ bool KeyboardHandler::handle( const osgGA::GUIEventAdapter& ea,
 	//получить доступ к состоянию клавиатуры
 	binEvents &mEvents = KeyboardState::Instance().GetEvents();
 
+	// Record mouse location for the button press
+	//   and move events.
+	mEvents.m_dX = ea.getXnormalized();
+	mEvents.m_dY = ea.getYnormalized();
+
+
 	switch(ea.getEventType())
 	{
 	case( osgGA::GUIEventAdapter::KEYDOWN ):
@@ -45,12 +51,29 @@ bool KeyboardHandler::handle( const osgGA::GUIEventAdapter& ea,
 
 			return false;
 		}
+	case osgGA::GUIEventAdapter::PUSH:
 	case osgGA::GUIEventAdapter::MOVE:
 		{
-			// Record mouse location for the button press
-			//   and move events.
-			mEvents.m_dX = ea.getXnormalized();
-			mEvents.m_dY = ea.getYnormalized();
+			int mMask =  ea.getButtonMask();
+
+			if ( mMask == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON )
+				mEvents.m_bLeft = true;
+			else
+				if ( mMask == osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON )
+					mEvents.m_bRight = true;
+			
+			return false;
+		}
+
+	case osgGA::GUIEventAdapter::RELEASE:
+		{
+			int mMask =  ea.getButtonMask();
+
+			if ( mMask == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON )
+				mEvents.m_bLeft = false;
+			else
+				if ( mMask == osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON )
+					mEvents.m_bRight = false;
 
 			return false;
 		}
