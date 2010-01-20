@@ -68,12 +68,19 @@ bool KeyboardHandler::handle( const osgGA::GUIEventAdapter& ea,
 	case osgGA::GUIEventAdapter::RELEASE:
 		{
 			int mMask =  ea.getButtonMask();
+			int a1 = osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON;
+			int a2 = osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON;
 
 			if ( mMask == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON )
 				mEvents.m_bLeft = false;
 			else
 				if ( mMask == osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON )
 					mEvents.m_bRight = false;
+				else
+				{
+					mEvents.m_bLeft = false;
+					mEvents.m_bRight = false;
+				}
 
 			return false;
 		}

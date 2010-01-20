@@ -155,7 +155,7 @@ void osgTexturePlane::AddCamera()
 	camera->setRenderOrder( osg::Camera::PRE_RENDER );
  
 	// tell the camera to use OpenGL frame buffer object where supported.
-	camera->setRenderTargetImplementation( osg::Camera::FRAME_BUFFER );
+	camera->setRenderTargetImplementation( osg::Camera::FRAME_BUFFER_OBJECT );
 
 	// attach the texture and use it as the color buffer.
 	camera->attach(osg::Camera::COLOR_BUFFER, texture, 

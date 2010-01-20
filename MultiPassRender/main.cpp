@@ -85,7 +85,7 @@ int main()
 		mtTr.makeTranslate( 0, 0 , -100 );
 
 		//задать явно смещение
-		viewer.getCamera()->setViewMatrix( mtTr );
+		//viewer.getCamera()->setViewMatrix( mtTr );
 
 		viewer.frame();
 	}
