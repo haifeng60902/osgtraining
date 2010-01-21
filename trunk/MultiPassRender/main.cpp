@@ -2,6 +2,7 @@
 #include "CameraUpdateCallback.h"
 #include "UfoManipulator.h"
 #include "osgTexturePlane.h"
+#include "osgPerspectiveTexturePlane.h"
 #include "KeyboardHandler.h"
 #include "binEvents.h"
 
@@ -57,12 +58,18 @@ int main()
 	viewer.getCamera()->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ));
 
 	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, WIN_W / WIN_H , 1.0 , 35000.0 );
+	//viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, WIN_W / WIN_H , 1.0 , 35000.0 );
+	viewer.getCamera()->setProjectionMatrixAsFrustum( -WIN_W / WIN_H * 0.5 , WIN_W / WIN_H * 0.5 
+		, -0.5 , 0.5 , 1.0 , 29700.0 );
 
-	//osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
 	osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
+	osgPerspectiveTexturePlane perspPlane;
 
-	viewer.setSceneData( node.get() );
+	osg::ref_ptr< osg::Group > group = new osg::Group;
+	//group->addChild( node.get() );
+	group->addChild( perspPlane.GetNode().get() );
+
+	viewer.setSceneData( group.get() );
 
 	osg::StateSet* stateNode = viewer.getCamera()->getOrCreateStateSet();
 
@@ -81,12 +88,6 @@ int main()
 	// Display, and main loop.
 	while (!viewer.done())
 	{
-		osg::Matrix mtTr;
-		mtTr.makeTranslate( 0, 0 , -100 );
-
-		//задать явно смещение
-		//viewer.getCamera()->setViewMatrix( mtTr );
-
 		viewer.frame();
 	}
 #endif
