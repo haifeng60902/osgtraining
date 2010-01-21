@@ -202,6 +202,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\node\osgPerspectiveTexturePlane.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\node\osgPerspectiveTexturePlane.h"
+					>
+				</File>
+				<File
 					RelativePath=".\node\osgTexturePlane.cpp"
 					>
 				</File>

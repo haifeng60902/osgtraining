@@ -10,7 +10,7 @@ float fY = 0.0f;
 
 CameraUpdateCallback::CameraUpdateCallback() : m_fMoveSpeed( 0.0 )
 {
-	m_v3Pos = osg::Vec3( 0.0 , -10.0 , 0.0 );
+	m_v3Pos = osg::Vec3( 0.0 , -1.0 , 0.0 );
 }
 
 void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
@@ -19,7 +19,7 @@ void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	if ( cam )
 	{
 		//обработать вращения
-		ProcessRotate();
+		//ProcessRotate();
 
 		//обработать перемещение
 		ProcessMove();
@@ -30,6 +30,8 @@ void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 		mtTr.makeTranslate( m_v3Pos );	
 
 		mtRes = mtTr * mtRtZ * mtRtX;
+
+		std::cout << m_v3Pos.y() << "\n";
 
 		//задать явно смещение
 		cam->setViewMatrix( mtRes );
@@ -88,7 +90,7 @@ void CameraUpdateCallback::MoveForward()
 	double dY = -nD * cos( osg::DegreesToRadians( m_v3Rot.z() + 180.0 ) );
 
 	m_v3Pos.x() += dX * 0.01;
-	m_v3Pos.y() += dY * 0.01;
+	m_v3Pos.y() += dY * 0.0000001;
 	m_v3Pos.z() += dZ * 0.01;
 }
 
@@ -102,6 +104,6 @@ void CameraUpdateCallback::MoveBackward()
 	double dY = nD * cos( osg::DegreesToRadians( m_v3Rot.z() + 180.0 ) );
 
 	m_v3Pos.x() += dX * 0.01;
-	m_v3Pos.y() += dY * 0.01;
+	m_v3Pos.y() += dY * 0.0000001;
 	m_v3Pos.z() += dZ * 0.01;
 }
