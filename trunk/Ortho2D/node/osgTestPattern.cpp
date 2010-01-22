@@ -54,8 +54,8 @@ void osgTestPattern::CreateGeom()
 	// and attach it to the geom.
 	osg::ref_ptr<osg::Vec2Array> tc = new osg::Vec2Array;
 	geom->setTexCoordArray( 0, tc.get() );
-	double dW = 1.0 / ( 768.0f * 2.0f );
-	double dH = 1.0 / ( 512.0f * 2.0f );
+	double dW = 1.0 / ( WIN_W * 2.0f );
+	double dH = 1.0 / ( WIN_H * 2.0f );
 	tc->push_back( osg::Vec2( 0.0 + dW, 0.0 + dH ) );
 	tc->push_back( osg::Vec2( 1.0 - dW, 0.0 + dH ) );
 	tc->push_back( osg::Vec2( 1.0 - dW, 1.0 - dH ) );
@@ -74,7 +74,7 @@ void osgTestPattern::AddTexture()
 	osg::StateSet* state = m_Geode->getOrCreateStateSet();
 
 	// Load the texture image
-	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "640x480.bmp" );
+	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "1280x1024.PNG" );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
