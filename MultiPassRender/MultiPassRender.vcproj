@@ -205,20 +205,42 @@
 					RelativePath=".\node\osgPerspectiveTexturePlane.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="other"
+				>
 				<File
-					RelativePath=".\node\osgTexturePlane.cpp"
+					RelativePath=".\other\osgTexturePlane.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\node\osgTexturePlane.h"
+					RelativePath=".\other\osgTexturePlane.h"
 					>
 				</File>
 				<File
-					RelativePath=".\node\UfoManipulator.cpp"
+					RelativePath=".\other\UfoManipulator.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\node\UfoManipulator.h"
+					RelativePath=".\other\UfoManipulator.h"
 					>
 				</File>
 			</Filter>
@@ -231,6 +253,62 @@
 				</File>
 				<File
 					RelativePath=".\bin\binEvents.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="CameraPlane"
+				>
+				<File
+					RelativePath=".\CameraPlane\CameraUpdateCallback.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\CameraPlane\CameraUpdateCallback.h"
+					>
+				</File>
+				<File
+					RelativePath=".\CameraPlane\osgPerspectiveTexturePlane.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\CameraPlane\osgPerspectiveTexturePlane.h"
 					>
 				</File>
 			</Filter>
