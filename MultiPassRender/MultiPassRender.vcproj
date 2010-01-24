@@ -265,6 +265,18 @@
 					RelativePath=".\CameraPlane\osgPerspectiveTexturePlane.h"
 					>
 				</File>
+				<Filter
+					Name="NodeCameraTexture0"
+					>
+					<File
+						RelativePath=".\CameraPlane\NodeCameraTexture0\osgCameraNodeTexture0.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CameraPlane\NodeCameraTexture0\osgCameraNodeTexture0.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Keyboard"
