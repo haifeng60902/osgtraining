@@ -1,6 +1,5 @@
 #include "binDef.h"
 #include "CameraUpdateCallback.h"
-#include "UfoManipulator.h"
 #include "osgTexturePlane.h"
 #include "osgPerspectiveTexturePlane.h"
 #include "KeyboardHandler.h"
