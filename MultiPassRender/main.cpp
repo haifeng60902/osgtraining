@@ -9,6 +9,7 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgDB/ReadFile>
+#include <osg/MatrixTransform>
 
 #include <iostream>
 
@@ -58,15 +59,24 @@ int main()
 	viewer.getCamera()->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ));
 
 	//настройка камеры
-	//viewer.getCamera()->setProjectionMatrixAsPerspective( 45.0, WIN_W / WIN_H , 1.0 , 35000.0 );
-	viewer.getCamera()->setProjectionMatrixAsFrustum( -WIN_W / WIN_H * 0.5 , WIN_W / WIN_H * 0.5 
-		, -0.5 , 0.5 , 1.0 , 29700.0 );
+	//viewer.getCamera()->setProjectionMatrixAsPerspective( 30.0, WIN_W / WIN_H , 1.0 , 3500.0 );
+	viewer.getCamera()->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
+		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 2970.0 );
 
-	osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
+	//osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
+	osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
+
+	osg::ref_ptr< osg::MatrixTransform > mTr = new osg::MatrixTransform;
+	osg::Matrix mT;
+	mT.makeTranslate( 0, 4, 0);
+	mTr->setMatrix( mT );
+	
+	mTr->addChild( node.get() );
+
 	osgPerspectiveTexturePlane perspPlane;
 
 	osg::ref_ptr< osg::Group > group = new osg::Group;
-	//group->addChild( node.get() );
+	group->addChild( mTr.get() );
 	group->addChild( perspPlane.GetNode().get() );
 
 	viewer.setSceneData( group.get() );

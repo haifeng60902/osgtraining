@@ -36,10 +36,10 @@ void osgPerspectiveTexturePlane::CreateGeom()
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	m_Geom->setVertexArray( v.get() );
 
-	v->push_back( osg::Vec3( WIN_W / WIN_H * 0.5 , 0.0 , -0.5 ) );
-	v->push_back( osg::Vec3( -WIN_W / WIN_H * 0.5 , 0.0 , -0.5 ) );
-	v->push_back( osg::Vec3( -WIN_W / WIN_H * 0.5 , 0.0 , 0.5 ) );
-	v->push_back( osg::Vec3( WIN_W / WIN_H * 0.5 , 0.0 , 0.5 ) );
+	v->push_back( osg::Vec3( HALF_SIZE , 1.0 , -HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( -HALF_SIZE , 1.0 , -HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( -HALF_SIZE , 1.0 , HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( HALF_SIZE , 1.0 , HALF_SIZE * WIN_H / WIN_W ) );
 
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -61,10 +61,16 @@ void osgPerspectiveTexturePlane::CreateGeom()
 	m_Geom->setTexCoordArray( 0, tc.get() );
 	double dW = 1.0 / ( WIN_W * 2.0f );
 	double dH = 1.0 / ( WIN_H * 2.0f );
-	tc->push_back( osg::Vec2( 0.0 , 0.0 ) );
-	tc->push_back( osg::Vec2( 1.0, 0.0 ) );
+	//tc->push_back( osg::Vec2( dW , dH ) );
+	//tc->push_back( osg::Vec2( 1.0 - dW , dH ) );
+	//tc->push_back( osg::Vec2( 1.0 - dW , 1.0 - dH ) );
+	//tc->push_back( osg::Vec2( dW , 1.0 - dH ) );
+
+	tc->push_back( osg::Vec2( 0 , 0 ) );
+	tc->push_back( osg::Vec2( 1.0 , 0 ) );
 	tc->push_back( osg::Vec2( 1.0 , 1.0 ) );
-	tc->push_back( osg::Vec2( 0.0 , 1.0 ) );
+	tc->push_back( osg::Vec2( 0 , 1.0 ) );
+
 
 	m_Geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS , 0, v->size() ) );
 
@@ -79,7 +85,7 @@ void osgPerspectiveTexturePlane::AddTexture()
 	osg::StateSet* state = m_Geode->getOrCreateStateSet();
 
 	// Load the texture image
-	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "1680x1050.PNG" );
+	osg::ref_ptr<osg::Image> image0 = osgDB::readImageFile( "setka.PNG" );
 
 	// Attach the image in a Texture2D object
 	osg::ref_ptr<osg::Texture2D> tex0 = new osg::Texture2D;
