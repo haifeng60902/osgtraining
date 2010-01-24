@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./node;./bin;./Keyboard"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./CameraPlane;./bin;./Keyboard"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./node;./bin;./Keyboard"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./CameraPlane;./bin;./Keyboard"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -187,26 +187,6 @@
 				>
 			</File>
 			<Filter
-				Name="node"
-				>
-				<File
-					RelativePath=".\node\CameraUpdateCallback.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\node\CameraUpdateCallback.h"
-					>
-				</File>
-				<File
-					RelativePath=".\node\osgPerspectiveTexturePlane.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\node\osgPerspectiveTexturePlane.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="other"
 				>
 				<File
@@ -260,32 +240,6 @@
 				Name="CameraPlane"
 				>
 				<File
-					RelativePath=".\CameraPlane\CameraUpdateCallback.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\CameraPlane\CameraUpdateCallback.h"
-					>
-				</File>
-				<File
 					RelativePath=".\CameraPlane\osgPerspectiveTexturePlane.cpp"
 					>
 					<FileConfiguration
@@ -315,6 +269,14 @@
 			<Filter
 				Name="Keyboard"
 				>
+				<File
+					RelativePath=".\Keyboard\CameraUpdateCallback.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Keyboard\CameraUpdateCallback.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Keyboard\KeyboardHandler.cpp"
 					>
