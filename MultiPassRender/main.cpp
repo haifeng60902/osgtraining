@@ -1,6 +1,5 @@
 #include "binDef.h"
 #include "CameraUpdateCallback.h"
-#include "osgTexturePlane.h"
 #include "osgPerspectiveTexturePlane.h"
 #include "KeyboardHandler.h"
 #include "binEvents.h"
@@ -11,8 +10,6 @@
 #include <osg/MatrixTransform>
 
 #include <iostream>
-
-//#define ORTHO2D
 
 int main()
 {
@@ -33,32 +30,9 @@ int main()
 	//viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
 	viewer.setUpViewOnSingleScreen( 0 );
 
-#ifdef ORTHO2D
-	//настройка камеры
-	viewer.getCamera()->setProjectionMatrixAsOrtho( 0.0 , WIN_W , 0.0 , WIN_H , 1.0 , 200.0 );
-
-	//простая геометрия с текстурой
-	osgTexturePlane plane;
-	viewer.setSceneData( plane.GetNode().get() );
-
-	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
-
-	// Display, and main loop.
-	while (!viewer.done())
-	{
-		osg::Matrix mtTr;
-		mtTr.makeTranslate( 0, 0 , -100 );
-
-		//задать явно смещение
-		viewer.getCamera()->setViewMatrix( mtTr );
-
-		viewer.frame();
-	}
-#else
 	viewer.getCamera()->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ));
 
 	//настройка камеры
-	//viewer.getCamera()->setProjectionMatrixAsPerspective( 30.0, WIN_W / WIN_H , 1.0 , 3500.0 );
 	viewer.getCamera()->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
 		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 2970.0 );
 
@@ -91,15 +65,9 @@ int main()
 
 	viewer.getCamera()->setUpdateCallback( new CameraUpdateCallback() );
 
-	// set up the camera manipulation with out custom manipultor
-	//viewer.setCameraManipulator( new UfoManipulator() );
-
 	// Display, and main loop.
 	while (!viewer.done())
 	{
 		viewer.frame();
 	}
-#endif
-
-	//viewer.run();
 }
