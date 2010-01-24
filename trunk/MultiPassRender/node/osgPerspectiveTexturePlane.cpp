@@ -1,6 +1,6 @@
 #include "osgPerspectiveTexturePlane.h"
 
-#include "../binDef.h"
+#include "binDef.h"
 
 #include <osg/Geometry>
 #include <osg/Image>
