@@ -1,6 +1,6 @@
 #include "osgTexturePlane.h"
 
-#include "../binDef.h"
+#include "binDef.h"
 
 #include "CameraUpdateCallback.h"
 

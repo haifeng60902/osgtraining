@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./node;./handler;./bin;./Singletons"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./node;./bin;./Keyboard"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./node;./handler;./bin;./Singletons"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./node;./bin;./Keyboard"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -183,10 +183,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\binDef.h"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -227,38 +223,74 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="handler"
-				>
-				<File
-					RelativePath=".\handler\KeyboardHandler.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\handler\KeyboardHandler.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="bin"
 				>
+				<File
+					RelativePath=".\bin\binDef.h"
+					>
+				</File>
 				<File
 					RelativePath=".\bin\binEvents.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Singletons"
+				Name="Keyboard"
 				>
 				<File
-					RelativePath=".\Singletons\KeyboardState.cpp"
+					RelativePath=".\Keyboard\KeyboardHandler.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Keyboard\KeyboardHandler.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Singletons\KeyboardState.h"
+					RelativePath=".\Keyboard\KeyboardState.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Keyboard\KeyboardState.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Singletons\Singleton.h"
+					RelativePath=".\Keyboard\Singleton.h"
 					>
 				</File>
 			</Filter>
