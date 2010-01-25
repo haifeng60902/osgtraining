@@ -1,4 +1,4 @@
-#include "CameraUpdateCallback.h"
+#include "Camera0UpdateCallback.h"
 
 #include "KeyboardState.h"
 
@@ -6,14 +6,18 @@
 
 #include <iostream>
 
+namespace
+{
 float fY = 0.0f;
+}
 
-CameraUpdateCallback::CameraUpdateCallback() : m_fMoveSpeed( 0.0 )
+
+Camera0UpdateCallback::Camera0UpdateCallback() : m_fMoveSpeed( 0.0 )
 {
 	m_v3Pos = osg::Vec3( 0.0 , 0.0 , 0.0 );
 }
 
-void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
+void Camera0UpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 {
 	osg::Camera* cam = dynamic_cast< osg::Camera* >( node );
 	if ( cam )
@@ -46,14 +50,14 @@ void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	traverse(node,nv);
 }
 
-void CameraUpdateCallback::ProcessRotate()
+void Camera0UpdateCallback::ProcessRotate()
 {
 	//обработать вращения
 
 	//получить доступ к состоянию клавиатуры
 	binEvents &mEvents = KeyboardState::Instance().GetEvents();
 
-	m_v3Rot.z() = m_v3Rot.z() + mEvents.m_dX * 0.5;
+	m_v3Rot.z() = m_v3Rot.z() - mEvents.m_dX * 0.5;
 	m_v3Rot.x() = m_v3Rot.x() + mEvents.m_dY * 0.5;
 
 	//ограничение диапазона углов
@@ -71,7 +75,7 @@ void CameraUpdateCallback::ProcessRotate()
 
 }
 
-void CameraUpdateCallback::ProcessMove()
+void Camera0UpdateCallback::ProcessMove()
 {
 	//обработать перемещение
 
@@ -86,7 +90,7 @@ void CameraUpdateCallback::ProcessMove()
 			MoveBackward();
 }
 
-void CameraUpdateCallback::MoveForward()
+void Camera0UpdateCallback::MoveForward()
 {
 	//перемещение камеры вперед
 	double dZ = cos( osg::DegreesToRadians( -m_v3Rot.x() + 90.0 ) );
@@ -100,7 +104,7 @@ void CameraUpdateCallback::MoveForward()
 	m_v3Pos.z() += dZ * 0.01;
 }
 
-void CameraUpdateCallback::MoveBackward()
+void Camera0UpdateCallback::MoveBackward()
 {
 	//перемещение камеры назад
 	double dZ = -cos( osg::DegreesToRadians( -m_v3Rot.x() + 90.0 ) );

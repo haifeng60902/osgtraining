@@ -41,7 +41,7 @@ int main()
 
 	osg::ref_ptr< osg::MatrixTransform > mTr = new osg::MatrixTransform;
 	osg::Matrix mT;
-	mT.makeTranslate( 0, 4, 0);
+	mT.makeTranslate( 0, 0, 0);
 	mTr->setMatrix( mT );
 	
 	mTr->addChild( node.get() );
@@ -57,7 +57,7 @@ int main()
 	osg::StateSet* stateNode = viewer.getCamera()->getOrCreateStateSet();
 
 	//выключаем освещение
-	stateNode->setMode( GL_LIGHTING , osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE );
+	stateNode->setMode( GL_LIGHTING , osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE );
 
 	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 
