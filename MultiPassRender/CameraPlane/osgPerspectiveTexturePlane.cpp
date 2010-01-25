@@ -14,7 +14,10 @@ osgPerspectiveTexturePlane::osgPerspectiveTexturePlane()
 	CreateGeom();
 
 	//добавить текстуру
-	AddTexture();
+	//AddTexture();
+
+	//добавить камеру
+	AddCamera();
 }
 
 osgPerspectiveTexturePlane::~osgPerspectiveTexturePlane()
@@ -100,8 +103,23 @@ void osgPerspectiveTexturePlane::AddTexture()
 
 	// Attach the 2D texture attribute and enable GL_TEXTURE_2D,
 	// both on texture unit 0.
-	state->setTextureAttributeAndModes( 0, tex0.get() , osg::StateAttribute::ON );
+	state->setTextureAttributeAndModes( 0 , tex0.get() , osg::StateAttribute::ON );
 
 	//выключаем освещение
 	state->setMode( GL_LIGHTING , osg::StateAttribute::OFF );
+}
+
+void osgPerspectiveTexturePlane::AddCamera()
+{
+	//добавить камеру
+	m_Camera0.Init();
+
+	//получить доступ к свойствам узла
+	osg::StateSet* state = m_Group->getOrCreateStateSet();
+
+	//определить текстуру
+	state->setTextureAttributeAndModes( 0 , m_Camera0.GetTexture().get() , osg::StateAttribute::ON );
+
+	//добавить узел камеры
+	m_Group->addChild( m_Camera0.GetCameraNode().get() );
 }

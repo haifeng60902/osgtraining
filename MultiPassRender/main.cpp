@@ -27,8 +27,8 @@ int main()
 	viewer.addEventHandler( keyboard.get() );
 
 	//размер окна
-	//viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
-	viewer.setUpViewOnSingleScreen( 0 );
+	viewer.setUpViewInWindow(10, 10, WIN_W, WIN_H );
+	//viewer.setUpViewOnSingleScreen( 0 );
 
 	viewer.getCamera()->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ));
 
