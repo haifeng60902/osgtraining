@@ -1,6 +1,7 @@
 #include "osgPerspectiveTexturePlane.h"
 
 #include "binDef.h"
+#include "NodeCameraTexture0/Camera0UpdateCallback.h"
 
 #include <osg/Geometry>
 #include <osg/Image>
@@ -111,6 +112,7 @@ void osgPerspectiveTexturePlane::AddTexture()
 
 void osgPerspectiveTexturePlane::AddCamera()
 {
+
 	//добавить камеру
 	m_Camera0.Init();
 
@@ -119,6 +121,9 @@ void osgPerspectiveTexturePlane::AddCamera()
 
 	//определить текстуру
 	state->setTextureAttributeAndModes( 0 , m_Camera0.GetTexture().get() , osg::StateAttribute::ON );
+
+	//выключаем освещение
+	state->setMode( GL_LIGHTING , osg::StateAttribute::OFF );
 
 	//добавить узел камеры
 	m_Group->addChild( m_Camera0.GetCameraNode().get() );

@@ -269,6 +269,14 @@
 					Name="NodeCameraTexture0"
 					>
 					<File
+						RelativePath=".\CameraPlane\NodeCameraTexture0\Camera0UpdateCallback.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CameraPlane\NodeCameraTexture0\Camera0UpdateCallback.h"
+						>
+					</File>
+					<File
 						RelativePath=".\CameraPlane\NodeCameraTexture0\osgCameraNodeTexture0.cpp"
 						>
 					</File>

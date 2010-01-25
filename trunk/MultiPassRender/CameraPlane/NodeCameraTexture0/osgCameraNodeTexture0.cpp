@@ -1,7 +1,7 @@
 #include "osgCameraNodeTexture0.h"
 
 #include "binDef.h"
-#include "CameraUpdateCallback.h"
+#include "Camera0UpdateCallback.h"
 
 #include <osgDB/ReadFile>
 
@@ -49,7 +49,7 @@ void osgCameraNodeTexture0::CreateCamera()
 	m_Camera = new osg::Camera;
 
 	// set up the background color and clear mask.
-	m_Camera->setClearColor(osg::Vec4( 0.1f , 0.2f , 0.3f , 1.0f ) );
+	m_Camera->setClearColor(osg::Vec4( 0.2f , 0.2f , 0.2f , 0.5f ) );
 	m_Camera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//настройка камеры
@@ -77,10 +77,19 @@ void osgCameraNodeTexture0::CreateCamera()
 void osgCameraNodeTexture0::SetupCameraNode()
 {
 	//настройка узла камеры
-	osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
+	osg::ref_ptr< osg::Node > node0 = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
+	osg::ref_ptr< osg::Node > node1 = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
 
-	m_Camera->setUpdateCallback( new CameraUpdateCallback() );
+	m_Camera->setUpdateCallback( new Camera0UpdateCallback() );
+
+	m_Camera->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
+
+	osg::StateSet* stateNode = m_Camera->getOrCreateStateSet();
+
+	//выключаем освещение
+	stateNode->setMode( GL_LIGHTING , osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE );
 
 	// add subgraph to render
-	m_Camera->addChild( node.get() );
+	m_Camera->addChild( node0.get() );
+	m_Camera->addChild( node1.get() );
 }
