@@ -3,8 +3,7 @@
 
 #include "NodeCameraTexture0/osgCameraNodeTexture0.h"
 
-#include <osg/Geode>
-#include <osg/Group>
+#include <osg/MatrixTransform>
 
 class osgPerspectiveTexturePlane
 {
@@ -12,8 +11,8 @@ public:
 	osgPerspectiveTexturePlane();
 	~osgPerspectiveTexturePlane();
 
-	//вернуть узел с геометрией
-	osg::ref_ptr< osg::Group > GetNode(){ return m_Group.get(); };
+	//вернуть узел
+	osg::ref_ptr< osg::MatrixTransform > GetNode(){ return m_Transform.get(); };
 
 private:
 	//создать геометрию
@@ -28,13 +27,8 @@ private:
 	//класс отвечающий за отображение в текстуру
 	osgCameraNodeTexture0 m_Camera0;
 
-	osg::ref_ptr< osg::Geode > m_Geode;
-
-	//главная группа
-	osg::ref_ptr< osg::Group > m_Group;
-
-	//геометрия для прямоугольника
-	osg::ref_ptr< osg::Geometry > m_Geom;
+	//узел трансформации
+	osg::ref_ptr< osg::MatrixTransform > m_Transform;
 };
 
 #endif	//_OSG_PERSPECTIVE_TEXTURE_PLANE_H_

@@ -228,6 +228,10 @@
 				Name="bin"
 				>
 				<File
+					RelativePath=".\bin\binCameraState.h"
+					>
+				</File>
+				<File
 					RelativePath=".\bin\binDef.h"
 					>
 				</File>
@@ -239,6 +243,14 @@
 			<Filter
 				Name="CameraPlane"
 				>
+				<File
+					RelativePath=".\CameraPlane\CameraPlaneCallback.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CameraPlane\CameraPlaneCallback.h"
+					>
+				</File>
 				<File
 					RelativePath=".\CameraPlane\osgPerspectiveTexturePlane.cpp"
 					>
@@ -289,6 +301,14 @@
 			<Filter
 				Name="Keyboard"
 				>
+				<File
+					RelativePath=".\Keyboard\CameraState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Keyboard\CameraState.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Keyboard\CameraUpdateCallback.cpp"
 					>

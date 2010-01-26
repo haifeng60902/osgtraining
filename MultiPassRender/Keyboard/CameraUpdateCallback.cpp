@@ -1,16 +1,15 @@
 #include "CameraUpdateCallback.h"
 
 #include "KeyboardState.h"
+#include "CameraState.h"
 
 #include <osg/Camera>
 
 #include <iostream>
 
-float fY = 0.0f;
-
 CameraUpdateCallback::CameraUpdateCallback() : m_fMoveSpeed( 0.0 )
 {
-	m_v3Pos = osg::Vec3( 0.0 , 0.0 , 0.0 );
+	
 }
 
 void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
@@ -18,6 +17,9 @@ void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	osg::Camera* cam = dynamic_cast< osg::Camera* >( node );
 	if ( cam )
 	{
+		//получить доступ к состоянию камеры 
+		binCameraState &mCamState = CameraState::Instance().GetCameraState();
+
 		//обработать вращения
 		ProcessRotate();
 
@@ -25,19 +27,11 @@ void CameraUpdateCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 		ProcessMove();
 
 		osg::Matrix mtTr , mtRtX , mtRtZ , mtRes;
-		mtRtX.makeRotate( osg::DegreesToRadians( m_v3Rot.x() - 90.0 ) , 1, 0 , 0 );
-		mtRtZ.makeRotate(  osg::DegreesToRadians( m_v3Rot.z() ) , 0, 0 , 1 );
-		mtTr.makeTranslate( m_v3Pos );	
+		mtRtX.makeRotate( osg::DegreesToRadians( mCamState.m_dH - 90.0 ) , 1, 0 , 0 );
+		mtRtZ.makeRotate(  osg::DegreesToRadians( mCamState.m_dR ) , 0, 0 , 1 );
+		mtTr.makeTranslate( mCamState.m_dX , mCamState.m_dY , mCamState.m_dZ );	
 
 		mtRes = mtTr * mtRtZ * mtRtX;
-
-		//вывод перемещения
-		//std::cout << m_v3Pos.x() << " " << m_v3Pos.y() << " "
-		//	<< m_v3Pos.z() <<"\n";
-
-		//вывод углов поворота
-		//std::cout << m_v3Rot.x() << " " << m_v3Rot.y() << " "
-		//	<< m_v3Rot.z() <<"\n";
 
 		//задать явно смещение
 		cam->setViewMatrix( mtRes );
@@ -53,21 +47,24 @@ void CameraUpdateCallback::ProcessRotate()
 	//получить доступ к состоянию клавиатуры
 	binEvents &mEvents = KeyboardState::Instance().GetEvents();
 
-	m_v3Rot.z() = m_v3Rot.z() + mEvents.m_dX * 0.5;
-	m_v3Rot.x() = m_v3Rot.x() + mEvents.m_dY * 0.5;
+	//получить доступ к состоянию камеры 
+	binCameraState &mCamState = CameraState::Instance().GetCameraState();
+
+	mCamState.m_dR = mCamState.m_dR + mEvents.m_dX * 0.5;
+	mCamState.m_dH = mCamState.m_dH + mEvents.m_dY * 0.5;
 
 	//ограничение диапазона углов
-	if ( m_v3Rot.x() > 360.0 )
-		m_v3Rot.x() -= 360.0;
+	if ( mCamState.m_dH > 360.0 )
+		mCamState.m_dH -= 360.0;
 	else
-		if ( m_v3Rot.x() < -360.0 )
-			m_v3Rot.x() += 360.0;
+		if ( mCamState.m_dH < -360.0 )
+			mCamState.m_dH += 360.0;
 
-	if ( m_v3Rot.z() > 360.0 )
-		m_v3Rot.z() -= 360.0;
+	if ( mCamState.m_dR > 360.0 )
+		mCamState.m_dR -= 360.0;
 	else
-		if ( m_v3Rot.z() < -360.0 )
-			m_v3Rot.z() += 360.0;
+		if ( mCamState.m_dR < -360.0 )
+			mCamState.m_dR += 360.0;
 
 }
 
@@ -89,27 +86,35 @@ void CameraUpdateCallback::ProcessMove()
 void CameraUpdateCallback::MoveForward()
 {
 	//перемещение камеры вперед
-	double dZ = cos( osg::DegreesToRadians( -m_v3Rot.x() + 90.0 ) );
+
+	//получить доступ к состоянию камеры 
+	binCameraState &mCamState = CameraState::Instance().GetCameraState();
+
+	double dZ = cos( osg::DegreesToRadians( -mCamState.m_dH + 90.0 ) );
 	double nD = sqrt( 1.0 - dZ * dZ );
 
-	double dX = -nD * sin( osg::DegreesToRadians( m_v3Rot.z() ) );
-	double dY = -nD * cos( osg::DegreesToRadians( m_v3Rot.z() ) );
+	double dX = -nD * sin( osg::DegreesToRadians( mCamState.m_dR ) );
+	double dY = -nD * cos( osg::DegreesToRadians( mCamState.m_dR ) );
 
-	m_v3Pos.x() += dX * 0.01;
-	m_v3Pos.y() += dY * 0.01;
-	m_v3Pos.z() += dZ * 0.01;
+	mCamState.m_dX += dX * 0.01;
+	mCamState.m_dY += dY * 0.01;
+	mCamState.m_dZ += dZ * 0.01;
 }
 
 void CameraUpdateCallback::MoveBackward()
 {
 	//перемещение камеры назад
-	double dZ = -cos( osg::DegreesToRadians( -m_v3Rot.x() + 90.0 ) );
+
+	//получить доступ к состоянию камеры 
+	binCameraState &mCamState = CameraState::Instance().GetCameraState();
+
+	double dZ = -cos( osg::DegreesToRadians( -mCamState.m_dH + 90.0 ) );
 	double nD = sqrt( 1.0 - dZ * dZ );
 
-	double dX = nD * sin( osg::DegreesToRadians( m_v3Rot.z() ) );
-	double dY = nD * cos( osg::DegreesToRadians( m_v3Rot.z() ) );
+	double dX = nD * sin( osg::DegreesToRadians( mCamState.m_dR ) );
+	double dY = nD * cos( osg::DegreesToRadians( mCamState.m_dR ) );
 
-	m_v3Pos.x() += dX * 0.01;
-	m_v3Pos.y() += dY * 0.01;
-	m_v3Pos.z() += dZ * 0.01;
+	mCamState.m_dX += dX * 0.01;
+	mCamState.m_dY += dY * 0.01;
+	mCamState.m_dZ += dZ * 0.01;
 }
