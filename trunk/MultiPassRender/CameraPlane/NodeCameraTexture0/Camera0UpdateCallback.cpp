@@ -57,7 +57,7 @@ void Camera0UpdateCallback::ProcessRotate()
 	//получить доступ к состоянию клавиатуры
 	binEvents &mEvents = KeyboardState::Instance().GetEvents();
 
-	m_v3Rot.z() = m_v3Rot.z() - mEvents.m_dX * 0.5;
+	m_v3Rot.z() = m_v3Rot.z() + mEvents.m_dX * 0.5;
 	m_v3Rot.x() = m_v3Rot.x() + mEvents.m_dY * 0.5;
 
 	//ограничение диапазона углов
