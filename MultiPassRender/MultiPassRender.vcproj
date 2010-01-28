@@ -374,6 +374,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="MainNode"
+				>
+				<File
+					RelativePath=".\MainNode\MainNode.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
