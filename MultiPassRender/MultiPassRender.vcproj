@@ -327,6 +327,14 @@
 					RelativePath=".\MainNode\MainNode.h"
 					>
 				</File>
+				<File
+					RelativePath=".\MainNode\UpdClbkMainNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MainNode\UpdClbkMainNode.h"
+					>
+				</File>
 				<Filter
 					Name="CameraPlane"
 					>
