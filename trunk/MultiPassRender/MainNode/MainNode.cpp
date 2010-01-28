@@ -1,5 +1,7 @@
 #include "MainNode.h"
 
+#include "UpdClbkMainNode.h"
+
 #include <osgDB/ReadFile>
 
 MainNode::MainNode()
@@ -26,4 +28,7 @@ void MainNode::Init()
 
 	//добавить плоскость с динамической текстурой
 	m_Group->addChild( m_NodePlane.GetNode().get() );
+
+	//задать обратный вызов обновления главного узла для расчета параметров камеры
+	m_Group->setUpdateCallback( new UpdClbkMainNode() );
 }

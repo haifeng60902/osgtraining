@@ -66,7 +66,7 @@ void CameraTexture0::CreateCamera()
 	m_Camera->setRenderOrder( osg::Camera::PRE_RENDER );
 
 	// tell the camera to use OpenGL frame buffer object where supported.
-	m_Camera->setRenderTargetImplementation( osg::Camera::FRAME_BUFFER_OBJECT );
+	m_Camera->setRenderTargetImplementation( osg::Camera::PIXEL_BUFFER );
 
 	// attach the texture and use it as the color buffer.
 	m_Camera->attach(osg::Camera::COLOR_BUFFER, m_Texture.get() , 
