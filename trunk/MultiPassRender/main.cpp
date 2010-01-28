@@ -1,13 +1,11 @@
 #include "binDef.h"
 #include "CameraUpdateCallback.h"
-#include "osgPerspectiveTexturePlane.h"
 #include "KeyboardHandler.h"
 #include "binEvents.h"
+#include "MainNode.h"
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgDB/ReadFile>
-#include <osg/MatrixTransform>
 
 #include <iostream>
 
@@ -36,23 +34,15 @@ int main()
 	viewer.getCamera()->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
 		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 2970.0 );
 
-	//osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
-	osg::ref_ptr< osg::Node > node = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
+//////////////////////////////////////////////////////////////////////////
+	//главный узел, в которой входит остальная сцена
+	MainNode m_MainNode;
 
-	osg::ref_ptr< osg::MatrixTransform > mTr = new osg::MatrixTransform;
-	osg::Matrix mT;
-	mT.makeTranslate( 0, 0, 0);
-	mTr->setMatrix( mT );
-	
-	mTr->addChild( node.get() );
+	m_MainNode.Init();
 
-	osgPerspectiveTexturePlane perspPlane;
-
-	osg::ref_ptr< osg::Group > group = new osg::Group;
-	group->addChild( mTr.get() );
-	group->addChild( perspPlane.GetNode().get() );
-
-	viewer.setSceneData( group.get() );
+	//добавить в сцену корневой узел
+	viewer.setSceneData( m_MainNode.GetNode().get() );
+//////////////////////////////////////////////////////////////////////////
 
 	osg::StateSet* stateNode = viewer.getCamera()->getOrCreateStateSet();
 

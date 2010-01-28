@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./CameraPlane;./bin;./Keyboard"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./bin;./Keyboard;./MainNode"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./CameraPlane;./bin;./Keyboard"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;./bin;./Keyboard;./MainNode"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -241,64 +241,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="CameraPlane"
-				>
-				<File
-					RelativePath=".\CameraPlane\CameraPlaneCallback.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CameraPlane\CameraPlaneCallback.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CameraPlane\osgPerspectiveTexturePlane.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\CameraPlane\osgPerspectiveTexturePlane.h"
-					>
-				</File>
-				<Filter
-					Name="NodeCameraTexture0"
-					>
-					<File
-						RelativePath=".\CameraPlane\NodeCameraTexture0\Camera0UpdateCallback.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\CameraPlane\NodeCameraTexture0\Camera0UpdateCallback.h"
-						>
-					</File>
-					<File
-						RelativePath=".\CameraPlane\NodeCameraTexture0\osgCameraNodeTexture0.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\CameraPlane\NodeCameraTexture0\osgCameraNodeTexture0.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
 				Name="Keyboard"
 				>
 				<File
@@ -378,9 +320,53 @@
 				Name="MainNode"
 				>
 				<File
+					RelativePath=".\MainNode\MainNode.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\MainNode\MainNode.h"
 					>
 				</File>
+				<Filter
+					Name="CameraPlane"
+					>
+					<File
+						RelativePath=".\MainNode\CameraPlane\PerspectiveTexturePlane.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MainNode\CameraPlane\PerspectiveTexturePlane.h"
+						>
+					</File>
+					<File
+						RelativePath=".\MainNode\CameraPlane\UpdClbkPerspectiveTexturePlane.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MainNode\CameraPlane\UpdClbkPerspectiveTexturePlane.h"
+						>
+					</File>
+					<Filter
+						Name="CameraTexture0"
+						>
+						<File
+							RelativePath=".\MainNode\CameraPlane\CameraTexture0\CameraTexture0.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\MainNode\CameraPlane\CameraTexture0\CameraTexture0.h"
+							>
+						</File>
+						<File
+							RelativePath=".\MainNode\CameraPlane\CameraTexture0\UpdateCallbackCamera0.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\MainNode\CameraPlane\CameraTexture0\UpdateCallbackCamera0.h"
+							>
+						</File>
+					</Filter>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>
