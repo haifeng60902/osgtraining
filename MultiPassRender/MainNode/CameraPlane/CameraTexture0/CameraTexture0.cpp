@@ -59,7 +59,9 @@ void CameraTexture0::CreateCamera()
 
 	//настройка камеры
 	m_Camera->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
-		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 2970.0 );
+		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 11.0 );	//max 29700
+
+	//1 1.5 2
 
 	// set view
 	m_Camera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
@@ -85,19 +87,18 @@ void CameraTexture0::SetupCameraNode()
 	osg::ref_ptr< osg::Node > node0 = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
 	osg::ref_ptr< osg::Node > node1 = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
 
+	//инициализация плоскостей
+	m_TestFarPlanes.Init();
+
 	//задать обратный вызов обновления для камеры так чтобы координаты виртуальной камеры совподали с главной камерой
 	m_Camera->setUpdateCallback( new UpdateCallbackCamera0() );
 
 	m_Camera->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
 
-	osg::StateSet* stateNode = m_Camera->getOrCreateStateSet();
-
-	//выключаем освещение
-	//stateNode->setMode( GL_LIGHTING , osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE );
-
 	// add subgraph to render
 	m_Camera->addChild( node0.get() );
 	m_Camera->addChild( node1.get() );
+	m_Camera->addChild( m_TestFarPlanes.GetPlane().get() );
 }
 
 void CameraTexture0::AddShader()

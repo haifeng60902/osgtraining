@@ -5,6 +5,8 @@
 
 #include <osg/Math>
 
+#include <iostream>
+
 UpdClbkMainNode::UpdClbkMainNode() : m_fMoveSpeed( 0.0 )
 {
 
@@ -13,7 +15,7 @@ UpdClbkMainNode::UpdClbkMainNode() : m_fMoveSpeed( 0.0 )
 void UpdClbkMainNode::operator()( osg::Node* node, osg::NodeVisitor* nv )
 {
 	//обработать вращения
-	ProcessRotate();
+	//ProcessRotate();
 
 	//обработать перемещение
 	ProcessMove();
@@ -81,6 +83,8 @@ void UpdClbkMainNode::MoveForward()
 	mCamState.m_dX += dX * 0.01;
 	mCamState.m_dY += dY * 0.01;
 	mCamState.m_dZ += dZ * 0.01;
+
+	std::cout << mCamState.m_dY << " ";
 }
 
 void UpdClbkMainNode::MoveBackward()
@@ -99,4 +103,6 @@ void UpdClbkMainNode::MoveBackward()
 	mCamState.m_dX += dX * 0.01;
 	mCamState.m_dY += dY * 0.01;
 	mCamState.m_dZ += dZ * 0.01;
+
+	std::cout << mCamState.m_dY << " ";
 }

@@ -373,6 +373,18 @@
 							RelativePath=".\MainNode\CameraPlane\CameraTexture0\UpdateCallbackCamera0.h"
 							>
 						</File>
+						<Filter
+							Name="TestFarPlane"
+							>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\TestFarPlane\TestFarPlanes.cpp"
+								>
+							</File>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\TestFarPlane\TestFarPlanes.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 				</Filter>
 			</Filter>

@@ -1,6 +1,8 @@
 #ifndef _CAMERA_TEXTURE_0_H_
 #define _CAMERA_TEXTURE_0_H_
 
+#include "TestFarPlane/TestFarPlanes.h"
+
 #include <osg/Camera>
 #include <osg/Texture2D>
 
@@ -40,7 +42,10 @@ private:
 	osg::ref_ptr< osg::Camera > m_Camera;
 
 	//узел с динамической текстурой
-	osg::ref_ptr< osg::Texture2D > m_Texture; 
+	osg::ref_ptr< osg::Texture2D > m_Texture;
+
+	//тестовый плоскости для оценки правильности упаковки глубины
+	TestFarPlanes m_TestFarPlanes;
 };
 
 #endif	//_CAMERA_TEXTURE_0_H_
