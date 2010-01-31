@@ -11,6 +11,22 @@
 
 int main()
 {
+//////////////////////////////////////////////////////////////////////////
+//тест rgba
+	float c = 0.5;
+
+	float p0 = c;
+	float p1 = c * 255.0 - floor( c * 255.0 );
+	float p2 = c * 255.0 * 255.0 - floor( c * 255.0 * 255.0 );
+	float p3 = c * 255.0 * 255.0 * 255.0 - floor( c * 255.0 * 255.0 * 255.0 );
+
+	unsigned char c0 = p0 * 255;
+	unsigned char c1 = p1 * 255;
+	unsigned char c2 = p2 * 255;
+	unsigned char c3 = p3 * 255;
+
+	int a = 1;
+//////////////////////////////////////////////////////////////////////////
 	binEvents ff;
 
 	// Create a Viewer.
