@@ -30,6 +30,12 @@ private:
 	//настройка узла камеры
 	void SetupCameraNode();
 
+	//добавить шейдер
+	void AddShader();
+
+	// load source from a file.
+	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
+
 	//узел камеры	
 	osg::ref_ptr< osg::Camera > m_Camera;
 
