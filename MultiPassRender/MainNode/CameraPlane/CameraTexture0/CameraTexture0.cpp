@@ -4,6 +4,8 @@
 #include "UpdateCallbackCamera0.h"
 
 #include <osgDB/ReadFile>
+#include <osgDB/FileUtils>
+#include <osg/Program>
 
 CameraTexture0::CameraTexture0()
 {
@@ -27,6 +29,9 @@ void CameraTexture0::Init()
 
 	//настройка узла камеры
 	SetupCameraNode();
+
+	//добавить шейдер
+	AddShader();
 }
 
 void CameraTexture0::CreateTexture()
@@ -88,9 +93,43 @@ void CameraTexture0::SetupCameraNode()
 	osg::StateSet* stateNode = m_Camera->getOrCreateStateSet();
 
 	//выключаем освещение
-	stateNode->setMode( GL_LIGHTING , osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE );
+	//stateNode->setMode( GL_LIGHTING , osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE );
 
 	// add subgraph to render
 	m_Camera->addChild( node0.get() );
 	m_Camera->addChild( node1.get() );
+}
+
+void CameraTexture0::AddShader()
+{
+//добавить шейдер
+	osg::StateSet* stateNode = m_Camera->getOrCreateStateSet();
+
+	//создать экземпл€р программы
+	osg::Program* program = new osg::Program;
+	program->setName( "camera_shader" );
+
+	osg::Shader *VertObj = new osg::Shader( osg::Shader::VERTEX );
+	osg::Shader *FragObj = new osg::Shader( osg::Shader::FRAGMENT );
+	program->addShader( VertObj );
+	program->addShader( FragObj );
+
+	LoadShaderSource( VertObj , "glsl/camera0.vert" );
+	LoadShaderSource( FragObj , "glsl/camera0.frag" );
+
+	stateNode->setAttributeAndModes( program, osg::StateAttribute::ON );
+}
+
+void CameraTexture0::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
+{
+	// load source from a file.
+	std::string fqFileName = osgDB::findDataFile(fileName);
+	if( fqFileName.length() != 0 )
+	{
+		shader->loadShaderSourceFromFile( fqFileName.c_str() );
+	}
+	else
+	{
+		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
+	}
 }
