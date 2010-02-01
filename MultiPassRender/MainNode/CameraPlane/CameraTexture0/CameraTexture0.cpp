@@ -46,6 +46,10 @@ void CameraTexture0::CreateTexture()
 	m_Texture->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP_TO_EDGE);
 
 	m_Texture->setResizeNonPowerOfTwoHint( false );
+
+	m_Texture->setInternalFormat( GL_RGBA32F_ARB );
+	m_Texture->setSourceFormat( GL_RGBA );
+	m_Texture->setSourceType( GL_FLOAT );
 }
 
 void CameraTexture0::CreateCamera()
@@ -59,7 +63,7 @@ void CameraTexture0::CreateCamera()
 
 	//настройка камеры
 	m_Camera->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
-		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 11.0 );	//max 29700
+		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 29700.0 );	//max 29700
 
 	//1 1.5 2
 
