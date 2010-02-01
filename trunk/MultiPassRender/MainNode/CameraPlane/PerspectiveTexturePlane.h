@@ -24,6 +24,12 @@ private:
 	//добавить камеру
 	void AddCamera();
 
+	//добавить шейдер
+	void AddShader();
+
+	// load source from a file.
+	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
+
 	//класс отвечающий за отображение в текстуру
 	CameraTexture0 m_Camera0;
 
