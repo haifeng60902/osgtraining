@@ -400,6 +400,14 @@
 				RelativePath=".\glsl\camera0.vert"
 				>
 			</File>
+			<File
+				RelativePath=".\glsl\plane.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\plane.vert"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -8,6 +8,8 @@
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 #include <osg/Texture2D>
+#include <osg/Program>
+
 
 PerspectiveTexturePlane::PerspectiveTexturePlane()
 {
@@ -16,6 +18,9 @@ PerspectiveTexturePlane::PerspectiveTexturePlane()
 
 	//добавить камеру
 	AddCamera();
+
+	//добавить шейдер
+	AddShader();
 
 	//задать обратный вызов обновлени€ дл€ узла плоскости
 	m_Transform->setUpdateCallback( new UpdClbkPerspectiveTexturePlane() );
@@ -92,4 +97,42 @@ void PerspectiveTexturePlane::AddCamera()
 
 	//добавить узел камеры
 	m_Transform->addChild( m_Camera0.GetCameraNode().get() );
+}
+
+void PerspectiveTexturePlane::AddShader()
+{
+	//добавить шейдер
+	osg::StateSet* stateNode = m_Transform->getOrCreateStateSet();
+
+	//создать экземпл€р программы
+	osg::Program* program = new osg::Program;
+	program->setName( "plane_shader" );
+
+	osg::Shader *VertObj = new osg::Shader( osg::Shader::VERTEX );
+	osg::Shader *FragObj = new osg::Shader( osg::Shader::FRAGMENT );
+	program->addShader( VertObj );
+	program->addShader( FragObj );
+
+	LoadShaderSource( VertObj , "glsl/plane.vert" );
+	LoadShaderSource( FragObj , "glsl/plane.frag" );
+
+	stateNode->setAttributeAndModes( program, osg::StateAttribute::ON );
+
+	//добавление uniform'ов дл€ работы с текстурными модул€ми
+	stateNode->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+
+}
+
+void PerspectiveTexturePlane::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
+{
+	// load source from a file.
+	std::string fqFileName = osgDB::findDataFile(fileName);
+	if( fqFileName.length() != 0 )
+	{
+		shader->loadShaderSourceFromFile( fqFileName.c_str() );
+	}
+	else
+	{
+		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
+	}
 }
