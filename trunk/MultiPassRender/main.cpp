@@ -26,10 +26,10 @@ int main()
 	unsigned char c2 = p2 * 255;
 	unsigned char c3 = p3 * 255;
 
-	//c0 = 40;
-	//c1 = 80;
-	//c2 = 160;
-	//c3 = 240;
+	c0 = 1;
+	c1 = 2;
+	c2 = 3;
+	c3 = 4;
 
 	float nc = (float)c0 / 255.0f + (float)c1 / 255.0f /255.0f + (float)c2 / 255.0f / ( 255.0f * 255.0f ) + (float)c3 / 255.0f /( 255.0f * 255.0f * 255.0f );
 

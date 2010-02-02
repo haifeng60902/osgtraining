@@ -39,7 +39,7 @@ void CameraTexture0::CreateTexture()
 	//первый этап, создание текстуры в которую будет происходить отображение
 	m_Texture = new osg::Texture2D;
 	m_Texture->setTextureSize( WIN_W , WIN_H );
-	m_Texture->setInternalFormat(GL_RGBA);
+	//m_Texture->setInternalFormat(GL_RGBA);
 	m_Texture->setFilter(osg::Texture::MIN_FILTER,osg::Texture::NEAREST);
 	m_Texture->setFilter(osg::Texture::MAG_FILTER,osg::Texture::NEAREST);
 	m_Texture->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP_TO_EDGE); 
@@ -63,7 +63,7 @@ void CameraTexture0::CreateCamera()
 
 	//настройка камеры
 	m_Camera->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
-		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 29700.0 );	//max 29700
+		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 ,29700 );	//max 29700
 
 	//1 1.5 2
 
@@ -77,7 +77,7 @@ void CameraTexture0::CreateCamera()
 	m_Camera->setRenderOrder( osg::Camera::PRE_RENDER );
 
 	// tell the camera to use OpenGL frame buffer object where supported.
-	m_Camera->setRenderTargetImplementation( osg::Camera::PIXEL_BUFFER );
+	m_Camera->setRenderTargetImplementation( osg::Camera::FRAME_BUFFER );
 
 	// attach the texture and use it as the color buffer.
 	m_Camera->attach(osg::Camera::COLOR_BUFFER, m_Texture.get() , 
