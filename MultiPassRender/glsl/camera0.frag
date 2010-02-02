@@ -16,10 +16,11 @@ vec4 packFloatToVec4i( float value )
 void main()
 {
 	//pack depth
-	float depth = ( varPos.z + 1.0 ) * 0.5;
+	//float depth = ( varPos.z + 1.0 ) * 0.5;
 	//gl_FragColor = packFloatToVec4i( depth );
+	float depth = 0.0039525079;
 	
 	//pack normal
 	vec3    n2   = normalize ( n );
-	gl_FragColor = vec4 ( 0.5*n2 + vec3(0.5), depth );
+	gl_FragColor = vec4 ( depth , 0.5*n2 + vec3(0.5) );
 }
