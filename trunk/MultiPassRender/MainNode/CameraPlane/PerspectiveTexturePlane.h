@@ -18,8 +18,8 @@ private:
 	//создать геометрию
 	void CreateGeom();
 
-	//добавить текстуру
-	void AddTexture();
+	//добавить текстуры
+	void AddTextures( osg::StateSet* state );
 
 	//добавить камеру
 	void AddCamera();
