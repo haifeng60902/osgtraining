@@ -3,9 +3,10 @@
 
 #include "CameraPlane/PerspectiveTexturePlane.h"
 
-#include <osg/Referenced>
 #include <osg/ref_ptr>
-#include <osg/Group>
+
+class osg::Referenced;
+class osg::Group;
 
 class MainNode : public osg::Referenced
 {

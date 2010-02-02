@@ -1,4 +1,6 @@
 uniform sampler2D u_texture0;
+uniform sampler2D u_texture1;
+uniform sampler2D u_texture2;
 
 //
 // pack a floating point value from [0,1] into RGBA8 vector
@@ -20,9 +22,9 @@ vec4 packFloatToVec4i( float value )
 
 void main()
 {
-	vec4 res0 = texture2D( u_texture0 , gl_TexCoord[0].st );
+	vec4 res0 = texture2D( u_texture2 , gl_TexCoord[0].st );
 	
-	vec4 depth = packFloatToVec4i( res0.x );
+	//vec4 depth = packFloatToVec4i( res0.x );
 	
-	gl_FragColor = depth;	
+	gl_FragColor = res0;	
 }

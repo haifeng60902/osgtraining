@@ -89,8 +89,8 @@ void PerspectiveTexturePlane::AddCamera()
 	//получить доступ к свойствам узла
 	osg::StateSet* state = m_Transform->getOrCreateStateSet();
 
-	//определить текстуру
-	state->setTextureAttributeAndModes( 0 , m_Camera0.GetTexture().get() , osg::StateAttribute::ON );
+	//добавить текстуры
+	AddTextures( state );
 
 	//выключаем освещение
 	state->setMode( GL_LIGHTING , osg::StateAttribute::OFF );
@@ -120,7 +120,9 @@ void PerspectiveTexturePlane::AddShader()
 
 	//добавление uniform'ов для работы с текстурными модулями
 	stateNode->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
-
+	stateNode->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
+	stateNode->addUniform( new osg::Uniform( "u_texture2" , 2 ) );
+	//stateNode->addUniform( new osg::Uniform( "u_texture3" , 3 ) );
 }
 
 void PerspectiveTexturePlane::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -134,5 +136,17 @@ void PerspectiveTexturePlane::LoadShaderSource( osg::Shader* shader, const std::
 	else
 	{
 		osg::notify(osg::WARN) << "File \"" << fileName << "\" not found." << std::endl;
+	}
+}
+
+void PerspectiveTexturePlane::AddTextures( osg::StateSet* state )
+{
+//добавить текстуры
+	int i = 0;
+	CameraTexture0::tListTexture2D &mTextures2D = m_Camera0.GetListTextures();
+	for ( CameraTexture0::tListTexture2D::iterator it = mTextures2D.begin(); it != mTextures2D.end() ; ++it )
+	{
+		state->setTextureAttributeAndModes( i ,( *it ).get() , osg::StateAttribute::ON );
+		++i;
 	}
 }

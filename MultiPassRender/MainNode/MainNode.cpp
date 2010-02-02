@@ -3,6 +3,9 @@
 #include "UpdClbkMainNode.h"
 
 #include <osgDB/ReadFile>
+#include <osg/Referenced>
+#include <osg/Group>
+#include <osg/MatrixTransform>
 
 MainNode::MainNode()
 {
