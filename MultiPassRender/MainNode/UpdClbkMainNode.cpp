@@ -15,7 +15,7 @@ UpdClbkMainNode::UpdClbkMainNode() : m_fMoveSpeed( 0.0 )
 void UpdClbkMainNode::operator()( osg::Node* node, osg::NodeVisitor* nv )
 {
 	//обработать вращения
-	//ProcessRotate();
+	ProcessRotate();
 
 	//обработать перемещение
 	ProcessMove();

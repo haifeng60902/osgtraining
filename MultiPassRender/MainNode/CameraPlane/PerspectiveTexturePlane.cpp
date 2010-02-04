@@ -121,7 +121,7 @@ void PerspectiveTexturePlane::AddShader()
 	//добавление uniform'ов для работы с текстурными модулями
 	stateNode->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
 	stateNode->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
-	stateNode->addUniform( new osg::Uniform( "u_texture2" , 2 ) );
+	//stateNode->addUniform( new osg::Uniform( "u_texture2" , 2 ) );
 	//stateNode->addUniform( new osg::Uniform( "u_texture3" , 3 ) );
 }
 

@@ -143,17 +143,21 @@ void CameraTexture0::LoadShaderSource( osg::Shader* shader, const std::string& f
 void CameraTexture0::CreateTextures()
 {
 //создать текстуры
-	for ( int i = 0 ; i < 3 ; ++i )
+	for ( int i = 0 ; i < 2 ; ++i )
 	{
 		m_ListTexture2D.push_back( new osg::Texture2D );
 		m_ListTexture2D.back()->setTextureSize( WIN_W , WIN_H );
-		m_ListTexture2D.back()->setInternalFormat(GL_RGBA);
-		m_ListTexture2D.back()->setFilter(osg::Texture::MIN_FILTER,osg::Texture::NEAREST);
-		m_ListTexture2D.back()->setFilter(osg::Texture::MAG_FILTER,osg::Texture::NEAREST);
-		m_ListTexture2D.back()->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP_TO_EDGE); 
-		m_ListTexture2D.back()->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP_TO_EDGE);
+		//m_ListTexture2D.back()->setInternalFormat(GL_RGBA);
+		m_ListTexture2D.back()->setFilter( osg::Texture::MIN_FILTER , osg::Texture::NEAREST );
+		m_ListTexture2D.back()->setFilter( osg::Texture::MAG_FILTER , osg::Texture::NEAREST );
+		m_ListTexture2D.back()->setWrap( osg::Texture::WRAP_S , osg::Texture::CLAMP_TO_EDGE ); 
+		m_ListTexture2D.back()->setWrap( osg::Texture::WRAP_T , osg::Texture::CLAMP_TO_EDGE );
 
 		m_ListTexture2D.back()->setResizeNonPowerOfTwoHint( false );
+
+		m_ListTexture2D.back()->setInternalFormat( GL_RGBA_FLOAT32_ATI );	//GL_RGBA_FLOAT32_ATI	GL_RGBA32F_ARB
+		m_ListTexture2D.back()->setSourceFormat( GL_RGBA );
+		m_ListTexture2D.back()->setSourceType( GL_FLOAT );
 	}
 }
 
