@@ -22,9 +22,9 @@ vec4 packFloatToVec4i( float value )
 
 void main()
 {
-	vec4 res0 = texture2D( u_texture2 , gl_TexCoord[0].st );
+	vec4 res0 = texture2D( u_texture1 , gl_TexCoord[0].st );
 	
-	//vec4 depth = packFloatToVec4i( res0.x );
+	vec4 depth = packFloatToVec4i( res0.y );
 	
 	gl_FragColor = res0;	
 }

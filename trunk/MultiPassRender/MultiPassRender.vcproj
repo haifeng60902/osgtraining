@@ -385,6 +385,18 @@
 								>
 							</File>
 						</Filter>
+						<Filter
+							Name="LightPoint"
+							>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\LightPoint\LightPoint.cpp"
+								>
+							</File>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\LightPoint\LightPoint.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 				</Filter>
 			</Filter>
