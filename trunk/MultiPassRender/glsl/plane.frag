@@ -2,6 +2,12 @@ uniform sampler2D u_texture0;
 uniform sampler2D u_texture1;
 uniform sampler2D u_texture2;
 
+//fragment position
+varying vec4 varPos;
+
+//Light Source Position
+varying vec4 v4LightPos;
+
 //
 // pack a floating point value from [0,1] into RGBA8 vector
 //
@@ -22,9 +28,23 @@ vec4 packFloatToVec4i( float value )
 
 void main()
 {
-	vec4 res0 = texture2D( u_texture1 , gl_TexCoord[0].st );
+	vec4 res0 = texture2D( u_texture0 , gl_TexCoord[0].st );
 	
-	vec4 depth = packFloatToVec4i( res0.y );
+	//extract normal
+	vec3 v3Normal =  res0.xyz * 2.0 - 1.0;
 	
-	gl_FragColor = res0;	
+	float zEye = 20.0 / ( res0.w * 19.0 - 20.0 );
+	vec3  eyeCoord = varPos * zEye;
+	//eyeCoord *= -1.0;
+	
+	vec4 depth = packFloatToVec4i( eyeCoord.z / 20.0 );
+	
+	//get light vector
+	vec3 v3LightVec = eyeCoord - v4LightPos.xyz;
+	v3LightVec = normalize( v3LightVec );
+	
+	float nxDir = max( 0.0 , dot( v3Normal , v3LightVec ) );
+	
+	//gl_FragColor = depth.abgr;
+	gl_FragColor = nxDir;
 }

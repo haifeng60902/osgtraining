@@ -2,6 +2,7 @@
 
 #include "binDef.h"
 #include "UpdClbkPerspectiveTexturePlane.h"
+#include "UniUpdClbkLightPos.h"
 
 #include <osg/Geometry>
 #include <osg/Image>
@@ -121,6 +122,12 @@ void PerspectiveTexturePlane::AddShader()
 	//добавление uniform'ов для работы с текстурными модулями
 	stateNode->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
 	stateNode->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
+
+	//положение источника света
+	m_unfLightPos = new osg::Uniform( "u4LightPos" , osg::Vec4( 0.0f , 4.0f , 0.0f , 0.0 ) );
+	stateNode->addUniform(  m_unfLightPos.get() ); 
+	m_unfLightPos->setUpdateCallback( new UniUpdClbkLightPos() );
+
 	//stateNode->addUniform( new osg::Uniform( "u_texture2" , 2 ) );
 	//stateNode->addUniform( new osg::Uniform( "u_texture3" , 3 ) );
 }

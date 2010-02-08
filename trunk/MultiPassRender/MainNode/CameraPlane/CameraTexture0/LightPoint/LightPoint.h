@@ -1,7 +1,7 @@
 #ifndef _LIGHT_POINT_H_
 #define _LIGHT_POINT_H_
 
-#include <osg/Geode>
+#include <osg/MatrixTransform>
 
 class LightPoint
 {
@@ -13,10 +13,10 @@ public:
 	void Init();
 
 	//вернуть узел содержащий геометрическое представление источника света
-	osg::ref_ptr< osg::Geode > GetPoint(){ return m_Geode.get(); };
+	osg::ref_ptr< osg::MatrixTransform> GetPoint(){ return m_MatrTr.get(); };
 
 private:
-	osg::ref_ptr< osg::Geode > m_Geode;
+	osg::ref_ptr< osg::MatrixTransform > m_MatrTr;
 };
 
 #endif

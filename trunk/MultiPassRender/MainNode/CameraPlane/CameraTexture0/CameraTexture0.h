@@ -2,6 +2,7 @@
 #define _CAMERA_TEXTURE_0_H_
 
 #include "TestFarPlane/TestFarPlanes.h"
+#include "LightPoint/LightPoint.h"
 
 #include <osg/Camera>
 #include <osg/Texture2D>
@@ -63,6 +64,9 @@ private:
 
 	//тестовый плоскости для оценки правильности упаковки глубины
 	TestFarPlanes m_TestFarPlanes;
+
+	//геометрическое представление источника света
+	LightPoint m_LightPoint;
 };
 
 #endif	//_CAMERA_TEXTURE_0_H_

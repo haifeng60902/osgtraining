@@ -239,6 +239,10 @@
 					RelativePath=".\bin\binEvents.h"
 					>
 				</File>
+				<File
+					RelativePath=".\bin\binLight.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Keyboard"
@@ -312,6 +316,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Keyboard\Lighting.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Keyboard\Lighting.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Keyboard\Singleton.h"
 					>
 				</File>
@@ -344,6 +356,14 @@
 					</File>
 					<File
 						RelativePath=".\MainNode\CameraPlane\PerspectiveTexturePlane.h"
+						>
+					</File>
+					<File
+						RelativePath=".\MainNode\CameraPlane\UniUpdClbkLightPos.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MainNode\CameraPlane\UniUpdClbkLightPos.h"
 						>
 					</File>
 					<File
@@ -394,6 +414,14 @@
 							</File>
 							<File
 								RelativePath=".\MainNode\CameraPlane\CameraTexture0\LightPoint\LightPoint.h"
+								>
+							</File>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\LightPoint\UpdClbkLightPoint.cpp"
+								>
+							</File>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\LightPoint\UpdClbkLightPoint.h"
 								>
 							</File>
 						</Filter>
