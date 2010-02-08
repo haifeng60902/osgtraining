@@ -4,7 +4,7 @@
 
 #define PLANE_SIZE 1.0
 
-#define PLANE_DEPTH 8.0
+#define PLANE_DEPTH 6.0
 
 TestFarPlanes::TestFarPlanes()
 {

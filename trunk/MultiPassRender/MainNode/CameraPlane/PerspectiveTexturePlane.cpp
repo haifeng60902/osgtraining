@@ -47,10 +47,10 @@ void PerspectiveTexturePlane::CreateGeom()
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	mGeom->setVertexArray( v.get() );
 
-	v->push_back( osg::Vec3( -HALF_SIZE , 1.0 , -HALF_SIZE * WIN_H / WIN_W ) );
-	v->push_back( osg::Vec3( HALF_SIZE , 1.0 , -HALF_SIZE * WIN_H / WIN_W ) );
-	v->push_back( osg::Vec3( HALF_SIZE , 1.0 , HALF_SIZE * WIN_H / WIN_W ) );
-	v->push_back( osg::Vec3( -HALF_SIZE , 1.0 , HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( -HALF_SIZE , 2.0 , -HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( HALF_SIZE , 2.0 , -HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( HALF_SIZE , 2.0 , HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( -HALF_SIZE , 2.0 , HALF_SIZE * WIN_H / WIN_W ) );
 
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -124,7 +124,7 @@ void PerspectiveTexturePlane::AddShader()
 	stateNode->addUniform( new osg::Uniform( "u_texture1" , 1 ) );
 
 	//положение источника света
-	m_unfLightPos = new osg::Uniform( "u4LightPos" , osg::Vec4( 0.0f , 4.0f , 0.0f , 0.0 ) );
+	m_unfLightPos = new osg::Uniform( "u4LightPos" , osg::Vec4( 0.0f , 3.0f , 0.0f , 0.0 ) );
 	stateNode->addUniform(  m_unfLightPos.get() ); 
 	m_unfLightPos->setUpdateCallback( new UniUpdClbkLightPos() );
 
