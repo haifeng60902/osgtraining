@@ -17,7 +17,7 @@ void UpdClbkLightPoint::operator()( osg::Node* node, osg::NodeVisitor* nv)
 	{
 		osg::Matrix mTr , mR , mF;
 		mR.makeRotate( osg::DegreesToRadians( m_dRot ) , 0,0,1 );
-		mTr.makeTranslate( 8,0,0 );
+		mTr.makeTranslate( 0,4,0 );
 
 		mF = mTr * mR;
 

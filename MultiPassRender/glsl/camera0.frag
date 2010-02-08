@@ -17,5 +17,5 @@ void main()
 {	
 	//pack normal
 	vec3    n2   = normalize ( n );
-	gl_FragData[0] = vec4( 0.5*n2 + vec3(0.5) , gl_FragCoord.z );
+	gl_FragData[0] = vec4( 0.5*n2 + vec3(0.5) , varPos.z / varPos.w );
 }
