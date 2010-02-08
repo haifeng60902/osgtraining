@@ -2,9 +2,9 @@
 
 #include <osg/Geometry>
 
-#define PLANE_SIZE 1.5
+#define PLANE_SIZE 1.0
 
-#define PLANE_DEPTH 6.0
+#define PLANE_DEPTH 8.0
 
 TestFarPlanes::TestFarPlanes()
 {

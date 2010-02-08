@@ -66,7 +66,9 @@ void CameraTexture0::CreateCamera()
 
 	//настройка камеры
 	m_Camera->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
-		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 ,2970 );	//max 29700
+		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 ,20 );	//max 29700
+
+	osg::Matrix fr = m_Camera->getProjectionMatrix();
 
 	//1 1.5 2
 
@@ -95,6 +97,9 @@ void CameraTexture0::SetupCameraNode()
 	//инициализация плоскостей
 	m_TestFarPlanes.Init();
 
+	//инициализация геометрического представления источника света
+	m_LightPoint.Init();
+
 	//задать обратный вызов обновления для камеры так чтобы координаты виртуальной камеры совподали с главной камерой
 	m_Camera->setUpdateCallback( new UpdateCallbackCamera0() );
 
@@ -104,6 +109,7 @@ void CameraTexture0::SetupCameraNode()
 	m_Camera->addChild( node0.get() );
 	m_Camera->addChild( node1.get() );
 	m_Camera->addChild( m_TestFarPlanes.GetPlane().get() );
+	m_Camera->addChild( m_LightPoint.GetPoint().get() );
 }
 
 void CameraTexture0::AddShader()
@@ -143,7 +149,7 @@ void CameraTexture0::LoadShaderSource( osg::Shader* shader, const std::string& f
 void CameraTexture0::CreateTextures()
 {
 //создать текстуры
-	for ( int i = 0 ; i < 2 ; ++i )
+	for ( int i = 0 ; i < 1 ; ++i )
 	{
 		m_ListTexture2D.push_back( new osg::Texture2D );
 		m_ListTexture2D.back()->setTextureSize( WIN_W , WIN_H );

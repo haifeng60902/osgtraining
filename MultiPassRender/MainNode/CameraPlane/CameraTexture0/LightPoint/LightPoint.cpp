@@ -1,6 +1,10 @@
 #include "LightPoint.h"
 
+#include "UpdClbkLightPoint.h"
+
+#include <osg/Geode>
 #include <osg/Geometry>
+#include <osg/Point>
 
 LightPoint::LightPoint()
 {
@@ -15,7 +19,7 @@ LightPoint::~LightPoint()
 void LightPoint::Init()
 {
 	//инициализация геометрического представления источника света
-	m_Geode = new osg::Geode;
+	osg::ref_ptr< osg::Geode > mGeode = new osg::Geode;
 
 	//создать точку представляющую источник света
 	osg::ref_ptr<osg::Geometry> geom = new osg::Geometry;
@@ -26,7 +30,7 @@ void LightPoint::Init()
 
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	geom->setVertexArray( v.get() );
-	v->push_back( osg::Vec3( 0.f, 0.f, 5.f ) );
+	v->push_back( osg::Vec3( 0.f, 0.f, 0.f ) );
 
 	osg::ref_ptr<osg::Vec4Array> c = new osg::Vec4Array;
 	geom->setColorArray( c.get() );
@@ -35,13 +39,18 @@ void LightPoint::Init()
 
 	geom->addPrimitiveSet( new osg::DrawArrays( GL_POINTS, 0, 1 ) );
 
-	m_Geode->addDrawable( geom.get() );
+	mGeode->addDrawable( geom.get() );
 
-	osg::StateSet* state = m_Geode->getOrCreateStateSet();
+	osg::StateSet* state = mGeode->getOrCreateStateSet();
 	state->setMode( GL_LIGHTING, osg::StateAttribute::OFF |
 		osg::StateAttribute::PROTECTED );
 
-	osg::ref_ptr<osg::Point> pt = new osg::Point;
+	osg::ref_ptr< osg::Point > pt = new osg::Point;
 	pt->setSize( 10.f );
 	state->setAttribute( pt.get() );
+
+	//геометрической представление точки стало дочерним узлом MatrixTransform для того чтобы мы могли его перемещать
+	m_MatrTr = new osg::MatrixTransform;
+	m_MatrTr->addChild( mGeode.get() );
+	m_MatrTr->setUpdateCallback( new UpdClbkLightPoint() );
 }

@@ -35,6 +35,9 @@ private:
 
 	//узел трансформации
 	osg::ref_ptr< osg::MatrixTransform > m_Transform;
+
+	//uniform для задания положения источника света
+	osg::ref_ptr< osg::Uniform > m_unfLightPos;
 };
 
 #endif	//_PERSPECTIVE_TEXTURE_PLANE_H_
