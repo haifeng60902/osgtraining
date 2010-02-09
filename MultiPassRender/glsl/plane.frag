@@ -5,10 +5,7 @@ uniform sampler2D u_texture2;
 //fragment position
 varying vec4 varPos;
 
-//Light Source Position
-varying vec4 v4LightPos;
-
-//Original Light Sorce position
+//Light Source Position in viewer space
 uniform vec4 u4LightPos;
 
 //
@@ -37,18 +34,17 @@ void main()
 	vec3 v3Normal =  res0.xyz * 2.0 - 1.0;
 	
 	float zEye = 20.0 / ( res0.w * 19.0 - 20.0 );
-	vec3  eyeCoord = varPos.xyz * zEye;
+	
+	//for now eyeCoord contain camera space x,y,z fragment value
+	vec3  eyeCoord = -varPos.xyz * zEye;
 	
 	//get light vector
-	vec3 v3LightVec = eyeCoord - v4LightPos.xyz;
-	//v3LightVec = normalize( v3LightVec );
+	vec3 v3LightVec = eyeCoord - u4LightPos.xyz;
 	
-	float nxDir = max( 0.0 , dot( v3Normal , v3LightVec ) );
+	//calc light direction
+	vec3 v3Dir = -normalize( v3LightVec );
+	float fL = max( 0.0 , dot( v3Normal , v3Dir ) );
 	
-	//gl_FragColor = depth.abgr;
-	float fL = length( v3LightVec );
-	if ( fL > 6.0 )
-		fL = 0.0;
-	vec4 depth = packFloatToVec4i( -v4LightPos.z / 30.0 );
-	gl_FragColor = depth;
+	vec4 depth = packFloatToVec4i( fL );
+	gl_FragColor = vec4( fL , fL , fL , 1.0 );
 }

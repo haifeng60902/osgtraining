@@ -47,10 +47,10 @@ void PerspectiveTexturePlane::CreateGeom()
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
 	mGeom->setVertexArray( v.get() );
 
-	v->push_back( osg::Vec3( -HALF_SIZE , 2.0 , -HALF_SIZE * WIN_H / WIN_W ) );
-	v->push_back( osg::Vec3( HALF_SIZE , 2.0 , -HALF_SIZE * WIN_H / WIN_W ) );
-	v->push_back( osg::Vec3( HALF_SIZE , 2.0 , HALF_SIZE * WIN_H / WIN_W ) );
-	v->push_back( osg::Vec3( -HALF_SIZE , 2.0 , HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( -HALF_SIZE , 1.0 , -HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( HALF_SIZE , 1.0 , -HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( HALF_SIZE , 1.0 , HALF_SIZE * WIN_H / WIN_W ) );
+	v->push_back( osg::Vec3( -HALF_SIZE , 1.0 , HALF_SIZE * WIN_H / WIN_W ) );
 
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
@@ -75,6 +75,8 @@ void PerspectiveTexturePlane::CreateGeom()
 	tc->push_back( osg::Vec2( 0 , 1.0 ) );
 
 	mGeom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::QUADS , 0, v->size() ) );
+
+	mGeom->setUseDisplayList( false );
 
 	mGeode->addDrawable( mGeom.get() );
 

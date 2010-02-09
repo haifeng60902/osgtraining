@@ -46,7 +46,7 @@ void LightPoint::Init()
 		osg::StateAttribute::PROTECTED );
 
 	osg::ref_ptr< osg::Point > pt = new osg::Point;
-	pt->setSize( 10.f );
+	pt->setSize( 20.f );
 	state->setAttribute( pt.get() );
 
 	//геометрической представление точки стало дочерним узлом MatrixTransform для того чтобы мы могли его перемещать
