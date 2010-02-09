@@ -15,11 +15,12 @@ void UpdClbkLightPoint::operator()( osg::Node* node, osg::NodeVisitor* nv)
 
 	if ( mMatrTr )
 	{
-		osg::Matrix mTr , mR , mF;
-		mR.makeRotate( osg::DegreesToRadians( m_dRot ) , 0,0,1 );
-		mTr.makeTranslate( 0,4,0 );
+		osg::Matrix mTr , mRz , mRy , mF;
+		mRz.makeRotate( osg::DegreesToRadians( m_dRot ) , 0,0,1 );
+		mRy.makeRotate( osg::DegreesToRadians( m_dRot ) , 0,1,0 );
+		mTr.makeTranslate( 0,3,0 );
 
-		mF = mTr * mR;
+		mF = mTr * mRz * mRy ;
 
 		mMatrTr->setMatrix( mF );
 
@@ -27,7 +28,7 @@ void UpdClbkLightPoint::operator()( osg::Node* node, osg::NodeVisitor* nv)
 		Lighting::Instance().GetLight().m_dY = mF( 3 , 1 );
 		Lighting::Instance().GetLight().m_dZ = mF( 3 , 2 );
 
-		//m_dRot += 0.1;
+		m_dRot += 0.2;
 	}
 
 	traverse(node,nv);

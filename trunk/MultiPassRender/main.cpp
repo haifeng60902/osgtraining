@@ -79,6 +79,9 @@ int main()
 
 	viewer.getCamera()->setUpdateCallback( new CameraUpdateCallback() );
 
+	viewer.setThreadingModel(osgViewer::Viewer::SingleThreaded);
+
+
 	// Display, and main loop.
 	while (!viewer.done())
 	{
