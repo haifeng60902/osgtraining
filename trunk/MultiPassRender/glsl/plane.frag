@@ -29,6 +29,7 @@ vec4 packFloatToVec4i( float value )
 void main()
 {
 	vec4 res0 = texture2D( u_texture0 , gl_TexCoord[0].st );
+	vec4 res1 = texture2D( u_texture1 , gl_TexCoord[0].st );
 	
 	//extract normal
 	vec3 v3Normal =  res0.xyz * 2.0 - 1.0;
@@ -46,5 +47,5 @@ void main()
 	float fL = max( 0.0 , dot( v3Normal , v3Dir ) );
 	
 	vec4 depth = packFloatToVec4i( fL );
-	gl_FragColor = vec4( fL , fL , fL , 1.0 );
+	gl_FragColor = res1 * ( vec4( fL , fL , fL , 0.0 ) + vec4( 0.3 , 0.3 , 0.3 , 1.0 ) );
 }

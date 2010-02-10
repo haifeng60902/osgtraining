@@ -66,7 +66,7 @@ void CameraTexture0::CreateCamera()
 
 	//настройка камеры
 	m_Camera->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
-		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 ,20 );	//max 29700
+		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , ZNEAR , ZFAR );	//max 29700
 
 	osg::Matrix fr = m_Camera->getProjectionMatrix();
 
@@ -92,13 +92,15 @@ void CameraTexture0::SetupCameraNode()
 {
 	//настройка узла камеры
 	osg::ref_ptr< osg::Node > node0 = osgDB::readNodeFile( "flt/sphere/sphere.flt" );
-	osg::ref_ptr< osg::Node > node1 = osgDB::readNodeFile( "flt/mi17/MI_17_lod.flt" );
 
 	//инициализация плоскостей
 	m_TestFarPlanes.Init();
 
 	//инициализация геометрического представления источника света
 	m_LightPoint.Init();
+
+	//загрузить модель
+	m_AnimatingModel.Init( "flt/mi17/MI_17_lod.flt" );
 
 	//задать обратный вызов обновления для камеры так чтобы координаты виртуальной камеры совподали с главной камерой
 	m_Camera->setUpdateCallback( new UpdateCallbackCamera0() );
@@ -107,9 +109,9 @@ void CameraTexture0::SetupCameraNode()
 
 	// add subgraph to render
 	m_Camera->addChild( node0.get() );
-	m_Camera->addChild( node1.get() );
 	m_Camera->addChild( m_TestFarPlanes.GetPlane().get() );
 	m_Camera->addChild( m_LightPoint.GetPoint().get() );
+	m_Camera->addChild( m_AnimatingModel.GetNode().get() );
 }
 
 void CameraTexture0::AddShader()
@@ -130,6 +132,10 @@ void CameraTexture0::AddShader()
 	LoadShaderSource( FragObj , "glsl/camera0.frag" );
 
 	stateNode->setAttributeAndModes( program, osg::StateAttribute::ON );
+
+	stateNode->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+	stateNode->addUniform( new osg::Uniform( "fZNear" , ZNEAR ) );
+	stateNode->addUniform( new osg::Uniform( "fZFar" , ZFAR ) );
 }
 
 void CameraTexture0::LoadShaderSource( osg::Shader* shader, const std::string& fileName )
@@ -149,11 +155,11 @@ void CameraTexture0::LoadShaderSource( osg::Shader* shader, const std::string& f
 void CameraTexture0::CreateTextures()
 {
 //создать текстуры
-	for ( int i = 0 ; i < 1 ; ++i )
+	for ( int i = 0 ; i < 2 ; ++i )
 	{
 		m_ListTexture2D.push_back( new osg::Texture2D );
 		m_ListTexture2D.back()->setTextureSize( WIN_W , WIN_H );
-		//m_ListTexture2D.back()->setInternalFormat(GL_RGBA);
+		
 		m_ListTexture2D.back()->setFilter( osg::Texture::MIN_FILTER , osg::Texture::NEAREST );
 		m_ListTexture2D.back()->setFilter( osg::Texture::MAG_FILTER , osg::Texture::NEAREST );
 		m_ListTexture2D.back()->setWrap( osg::Texture::WRAP_S , osg::Texture::CLAMP_TO_EDGE ); 
@@ -161,9 +167,19 @@ void CameraTexture0::CreateTextures()
 
 		m_ListTexture2D.back()->setResizeNonPowerOfTwoHint( false );
 
-		m_ListTexture2D.back()->setInternalFormat( GL_RGBA_FLOAT32_ATI );	//GL_RGBA_FLOAT32_ATI	GL_RGBA32F_ARB
-		m_ListTexture2D.back()->setSourceFormat( GL_RGBA );
-		m_ListTexture2D.back()->setSourceType( GL_FLOAT );
+		//первая текстура будет float32rgba
+		//остальные 8бит RGBA
+		switch ( i )
+		{
+		case  0:
+			m_ListTexture2D.back()->setInternalFormat( GL_RGBA32F_ARB );	//GL_RGBA_FLOAT32_ATI	GL_RGBA32F_ARB
+			m_ListTexture2D.back()->setSourceFormat( GL_RGBA );
+			m_ListTexture2D.back()->setSourceType( GL_FLOAT );
+			break;
+		default:
+			m_ListTexture2D.back()->setInternalFormat( GL_RGBA );
+			break;
+		}
 	}
 }
 

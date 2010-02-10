@@ -1,6 +1,13 @@
 varying vec4 varPos;
 varying vec3 n;
 
+//for texture access
+uniform sampler2D u_texture0;
+
+//near and far plane clip
+uniform float fZNear;
+uniform float fZFar;
+
 //
 // pack a floating point value from [0,1] into RGBA8 vector
 //
@@ -25,4 +32,5 @@ void main()
 	
 	//pack normal vector and depth from [-1..1] to [0..1]
 	gl_FragData[ 0 ] = vec4( 0.5 * n2 + vec3( 0.5 ) , ( fPackDepth + 1.0 ) * 0.5 );
+	gl_FragData[ 1 ] = texture2D( u_texture0 , gl_TexCoord[0].st );
 }

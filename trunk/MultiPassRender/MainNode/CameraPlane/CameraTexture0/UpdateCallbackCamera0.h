@@ -2,7 +2,6 @@
 #define _UPDATE_CALLBACK_CAMERA_0_H_
 
 #include <osg/NodeCallback>
-#include <osg/Vec3>
 
 class UpdateCallbackCamera0 : public osg::NodeCallback
 {
