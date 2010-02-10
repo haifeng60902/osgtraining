@@ -26,8 +26,6 @@ void main()
 	vec3    n2   = normalize ( n );
 	
 	//pack depth value from camera space view to diapason [-1..1]
-	float fZFar = 20.0;
-	float fZNear = 1.0;
 	float fPackDepth = 1.0 / ( fZFar - fZNear ) * ( fZFar + fZNear + 2.0 * fZFar * fZNear / varPos.z );
 	
 	//pack normal vector and depth from [-1..1] to [0..1]

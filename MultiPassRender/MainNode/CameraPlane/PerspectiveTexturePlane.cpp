@@ -130,8 +130,9 @@ void PerspectiveTexturePlane::AddShader()
 	stateNode->addUniform(  m_unfLightPos.get() ); 
 	m_unfLightPos->setUpdateCallback( new UniUpdClbkLightPos() );
 
-	//stateNode->addUniform( new osg::Uniform( "u_texture2" , 2 ) );
-	//stateNode->addUniform( new osg::Uniform( "u_texture3" , 3 ) );
+	//передача в шейдер параметров плоскостей отсечения
+	stateNode->addUniform( new osg::Uniform( "fZNear" , ZNEAR ) );
+	stateNode->addUniform( new osg::Uniform( "fZFar" , ZFAR ) );
 }
 
 void PerspectiveTexturePlane::LoadShaderSource( osg::Shader* shader, const std::string& fileName )

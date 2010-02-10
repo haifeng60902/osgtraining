@@ -8,6 +8,10 @@ varying vec4 varPos;
 //Light Source Position in viewer space
 uniform vec4 u4LightPos;
 
+//near and far plane clip
+uniform float fZNear;
+uniform float fZFar;
+
 //
 // pack a floating point value from [0,1] into RGBA8 vector
 //
@@ -34,7 +38,7 @@ void main()
 	//extract normal
 	vec3 v3Normal =  res0.xyz * 2.0 - 1.0;
 	
-	float zEye = 20.0 / ( res0.w * 19.0 - 20.0 );
+	float zEye = fZNear * fZFar / ( res0.w * ( fZFar - fZNear ) - fZFar );
 	
 	//for now eyeCoord contain camera space x,y,z fragment value
 	vec3  eyeCoord = -varPos.xyz * zEye;
