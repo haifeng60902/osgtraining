@@ -425,6 +425,26 @@
 								>
 							</File>
 						</Filter>
+						<Filter
+							Name="AnimatingModel"
+							>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\AnimatingModel\AnimatingModel.cpp"
+								>
+							</File>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\AnimatingModel\AnimatingModel.h"
+								>
+							</File>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\AnimatingModel\UpdClbkAnimatingModel.cpp"
+								>
+							</File>
+							<File
+								RelativePath=".\MainNode\CameraPlane\CameraTexture0\AnimatingModel\UpdClbkAnimatingModel.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 				</Filter>
 			</Filter>

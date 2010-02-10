@@ -3,6 +3,7 @@
 
 #include "TestFarPlane/TestFarPlanes.h"
 #include "LightPoint/LightPoint.h"
+#include "AnimatingModel/AnimatingModel.h"
 
 #include <osg/Camera>
 #include <osg/Texture2D>
@@ -67,6 +68,9 @@ private:
 
 	//геометрическое представление источника света
 	LightPoint m_LightPoint;
+
+	//анимированная модель
+	AnimatingModel m_AnimatingModel;
 };
 
 #endif	//_CAMERA_TEXTURE_0_H_
