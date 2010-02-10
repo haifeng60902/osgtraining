@@ -134,6 +134,8 @@ void CameraTexture0::AddShader()
 	stateNode->setAttributeAndModes( program, osg::StateAttribute::ON );
 
 	stateNode->addUniform( new osg::Uniform( "u_texture0" , 0 ) );
+
+	//передача в шейдер параметров плоскостей отсечения
 	stateNode->addUniform( new osg::Uniform( "fZNear" , ZNEAR ) );
 	stateNode->addUniform( new osg::Uniform( "fZFar" , ZFAR ) );
 }
