@@ -198,6 +198,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Keyboard\CameraUpdateCallback.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Keyboard\CameraUpdateCallback.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Keyboard\KeyboardHandler.cpp"
 					>
 				</File>
@@ -257,6 +265,18 @@
 					RelativePath=".\MainNode\UpdClbkMainNode.h"
 					>
 				</File>
+				<Filter
+					Name="Triangle"
+					>
+					<File
+						RelativePath=".\MainNode\Triangle\Triangle.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MainNode\Triangle\Triangle.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>
