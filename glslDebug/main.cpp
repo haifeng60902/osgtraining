@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "binDef.h"
+#include "CameraUpdateCallback.h"
 #include "KeyboardHandler.h"
 #include "MainNode.h"
 
@@ -34,6 +35,21 @@ int main()
 
 	//добавить в сцену корневой узел
 	viewer.setSceneData( m_MainNode.GetNode().get() );
+
+//////////////////////////////////////////////////////////////////////////
+	viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
+
+	float fY = 0.0f;
+
+	viewer.getCamera()->setUpdateCallback( new CameraUpdateCallback() );
+
+	viewer.setThreadingModel(osgViewer::Viewer::SingleThreaded);
+
+	// Display, and main loop.
+	while (!viewer.done())
+	{
+		viewer.frame();
+	}
 
 	std::cout << "ok\n";
 }
