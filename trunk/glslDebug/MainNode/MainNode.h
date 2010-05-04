@@ -5,8 +5,7 @@
 
 #include <osg/ref_ptr>
 #include <osg/Group>
-
-class osg::Group;
+#include <osg/Program>
 
 class MainNode : public osg::Referenced
 {
@@ -21,6 +20,12 @@ public:
 	osg::ref_ptr< osg::Group > GetNode(){ return m_Group.get(); };
 
 private:
+	//добавить шейдер в сцену
+	void AddShader( osg::StateSet* ss );
+
+	// load source from a file.
+	void LoadShaderSource( osg::Shader* shader, const std::string& fileName );
+
 	//корневой узел
 	osg::ref_ptr< osg::Group > m_Group;
 
