@@ -19,11 +19,21 @@ Triangle::~Triangle()
 void Triangle::Init()
 {
 	//инициализация простой геометрии
-	
+	m_Node = new osg::MatrixTransform;
+
 	//создать геометрию
-	m_Geode = new osg::Geode;
+	m_Node->addChild( CreateGeode().get() );	
+}
+
+osg::ref_ptr< osg::Geode > Triangle::CreateGeode()
+{
+	//создать геометрию
+	osg::ref_ptr< osg::Geode > mGeode = new osg::Geode;
 
 	osg::ref_ptr< osg::Geometry > geom = new osg::Geometry;
+
+	//не использовать дисплейный список т.к. нужна отладка
+	geom->setUseDisplayList( false );
 
 	// Create an array of four vertices.
 	osg::ref_ptr<osg::Vec3Array> v = new osg::Vec3Array;
@@ -32,7 +42,7 @@ void Triangle::Init()
 	v->push_back( osg::Vec3( -3 , 3 , -3 ) );
 	v->push_back( osg::Vec3( 3 , 3 , -3 ) );
 	v->push_back( osg::Vec3( 0 , 3 , 3 ) );
-	
+
 	// Create an array for the single normal.
 	osg::ref_ptr< osg::Vec3Array > n = new osg::Vec3Array;
 	geom->setNormalArray( n.get() );
@@ -48,5 +58,7 @@ void Triangle::Init()
 
 	geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::TRIANGLES , 0, v->size() ) );
 
-	m_Geode->addDrawable( geom.get() );
+	mGeode->addDrawable( geom.get() );
+
+	return mGeode.get();
 }

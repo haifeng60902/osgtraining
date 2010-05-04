@@ -279,6 +279,18 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="glsl"
+			>
+			<File
+				RelativePath=".\glsl\simple.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\glsl\simple.vert"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
