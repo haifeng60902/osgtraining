@@ -80,9 +80,9 @@ void UpdClbkMainNode::MoveForward()
 	double dX = -nD * sin( osg::DegreesToRadians( mCamState.m_dR ) );
 	double dY = -nD * cos( osg::DegreesToRadians( mCamState.m_dR ) );
 
-	mCamState.m_dX += dX * 0.01;
-	mCamState.m_dY += dY * 0.01;
-	mCamState.m_dZ += dZ * 0.01;
+	mCamState.m_dX += dX * 1.0;
+	mCamState.m_dY += dY * 1.0;
+	mCamState.m_dZ += dZ * 1.0;
 
 	std::cout << mCamState.m_dY << " ";
 }
@@ -100,9 +100,9 @@ void UpdClbkMainNode::MoveBackward()
 	double dX = nD * sin( osg::DegreesToRadians( mCamState.m_dR ) );
 	double dY = nD * cos( osg::DegreesToRadians( mCamState.m_dR ) );
 
-	mCamState.m_dX += dX * 0.01;
-	mCamState.m_dY += dY * 0.01;
-	mCamState.m_dZ += dZ * 0.01;
+	mCamState.m_dX += dX * 1.0;
+	mCamState.m_dY += dY * 1.0;
+	mCamState.m_dZ += dZ * 1.0;
 
 	std::cout << mCamState.m_dY << " ";
 }

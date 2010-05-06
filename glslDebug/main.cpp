@@ -26,7 +26,7 @@ int main()
 
 	//настройка камеры
 	viewer.getCamera()->setProjectionMatrixAsFrustum( -HALF_SIZE , HALF_SIZE 
-		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 1.0 , 30.0 );
+		, -HALF_SIZE * WIN_H / WIN_W , HALF_SIZE * WIN_H / WIN_W , 2.0 , 5.0 );
 
 	//главный узел, в которой входит остальная сцена
 	MainNode m_MainNode;

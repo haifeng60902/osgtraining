@@ -53,6 +53,13 @@ void MainNode::AddShader( osg::StateSet* ss )
 
 	osg::Shader *VertObj = new osg::Shader( osg::Shader::VERTEX );
 	osg::Shader *FragObj = new osg::Shader( osg::Shader::FRAGMENT );
+	osg::Shader *GeomObj = new osg::Shader( osg::Shader::GEOMETRY );
+
+	//параметры для вершинного шейдера
+	program->setParameter( GL_GEOMETRY_VERTICES_OUT_EXT, 6 );
+	program->setParameter( GL_GEOMETRY_INPUT_TYPE_EXT, GL_TRIANGLES );
+	program->setParameter( GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_TRIANGLE_STRIP );
+
 	program->addShader( VertObj );
 	program->addShader( FragObj );
 
