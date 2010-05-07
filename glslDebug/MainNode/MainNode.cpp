@@ -61,9 +61,11 @@ void MainNode::AddShader( osg::StateSet* ss )
 	program->setParameter( GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_TRIANGLE_STRIP );
 
 	program->addShader( VertObj );
+	program->addShader( GeomObj );
 	program->addShader( FragObj );
 
 	LoadShaderSource( VertObj , "glsl/simple.vert" );
+	LoadShaderSource( GeomObj , "glsl/simple.geom" );
 	LoadShaderSource( FragObj , "glsl/simple.frag" );
 
 	ss->setAttributeAndModes( program , osg::StateAttribute::ON );
