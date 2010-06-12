@@ -38,11 +38,11 @@
 void integrateSilverLining(osg::ref_ptr<osg::Node> sceneGraphRoot, osgViewer::Viewer& viewer)
 {
     // No need for OSG to clear the color buffer, the sky will fill it for you.
-    viewer.getCamera()->setClearMask(0);
+    viewer.getCamera()->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Instantiate an Atmosphere and associate it with this camera. If you have multiple cameras
 	// in multiple contexts, be sure to instantiate seperate Atmosphere objects for each.
-	SilverLining::Atmosphere *atm = new SilverLining::Atmosphere("Your user name", "Your license code");
+	SilverLining::Atmosphere *atm = new SilverLining::Atmosphere( "SilverLining Demo" , "031b0d15111b2f0802492f1454360a0300" );
 
     // Add the sky (calls Atmosphere::BeginFrame and handles initialization once you're in
     // the rendering thread)
@@ -59,21 +59,21 @@ void integrateSilverLining(osg::ref_ptr<osg::Node> sceneGraphRoot, osgViewer::Vi
        sky box and clouds. One solution is to set the near and far clip planes explicitly
 	   like this:
     */
-/*
+
     viewer.getCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
     double fovy, aspect, zNear, zFar;
     viewer.getCamera()->getProjectionMatrixAsPerspective(fovy, aspect, zNear, zFar);
-    viewer.getCamera()->setProjectionMatrixAsPerspective(fovy, aspect, 10, 100000);
-*/
+    viewer.getCamera()->setProjectionMatrixAsPerspective(45.0 , 1050.0 / 1680.0 , 1.0 , 30000.0);
+
  /*
        or, you can use the included projection matrix callback to intercept how OSG computes
 	   the near and far clip planes and take SilverLining's objects into account, like this:
  */
 
-	SilverLiningProjectionMatrixCallback *cb = new SilverLiningProjectionMatrixCallback(
-		atm, viewer.getCamera());
-    viewer.getCamera()->setClampProjectionMatrixCallback(cb);
-    cb->setSkyDrawable(skyDrawable);
+	//SilverLiningProjectionMatrixCallback *cb = new SilverLiningProjectionMatrixCallback(
+	//	atm, viewer.getCamera());
+  //  viewer.getCamera()->setClampProjectionMatrixCallback(cb);
+   // cb->setSkyDrawable(skyDrawable);
     
 
 	AtmosphereReference *ar = new AtmosphereReference;
