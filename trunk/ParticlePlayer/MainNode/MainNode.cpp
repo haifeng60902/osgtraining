@@ -22,7 +22,10 @@ MainNode::~MainNode()
 void MainNode::Init()
 {
 //инициализация данных
-	
+
+	//инициализация эффекта
+	m_Particle.Init();
+
 	m_Group = new osg::Group;
 
 	osg::StateSet* ss = m_Group->getOrCreateStateSet();
