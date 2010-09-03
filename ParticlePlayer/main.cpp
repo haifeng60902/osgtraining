@@ -11,6 +11,9 @@
 
 int main()
 {
+	//создать эффект
+	ParticlePlayer::Instance().CreateEffect( "FireE.lua" );
+
 	// Create a Viewer.
 	osgViewer::Viewer viewer;
 
@@ -45,9 +48,6 @@ int main()
 	viewer.getCamera()->setUpdateCallback( new CameraUpdateCallback() );
 
 	viewer.setThreadingModel(osgViewer::Viewer::SingleThreaded);
-
-	//создать эффект
-	ParticlePlayer::Instance().CreateEffect( "d:/code/edge/data/Effects/ExplosionGroundN.lua" );
 
 	// Display, and main loop.
 	while (!viewer.done())

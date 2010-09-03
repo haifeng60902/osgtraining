@@ -54,7 +54,7 @@ void ParticlePlayer::CreateEffect( std::string sEffect )
 	//создать эффект
 	lua_State *L = lua_open();
 	{
-		Lua::Config config(L);
+		Lua::Config config( L );
 		if( !config.dofile( sEffect.c_str() ) )
 		{
 			std::cout << "error\n";

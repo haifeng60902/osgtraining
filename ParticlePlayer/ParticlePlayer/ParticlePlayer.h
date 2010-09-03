@@ -17,6 +17,9 @@ public:
 	//создать эффект
 	void CreateEffect( std::string sEffect );
 
+	//вернуть ссылку на параметры эффекта
+	binEffect &GetEffects(){ return m_Effect; };
+
 private:
 	//загрузить массив эммитеров
 	void LoadEmitterArray( lua_State *L , tVecEmitter *pEmitters );

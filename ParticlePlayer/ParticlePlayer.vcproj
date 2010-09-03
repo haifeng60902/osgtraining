@@ -209,6 +209,10 @@
 					RelativePath=".\Bin\binLight.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Bin\binParticle.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Keyboard"
@@ -285,6 +289,14 @@
 			<Filter
 				Name="ParticlePlayer"
 				>
+				<File
+					RelativePath=".\ParticlePlayer\Emitter.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ParticlePlayer\Emitter.h"
+					>
+				</File>
 				<File
 					RelativePath=".\ParticlePlayer\ParticlePlayer.cpp"
 					>
