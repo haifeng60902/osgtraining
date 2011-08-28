@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="c:\Work\test\Video\libtheora\include\;c:\Work\test\Video\libogg\include\;c:\Work\test\Video\libvorbis\include\"
+				AdditionalIncludeDirectories="..\..\lib\libtheora\include\;..\..\lib\libogg\include\;..\..\lib\libvorbis\include\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
@@ -64,7 +64,7 @@
 				AdditionalDependencies="libogg_static.lib libvorbis_static.lib libtheora_static.lib"
 				OutputFile="$(ProjectName)d.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="c:\Work\test\Video\libogg\win32\VS2008\Win32\Debug\;c:\Work\test\Video\libvorbis\win32\VS2008\Win32\Debug\;c:\Work\test\Video\libtheora\win32\VS2008\Win32\Debug\"
+				AdditionalLibraryDirectories="..\..\lib\libogg\win32\VS2008\Win32\Debug\;..\..\lib\libvorbis\win32\VS2008\Win32\Debug\;..\..\lib\libtheora\win32\VS2008\Win32\Debug\"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -118,6 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\..\lib\libtheora\include\;..\..\lib\libogg\include\;..\..\lib\libvorbis\include\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,7 +137,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libogg_static.lib libvorbis_static.lib libtheora_static.lib"
+				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\lib\libogg\win32\VS2008\Win32\Release;..\..\lib\libvorbis\win32\VS2008\Win32\Release;..\..\lib\libtheora\win32\VS2008\Win32\Release"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
