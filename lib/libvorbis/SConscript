@@ -1,0 +1,54 @@
+Import('env')
+
+env.edSharedLibrary(
+    target = 'vorbis',
+
+    source = '''
+        lib/analysis.c
+        lib/bitrate.c
+        lib/block.c
+        lib/codebook.c
+        lib/envelope.c
+        lib/floor0.c
+        lib/floor1.c
+        lib/info.c
+        lib/lookup.c
+        lib/lpc.c
+        lib/lsp.c
+        lib/mapping0.c
+        lib/mdct.c
+        lib/psy.c
+        lib/registry.c
+        lib/res0.c
+        lib/sharedbook.c
+        lib/smallft.c
+        lib/synthesis.c
+        lib/vorbisenc.c
+        lib/window.c
+        '''.split() + ['win32/vorbis.def'],
+		
+	header = [], 
+
+    CPPPATH = ['include', 'lib'],
+
+    CPPDEFINES = ['VORBIS_DYNAMIC_EXPORTS'],
+
+    LIBS = ['ogg'],
+)
+
+env.edSharedLibrary(
+    target = 'vorbisfile',
+
+    source = [
+        'lib/vorbisfile.c',
+        'win32/vorbisfile.def',
+    ],
+	header = [], 
+
+    CPPDEFINES = ['VORBISFILE_DYNAMIC_EXPORTS'],
+
+    CPPPATH = ['include'],
+
+    LIBS = ['ogg', 'vorbis'],
+)
+

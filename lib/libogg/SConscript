@@ -1,0 +1,22 @@
+Import('env')
+
+env.edSharedLibrary(
+    target = 'ogg',
+
+    source = [
+        'src/bitwise.c',
+        'src/framing.c',
+        'win32/ogg.def',
+    ],
+	header = [], 
+
+    CPPPATH = [
+        'include'
+    ],
+
+    CPPDEFINES = [
+        'OGG_DYNAMIC_EXPORTS'
+    ],
+
+#    LIBS = []
+)
