@@ -9,8 +9,8 @@
 #include "ogg/ogg.h"
 #include "theora/theoraenc.h"
 
-int video_q=48;
-ogg_uint32_t keyframe_frequency=64;
+int video_q=63;
+ogg_uint32_t keyframe_frequency=2;
 
 int frame_w=0;
 int frame_h=0;
@@ -22,10 +22,10 @@ int video_fps_n=25;
 int video_fps_d=1;
 int video_par_n=0;
 int video_par_d=0;
-int src_c_dec_h=2;
-int src_c_dec_v=2;
-int dst_c_dec_h=2;
-int dst_c_dec_v=2;
+int src_c_dec_h=1;
+int src_c_dec_v=1;
+int dst_c_dec_h=1;
+int dst_c_dec_v=1;
 char chroma_type[16];
 
 /*The size of each converted frame buffer.*/
@@ -39,26 +39,137 @@ size_t y4m_aux_buf_read_sz;
 
 int video_r=-1;
 
+long begin_sec=-1;
+long begin_usec=0;
+long end_sec=-1;
+long end_usec=0;
+
+static int                 frame_state=-1;
+static ogg_int64_t         frames=0;
+static unsigned char      *yuvframe[3];
+static th_ycbcr_buffer     ycbcr;
+
+unsigned char    *frame;
+
+float GetRand()
+{
+	//получить случайное число от 0 до 1
+	return (float)rand()/(float)RAND_MAX;
+}
+
+//заполнить случайными цветаи
+void FillMagicColors()
+{
+	for (int i=0; i< frame_w*frame_h*3;++i)
+		frame[i]=GetRand()*255;
+}
+
+int fetch_and_process_video_packet(th_enc_ctx *thEncCtx,ogg_packet *op){
+  int                        ret;
+  int                        pic_sz;
+  int                        frame_c_w;
+  int                        frame_c_h;
+  int                        c_w;
+  int                        c_h;
+  int                        c_sz;
+  ogg_int64_t                beginframe;
+  ogg_int64_t                endframe;
+  
+  beginframe=(video_fps_n*begin_sec+video_fps_n*begin_usec*.000001)/video_fps_d;
+  endframe=(video_fps_n*end_sec+video_fps_n*end_usec*.000001)/video_fps_d;
+  
+  //выполняется только первый раз
+  if(frame_state==-1){
+    /* initialize the double frame buffer */
+
+    frame_state=0;
+  }
+  pic_sz=pic_w*pic_h;
+  frame_c_w=frame_w/dst_c_dec_h;
+  frame_c_h=frame_h/dst_c_dec_v;
+  c_w=(pic_w+dst_c_dec_h-1)/dst_c_dec_h;
+  c_h=(pic_h+dst_c_dec_v-1)/dst_c_dec_v;
+  c_sz=c_w*c_h;
+ 
+/*
+    if(fread(yuvframe[frame_state],1,y4m_dst_buf_read_sz,video)!=
+     y4m_dst_buf_read_sz){
+      fprintf(stderr,"Error reading YUV frame data.\n");
+      exit(1);
+    }
+  
+  if(fread(yuvframe[2],1,y4m_aux_buf_read_sz,video)!=y4m_aux_buf_read_sz){
+      fprintf(stderr,"Error reading YUV frame data.\n");
+      exit(1);
+    }
+*/
+	frames++;
+    if(frames>=beginframe)
+    frame_state++;
+  //}
+  /* check to see if there are dupes to flush */
+
+	int iLast=0;
+  if(th_encode_packetout(thEncCtx,iLast,op)>0)return 1;
+  if(frame_state<1){
+    /* can't get here unless YUV4MPEG stream has no video */
+    fprintf(stderr,"Video input contains no frames.\n");
+    exit(1);
+  }
+  
+  ycbcr[0].width=frame_w;
+  ycbcr[0].height=frame_h;
+  ycbcr[0].stride=pic_w;
+  ycbcr[0].data=&frame[0];
+  ycbcr[1].width=frame_w;
+  ycbcr[1].height=frame_h;
+  ycbcr[1].stride=c_w;
+  ycbcr[1].data=&frame[frame_w*frame_h];
+  ycbcr[2].width=frame_c_w;
+  ycbcr[2].height=frame_c_h;
+  ycbcr[2].stride=c_w;
+  ycbcr[2].data=&frame[frame_w*frame_h*2];
+  th_encode_ycbcr_in(thEncCtx,ycbcr);
+  {
+    unsigned char *temp=yuvframe[0];
+    yuvframe[0]=yuvframe[1];
+    yuvframe[1]=temp;
+    frame_state--;
+  }
+ 
+  static int iF=0;
+  ++iF;
+  if (iF>100)
+  iLast=1;
+  
+  std::cout <<iF <<" ";
+  /* if there was only one frame, it's the last in the stream */
+  ret = th_encode_packetout(thEncCtx,iLast,op);
+  
+  return ret;
+}
+
 int ilog(unsigned _v){
 	int ret;
 	for(ret=0;_v;ret++)_v>>=1;
 	return ret;
 }
 
-int fetch_and_process_video(FILE *video,ogg_page *videopage,
-			ogg_stream_state *to,th_enc_ctx *td,FILE *twopass_file,int passno,
-			int videoflag){
-	ogg_packet op;
+int fetch_and_process_video(ogg_page *oggVideoPage,
+			ogg_stream_state *oggStreamState,th_enc_ctx *thEncCtx){
+	ogg_packet oggPacket;
 	int ret;
 	/* is there a video page flushed?  If not, work until there is. */
-	while(!videoflag){
-		if(ogg_stream_pageout(to,videopage)>0) return 1;
-		if(ogg_stream_eos(to)) return 0;
-		int ret=0;//fetch_and_process_video_packet(video,twopass_file,passno,td,&op);
+	while(1){
+		if(ogg_stream_pageout(oggStreamState,oggVideoPage)>0) return 1;
+
+		if(ogg_stream_eos(oggStreamState)) return 0;
+
+		int ret=fetch_and_process_video_packet(thEncCtx,&oggPacket);
 		if(ret<=0)return 0;
-		ogg_stream_packetin(to,&op);
+		ogg_stream_packetin(oggStreamState,&oggPacket);
 	}
-	return videoflag;
+	return 1;
 }
 
 int main()
@@ -94,13 +205,12 @@ int main()
 //////////////////////////////////////////////////////////////////////////
 
 /////////расчет размера буферов на основании ширины-высоты////////////////////////
-	y4m_dst_buf_read_sz=pic_w*pic_h+2*((pic_w+1)/2)*((pic_h+1)/2);
+	y4m_dst_buf_read_sz=pic_w*pic_h*3;
 	y4m_aux_buf_sz=y4m_aux_buf_read_sz=0;
 
 	/*The size of the final frame buffers is always computed from the
          destination chroma decimation type.*/
-     y4m_dst_buf_sz=pic_w*pic_h+2*((pic_w+dst_c_dec_h-1)/dst_c_dec_h)*
-       ((pic_h+dst_c_dec_v-1)/dst_c_dec_v);
+     y4m_dst_buf_sz=pic_w*pic_h;
 //////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
@@ -128,6 +238,9 @@ int main()
     pic_x=frame_w-pic_w>>1&~1;
     pic_y=frame_h-pic_h>>1&~1;
 
+	//self->frame = malloc(frame_w * frame_h * 3);
+	frame = new unsigned char[frame_w * frame_h * 3];
+
 	/*
 	Initializes a th_info structure. 
 	This should be called on a freshly allocated th_info structure before attempting to use it. 
@@ -149,54 +262,15 @@ int main()
     thInfo.aspect_denominator=video_par_d;
     thInfo.colorspace=TH_CS_UNSPECIFIED;
 
-    /*Account for the Ogg page overhead.
-      This is 1 byte per 255 for lacing values, plus 26 bytes per 4096 bytes for
-       the page header, plus approximately 1/2 byte per packet (not accounted for
-       here).*/
     thInfo.target_bitrate=(int)(64870*(ogg_int64_t)video_r>>16);
     thInfo.quality=video_q;
     thInfo.keyframe_granule_shift=ilog(keyframe_frequency-1);
-    if(dst_c_dec_h==2){
-      if(dst_c_dec_v==2)thInfo.pixel_fmt=TH_PF_420;
-      else thInfo.pixel_fmt=TH_PF_422;
-    }
-    else thInfo.pixel_fmt=TH_PF_444;
+	thInfo.pixel_fmt=TH_PF_444;
 
-/*
-Allocates an encoder instance. 
-
-Parameters:
-	_info  A th_info struct filled with the desired encoding parameters.  
-
-Returns:
-	The initialized th_enc_ctx handle. 
-Return values:
-	NULL  If the encoding parameters were invalid.  
-*/
 	thEncCtx=th_encode_alloc(&thInfo);
 
-/*
-Clears a th_info structure. 
-This should be called on a th_info structure after it is no longer needed. 
-
-Parameters:
-	_info  The th_info struct to clear.  
-*/
 	th_info_clear(&thInfo);
 
-	/* setting just the granule shift only allows power-of-two keyframe
-       spacing.  Set the actual requested spacing. */
-	/*
-	Encoder control function. 
-
-	This is used to provide advanced control the encoding process. 
-
-	Parameters:
-	_enc  A th_enc_ctx handle.  
-	_req  The control code to process. See the list of available control codes for details.  
-	_buf  The parameters for this control code.  
-	_buf_sz  The size of the parameter buffer.  
-*/
     int ret=th_encode_ctl(thEncCtx,TH_ENCCTL_SET_KEYFRAME_FREQUENCY_FORCE,
      &keyframe_frequency,sizeof(keyframe_frequency-1));
 
@@ -204,75 +278,21 @@ Parameters:
       fprintf(stderr,"Could not set keyframe interval to %d.\n",(int)keyframe_frequency);
     }
 
-	/* write the bitstream header packets with proper page interleave */
-/*
-	Initialize a th_comment structure. 
-
-	This should be called on a freshly allocated th_comment structure before attempting to use it. 
-
-	Parameters:
-	_tc  The th_comment struct to initialize.  
-*/
 	th_comment_init(&thComment);
 
-
-
-	 /* first packet will get its own page automatically */
-/*
-Outputs the next header packet. 
-
-This should be called repeatedly after encoder initialization until it returns 0 
-in order to get all of the header packets, in order, before encoding actual video data. 
-
-Parameters:
-_enc  A th_enc_ctx handle.  
-_comments  The metadata to place in the comment header, when it is encoded.  
-_op  An ogg_packet structure to fill. All of the elements of this structure will be set, 
-including a pointer to the header data. The memory for the header data is owned by libtheoraenc, 
-and may be invalidated when the next encoder function is called.  
-
-Returns:
-A positive value indicates that a header packet was successfully produced. 
-Return values:
-0  No packet was produced, and no more header packets remain.  
-TH_EFAULT  _enc, _comments, or _op was NULL.  
-*/
 	if(th_encode_flushheader(thEncCtx, &thComment,&oggPacket)<=0){
 		fprintf(stderr,"Internal Theora library error.\n");
 		exit(1);
 	}
 
-/*
-This function submits a packet to the bitstream for page encapsulation. 
-After this is called, more packets can be submitted, or pages can be written out.
-
-In a typical encoding situation, this should be used after filling a packet with data. 
-The data in the packet is copied into the internal storage managed by the ogg_stream_state, 
-so the caller is free to alter the contents of os after this call has returned. 
-*/
 	ogg_stream_packetin(&oggStreamState,&oggPacket);
 
-/*
-This function forms packets into pages.
-In a typical encoding situation, this would be called after using ogg_stream_packetin()
-to submit data packets to the bitstream. Internally, this function assembles the accumulated 
-packet bodies into an Ogg page suitable for writing to a stream.
-
-This function will only return a page when a "reasonable" amount of packet data is available. 
-Normally this is appropriate since it limits the overhead of the Ogg page headers in the bitstream, 
-and so calling ogg_stream_pageout() after ogg_stream_packetin() should be the common case. 
-Call ogg_stream_flush() if immediate page generation is desired. This may be occasionally necessary, 
-for example, to limit the temporal latency of a variable bitrate stream.
-*/
 	if(ogg_stream_pageout(&oggStreamState, &oggPage)!=1){
 		fprintf(stderr,"Internal Ogg library error.\n");
 		exit(1);
 	}
 	fwrite(oggPage.header,1, oggPage.header_len,outfile);
 	fwrite(oggPage.body,1 ,oggPage.body_len,outfile);
-
-
-
 
 	/* create the remaining theora headers */
 	for(;;){
@@ -300,10 +320,12 @@ for example, to limit the temporal latency of a variable bitrate stream.
 	for(;;){
 		double videotime;
 		ogg_page videopage;
+
+		//заполнить случайными цветаи
+		FillMagicColors();
 		
 		// is there a video page flushed?  If not, fetch one if possible
-		videoflag=fetch_and_process_video(NULL,&videopage,&oggStreamState,thEncCtx,
-			NULL,passno,videoflag);
+		videoflag=fetch_and_process_video(&videopage,&oggStreamState,thEncCtx);
 
 		if(!videoflag)break;
 
