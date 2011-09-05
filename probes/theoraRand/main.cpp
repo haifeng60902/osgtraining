@@ -9,8 +9,8 @@
 #include "ogg/ogg.h"
 #include "theora/theoraenc.h"
 
-int video_q=63;
-ogg_uint32_t keyframe_frequency=2;
+int video_q=48;
+ogg_uint32_t keyframe_frequency=1;
 
 int frame_w=0;
 int frame_h=0;
@@ -37,7 +37,7 @@ size_t y4m_aux_buf_sz;
 /*The amount to read into the auxilliary buffer.*/
 size_t y4m_aux_buf_read_sz;
 
-int video_r=-1;
+int video_r=10000;
 
 long begin_sec=-1;
 long begin_usec=0;
@@ -60,8 +60,20 @@ float GetRand()
 //заполнить случайными цветаи
 void FillMagicColors()
 {
-	for (int i=0; i< frame_w*frame_h*3;++i)
-		frame[i]=GetRand()*255;
+	for (int i=0; i< frame_w*frame_h;++i)
+	{
+		// http://en.wikipedia.org/wiki/YCbCr
+		int B = GetRand()*255;
+		int G = GetRand()*255;
+		int R = GetRand()*255;
+
+		int Y = ( (  66 * R + 129 * G +  25 * B + 128) >> 8) +  16;
+		int U = ( ( -38 * R -  74 * G + 112 * B + 128) >> 8) + 128;
+		int V = ( ( 112 * R -  94 * G -  18 * B + 128) >> 8) + 128; 
+		frame[i]=Y;
+		frame[i+frame_w*frame_h]=U;
+		frame[i+frame_w*frame_h*2]=V;
+	}
 }
 
 int fetch_and_process_video_packet(th_enc_ctx *thEncCtx,ogg_packet *op){
@@ -139,7 +151,7 @@ int fetch_and_process_video_packet(th_enc_ctx *thEncCtx,ogg_packet *op){
  
   static int iF=0;
   ++iF;
-  if (iF>100)
+  if (iF>99)
   iLast=1;
   
   std::cout <<iF <<" ";
@@ -273,6 +285,10 @@ int main()
 
     int ret=th_encode_ctl(thEncCtx,TH_ENCCTL_SET_KEYFRAME_FREQUENCY_FORCE,
      &keyframe_frequency,sizeof(keyframe_frequency-1));
+
+	int vp3_compatible=1;
+	ret=th_encode_ctl(thEncCtx,TH_ENCCTL_SET_VP3_COMPATIBLE,&vp3_compatible,
+		sizeof(vp3_compatible));
 
     if(ret<0){
       fprintf(stderr,"Could not set keyframe interval to %d.\n",(int)keyframe_frequency);

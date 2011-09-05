@@ -97,8 +97,8 @@ int main()
 
 	outfile=fopen( "test.avi","wb");
 //////////////////////////////////////////////////////////////////////////
-	State.Screen.fQuality=0.7;
-	State.Screen.iFramerate=30;
+	State.Screen.fQuality=1.0;
+	State.Screen.iFramerate=25;
 	State.Screen.iWidth=800;//384
 	State.Screen.iHeight=600;//288
 	State.outfile=outfile;
@@ -119,10 +119,11 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////
 //формирование кадров видео
-	for (int i=0; i<30*10;++i)
+	for (int i=0; i<4*25;++i)
 	{
 		//эмуляция работы заполнения экранного буфера
 		EmulateScreen(pScreen);
+		std::cout << i << " ";
 
 		int res=xiph_video( &State, pScreen, 0);
 	}
@@ -164,8 +165,9 @@ int frame_w, frame_h;
     self->thInfo.pixel_fmt = TH_PF_444;
     // some players (based on example_player.c from libtheora) can't propely play 4:4:4
     // should we downsample the chroma, or let them fix their players?
-    self->thInfo.target_bitrate = 0;
+    self->thInfo.target_bitrate = -1;
     self->thInfo.quality = (int)(self->Screen.fQuality * 63);
+	self->thInfo.keyframe_granule_shift=1;
 
     self->thInfo.fps_numerator = (int)self->Screen.iFramerate;
     self->thInfo.fps_denominator = 1;
@@ -175,6 +177,10 @@ int frame_w, frame_h;
     self->thEncCtx = th_encode_alloc(&self->thInfo);
     if (!self->thEncCtx)
         return 0;
+
+	ogg_uint32_t keyframe_frequency=2;
+	int ret=th_encode_ctl( self->thEncCtx,TH_ENCCTL_SET_KEYFRAME_FREQUENCY_FORCE,
+		&keyframe_frequency,sizeof(keyframe_frequency-1));
 
     /* set up Ogg output */
     ogg_stream_init(&self->oggStreamState, rand());
@@ -277,7 +283,14 @@ int xiph_video(enState *self, const unsigned char *bgra_dib, unsigned int stride
 	int last = bgra_dib == 0;
 	if (self->frame_ready)
 	{
-		th_encode_ycbcr_in(self->thEncCtx, self->ycbcr);
+		int iR=th_encode_ycbcr_in(self->thEncCtx, self->ycbcr);
+		if (iR)
+		{
+			int a=1;
+		}
+		
+
+		int iK=th_packet_iskeyframe(&self->oggPacket);
 
 		while (th_encode_packetout(self->thEncCtx, last, &self->oggPacket)>0)
 			ogg_stream_packetin(&self->oggStreamState, &self->oggPacket);
@@ -300,7 +313,16 @@ void EmulateScreen(unsigned char *bgra_dib)
 	//эмуляция работы заполнения экранного буфера
 	static int iPixel=0;
 
-	//int iX= iPixel-iY*State.Screen.iWidth;
+	for (int y=0;y<State.Screen.iHeight;++y)
+	{
+		for (int x=0;x<State.Screen.iWidth;++x)
+		{
+			bgra_dib[y*3*State.Screen.iWidth+x*3]=GetRand()*255;
+			bgra_dib[y*3*State.Screen.iWidth+x*3+1]=GetRand()*255;
+			bgra_dib[y*3*State.Screen.iWidth+x*3+2]=GetRand()*255;
+		}
+	}
+/*	
 	int iP=GetRand()*(State.Screen.iWidth*State.Screen.iHeight-1);
 
 	bgra_dib[iP*3]=GetRand()*255;
@@ -310,6 +332,7 @@ void EmulateScreen(unsigned char *bgra_dib)
 	++iPixel;
 	if (iPixel==State.Screen.iWidth*State.Screen.iHeight)
 		iPixel=0;
+		*/
 }
 
 float GetRand()
