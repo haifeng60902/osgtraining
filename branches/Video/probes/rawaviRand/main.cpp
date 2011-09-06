@@ -136,7 +136,7 @@ struct AviHeader ref_info = {
 						0, // biWidth
 						0, // biHeight
 						1, // biPlanes
-						24, // biBitCount
+						32, // biBitCount
 						BI_RGB, // biCompression
 						0, // biSizeImage
 						0, // biXPelsPerMeter
@@ -462,9 +462,9 @@ void EmulateScreen(unsigned char *bgra_dib)
 	{
 		for (int x=0;x<WIDTH;++x)
 		{
-			bgra_dib[y*3*WIDTH+x*3]=GetRand()*255;
-			bgra_dib[y*3*WIDTH+x*3+1]=GetRand()*255;
-			bgra_dib[y*3*WIDTH+x*3+2]=GetRand()*255;
+			bgra_dib[y*4*WIDTH+x*4]=GetRand()*255;
+			bgra_dib[y*4*WIDTH+x*4+1]=GetRand()*255;
+			bgra_dib[y*4*WIDTH+x*4+2]=GetRand()*255;
 		}
 	}
 /*	
@@ -487,8 +487,8 @@ unsigned char *pScreen;
 int main()
 {
 	//выделить пам€ть под виртуальный экранный буффер
-	pScreen = new unsigned char[WIDTH*HEIGHT*3];
-	memset(pScreen,0,WIDTH*HEIGHT*3);
+	pScreen = new unsigned char[WIDTH*HEIGHT*4];
+	memset(pScreen,0,WIDTH*HEIGHT*4);
 
 	int abs_height;
 	rawavi_t* self = (rawavi_t*)calloc(1, sizeof(*self));
@@ -515,7 +515,7 @@ int main()
 	self->info.video.strf.biWidth = WIDTH;
 	// Note: MPlayer does not understand top-to-bottom DIBs
 	self->info.video.strf.biHeight = HEIGHT;
-	self->info.video.strf.biSizeImage = WIDTH * abs_height * 3;
+	self->info.video.strf.biSizeImage = WIDTH * abs_height * 4;
 
 	self->info.avih.dwMaxBytesPerSec += self->info.video.strf.biSizeImage * FPS;
 
@@ -555,13 +555,13 @@ int main()
 	stream_start(self, &self->audio);
 //////////////////////////////////////////////////////////////////////////
 
-	for (int i=0;i<300;++i)
+	for (int i=0;i<50;++i)
 	{
 		//эмул€ци€ работы заполнени€ экранного буфера
 		EmulateScreen(pScreen);
 		std::cout << i << " ";
 
-		rawavi_video(self,pScreen,WIDTH*3);
+		rawavi_video(self,pScreen,WIDTH*4);
 	}
 
 //////////////////////////////////////////////////////////////////////////
