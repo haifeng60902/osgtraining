@@ -1,0 +1,125 @@
+from BuildEnv import BuildEnvironment
+import utils
+import os
+
+#---------------------#
+
+mode=ARGUMENTS.get('mode','debug').lower()
+if not (mode in ['debug', 'release','msvsproj', 'msvsproj_new', 'msvsproj2005', 'msvsproj2008', 'msvsproj2010']):
+   print "Error: expected 'debug' or 'release', found: " + mode
+   Exit(1)
+
+if (not ARGUMENTS.has_key('arch')) and os.name != 'nt':
+	arch = os.uname()[-1]
+else:
+	arch = ARGUMENTS.get('arch','x86').lower()
+
+#---------------------#
+
+CONFIG_PATHS = [os.path.abspath('./'), utils.get_home_dir() + '/.edge/Make']
+
+options = {}
+options['TOOL'] = 'msvc' if os.name == 'nt' else 'gcc'
+utils.read_config(CONFIG_PATHS, 'build_options.py', options, {'_MODE_' : mode})
+
+#---------------------#
+
+env_config={}
+
+env_config['TOOL'] = options['TOOL']
+env_config['DONT_BUILD_DEPENDENCIES']=options['DONT_BUILD_DEPENDENCIES']
+env_config['USER_VARIABLES']=options['USER_VARIABLES']
+env_config['FORCE_LC_MESSAGES']=options['FORCE_LC_MESSAGES']
+
+if options['TOOL']=='mingw':
+	env_config['WINDOWS_INSERT_DEF'] = 1
+	env_config['TOOLS'] = [options['TOOL']]
+elif options['TOOL']=='msvc':
+	env_config['MSVC_VERSION'] = options['MSVS_VERSION']
+	env_config['MSVC_BATCH'] = options['USE_BATCH_BUILD']
+
+if mode == 'msvsproj2005':
+	env_config['MSVC_VERSION'] = '8.0'
+	mode = 'msvsproj'
+elif mode == 'msvsproj2008':
+	env_config['MSVC_VERSION'] = '9.0'
+	mode = 'msvsproj'
+elif mode == 'msvsproj2010':
+	env_config['MSVC_VERSION'] = '10.0'
+	mode = 'msvsproj'
+
+env = BuildEnvironment(mode,arch,CONFIG_PATHS=CONFIG_PATHS,**env_config)
+
+env.SetOption('max_drift',1)
+env.SetOption('implicit_cache',options['ENABLE_IMPLICIT_CACHE'])
+env.SetOption('diskcheck','none')
+env.SetOption('num_jobs',options['NUMBER_JOBS'])
+env.Decider('MD5')
+
+#---------------------#
+
+if options['TOOL']=='msvc':
+	toolStr='msvc_'+options['MSVS_VERSION']
+else:
+	toolStr=options['TOOL']
+
+platformPath=arch+'/'+toolStr+'/'+env['MODE']+'/'
+
+env['INSTALL_BIN_PATH']=os.path.abspath(env['TOP_DIR']+'/bin/'+platformPath)
+env['INSTALL_LIB_PATH']=os.path.abspath(env['TOP_DIR']+'/lib/'+platformPath)
+env['BUILD_DIR']=os.path.abspath(env['TOP_DIR']+'/.build/'+platformPath)
+
+pluginsPath=''
+
+# windows+msvs specific stuff
+if os.name == 'nt':
+
+	pluginsPath='../bin/'+platformPath
+
+	env.Append(CPPPATH = [env['TOP_DIR']+'/inc/win32'])
+
+	# install libraries from sdk to $INSTALL_BIN_PATH
+	try:
+		sdkLibPath = os.environ['SDK_DIR']+'/bin/'+env['ARCHITECTURE']
+		if options['TOOL'] == 'msvc':
+			sdkLibPath += '/vc'+options['MSVS_VERSION'].replace('.','')+'.'
+		else:
+			sdkLibPath += '/'+options['TOOL']+'.'
+
+		sdkLibPath += env['MODE']
+		inst = env.Install(env['INSTALL_BIN_PATH'],env.Glob(sdkLibPath+'/*.dll')+env.Glob(sdkLibPath+'/*.exe'))
+		
+		env.Alias('copy_sdk_libs',inst)
+	except KeyError:
+		env.Alias('copy_sdk_libs',None)
+	
+	if options['TOOL'] == 'msvc':
+		# add manifest embedding
+		env['LINKCOM'] = [env['LINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;1']
+		env['SHLINKCOM'] = [env['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
+		env['WINDOWS_INSERT_MANIFEST'] = 1
+else:
+	pluginsPath='../lib/'+platformPath
+
+pluginsPath=pluginsPath.replace('\\','/')
+
+CPPPATH = [env['TOP_DIR']+'/inc']
+renderer = env.getUserVariable('renderer') 
+if renderer == 'current':
+	CPPPATH.append(env['TOP_DIR']+'/src/render/inc')
+
+if renderer == 'old':
+	CPPPATH.append(env['TOP_DIR']+'/src/render/inc_v0')
+
+env.Append(
+	CPPPATH = CPPPATH,
+	CPPDEFINES = ['EDGE', 'PLUGINS_PATH=\\"'+pluginsPath+'\\"'],
+
+	LIBPATH = [env['INSTALL_LIB_PATH']],
+)
+
+Export('env')
+
+env.SConscript("../SConscript",variant_dir=env['BUILD_DIR'],duplicate=0);
+env.Default('install')
+
