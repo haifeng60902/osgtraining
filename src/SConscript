@@ -1,6 +1,7 @@
 Import('env')
 
 env.processSconscripts([
-	'Test1/Test1.scons'
+	'Test1/Test1.scons',
+	'DirectInput/DirectInput.scons'
 ])
 

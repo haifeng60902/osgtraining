@@ -1,0 +1,45 @@
+Import('env')
+
+#--------------------------------------#
+
+target = 'DirectInput'
+
+libs = [
+	'xinput',
+	'dinput8',
+	'dxguid',
+#	'dxerr',
+#	'd3d11',
+#	'd3dx11',
+#	'd3dcompiler'
+	]
+
+not_linked_dependencies = [
+#	'Ephemeris',
+	]
+	 
+external_libs = []
+
+#--------------------------------------#
+
+sources=env.Glob("*.cpp")
+headers=env.Glob("*.h")
+sources+=env.Glob("Editors/*.cpp")
+headers+=env.Glob("Editors/*.h")
+
+#--------------------------------------#
+
+env.EdSimProgram(
+	target=target,
+	source=sources,
+	header=headers,
+#	resource = ['Editors/Viewer.rc'],
+	external_libs=external_libs,
+	libs=libs,
+	not_linked_dependencies=not_linked_dependencies,
+
+    CPPPATH = [
+#		env['TOP_DIR']+'src/render/inc',
+#		env['TOP_DIR'] + '/src/Plugins/ViewerEditors', 
+        ],
+)
