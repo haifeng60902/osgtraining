@@ -20,6 +20,8 @@
 // the number of super-index entries
 #define MAX_RIFF_COUNT 1024
 
+#pragma pack(push, 1)
+
 // this one is missing from MS SDK
 typedef struct _avisuperindex::_avisuperindex_entry AVISUPERINDEX_ENTRY;
 
@@ -61,6 +63,7 @@ static struct AviHeader {
 		AviSuperIndex indx;
 	} audio;
 };
+#pragma pack(pop)
 
 struct AviHeader ref_info = {
 	// RIFFLIST
