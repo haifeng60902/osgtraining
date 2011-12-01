@@ -1,6 +1,10 @@
 #include <iostream>
 
+#include "DX11Renderer.h"
+
 int main()
-{
-	std::cout << "ok\n";
+{ 
+	DX11Renderer *dx11=new DX11Renderer();
+
+	std::cout << dx11->getBackendName() << "\n";
 }

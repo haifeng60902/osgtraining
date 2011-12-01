@@ -1,0 +1,4 @@
+Import('env')
+
+env.processSconscripts(['dx11backend/SConscript.edge'])
+
