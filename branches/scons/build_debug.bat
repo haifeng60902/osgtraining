@@ -1,2 +1,2 @@
-call scons -C ./Make DirectInput mode=debug %*
+call scons -C ./Make Test1 mode=debug %*
 pause

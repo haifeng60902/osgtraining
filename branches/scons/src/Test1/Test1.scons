@@ -5,11 +5,12 @@ Import('env')
 target = 'Test1'
 
 libs = [
-#	'edCore'
+#	'edCore',
+	'dx11backend'
 	]
 
 not_linked_dependencies = [
-#	'Ephemeris',
+#	'dx11backend',
 	]
 	 
 external_libs = []
@@ -18,8 +19,6 @@ external_libs = []
 
 sources=env.Glob("*.cpp")
 headers=env.Glob("*.h")
-sources+=env.Glob("Editors/*.cpp")
-headers+=env.Glob("Editors/*.h")
 
 #--------------------------------------#
 
@@ -33,7 +32,7 @@ env.EdSimProgram(
 	not_linked_dependencies=not_linked_dependencies,
 
     CPPPATH = [
-#		env['TOP_DIR']+'src/render/inc',
+		env['TOP_DIR']+'src/render/dx11backend',
 #		env['TOP_DIR'] + '/src/Plugins/ViewerEditors', 
         ],
 )
