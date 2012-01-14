@@ -21,6 +21,9 @@ public:
 	bool InitDevice(int iX, int iY);
 
 	std::string getBackendName();
+
+private:
+	void Get();
 };
 
 #endif
