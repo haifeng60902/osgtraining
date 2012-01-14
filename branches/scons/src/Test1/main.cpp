@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <windows.h>
+#include <Winuser.h>
 #include "DX11Renderer.h"
 
 int main()
@@ -9,7 +10,7 @@ int main()
 
 	std::cout << dx11->getBackendName() << "\n";
 
-	GetActiveWindow();
+	//GetActiveWindow();
 
 	bool bRes=dx11->InitDevice(512,512);
 

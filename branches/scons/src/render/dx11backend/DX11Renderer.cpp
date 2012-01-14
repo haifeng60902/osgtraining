@@ -1,5 +1,7 @@
 #include "DX11Renderer.h"
 
+#include <windows.h>
+
 DX11Renderer::DX11Renderer()
 {
 
@@ -43,4 +45,9 @@ bool DX11Renderer::InitDevice(int iX, int iY)
 	UINT numFeatureLevels = ARRAYSIZE( featureLevels );
 
 	return true;
+}
+
+void DX11Renderer::Get()
+{
+	//GetActiveWindow();
 }
