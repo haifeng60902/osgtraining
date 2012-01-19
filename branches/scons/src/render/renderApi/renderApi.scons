@@ -1,0 +1,31 @@
+Import('env')
+
+#--------------------------------------#
+
+target = 'renderApi'
+
+libs = []
+
+external_libs = []
+
+#--------------------------------------#
+
+sources = env.RGlob("*.cpp")
+
+headers = env.Glob("*.h")
+
+#--------------------------------------#
+
+env.EdSimStaticLibrary(
+	target=target,
+	source=sources,
+	header=headers,
+	libs=libs,
+	external_libs=external_libs,
+
+	CPPPATH=[
+		],
+	CPPDEFINES = [
+		'RENDER_API_EXPORTS=EDSIM_DLL_EXPORT'
+		]
+)

@@ -1,4 +1,7 @@
 #include <windows.h>
+
+#include "renderApi.h"
+
 //#include "KeyState.h"
 //#include "KeysDef.h"
 //#include "Render.h"
@@ -13,6 +16,8 @@
 //--------------------------------------------------------------------------------------
 HWND g_hWnd = NULL;
 POINT g_Pt;
+
+renderApi mApi;
 
 //--------------------------------------------------------------------------------------
 // Forward declarations
@@ -31,6 +36,11 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
 	if( FAILED( InitWindow( hInstance, nCmdShow ) ) )
 		return 0;
+
+	int iS=sizeof(HWND);
+
+	//инициализация рендера
+	mApi.init((tUInt64)g_hWnd, WIN_SIZE_X, WIN_SIZE_Y, false, 0, 0, render::MSAA_2x);
 
 	//Инициализация
 //	Render::Instance().Init(g_hWnd,WIN_SIZE_X, WIN_SIZE_Y);

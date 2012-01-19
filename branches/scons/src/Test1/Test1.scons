@@ -5,11 +5,13 @@ Import('env')
 target = 'Test1'
 
 libs = [
-	'dx11backend'
+	#'dx11backend',
+	'renderApi'
 	]
 
 not_linked_dependencies = [
 #	'dx11backend',
+#	'renderApi'
 	]
 	 
 external_libs = []
@@ -31,7 +33,7 @@ env.EdSimProgram(
 	not_linked_dependencies=not_linked_dependencies,
 
     CPPPATH = [
-		env['TOP_DIR']+'src/render/dx11backend',
-#		env['TOP_DIR'] + '/src/Plugins/ViewerEditors', 
+	#	env['TOP_DIR']+'src/render/dx11backend',
+		env['TOP_DIR']+'src/render/renderApi'  
         ],
 )

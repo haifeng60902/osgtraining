@@ -5,7 +5,8 @@ Import('env')
 target = 'testWin32'
 
 libs = [
-	'User32'
+	'User32',
+	'renderApi'
 	]
 
 not_linked_dependencies = [
@@ -31,7 +32,6 @@ env.EdSimProgram(
 	not_linked_dependencies=not_linked_dependencies,
 
     CPPPATH = [
-		env['TOP_DIR']+'src/render/dx11backend',
-#		env['TOP_DIR'] + '/src/Plugins/ViewerEditors', 
+		env['TOP_DIR']+'src/render/renderApi'
         ],
 )
