@@ -48,9 +48,9 @@ class BuildEnvironment(SConsEnvironment):
 		# Apply config files
 		# Make external libraries dictonary
 		for key in el_flags.keys():
-			#if key == 'SDK_DIR':
-			#	self['SDK_DIR']=el_flags[key]
-			#	continue
+			if key == 'SDK_DIR':
+				self['SDK_DIR']=el_flags[key]
+				continue
 
 			k=re.split('_',key)
 			if len(k) == 1:
@@ -133,6 +133,14 @@ class BuildEnvironment(SConsEnvironment):
 
 				utils.append_to_dict(dict,t[0],t[1])
 
+	def find_cppdefine(self, cppdefs, dfn):
+		sz = len(dfn)
+		for i in cppdefs:
+			if i[0] == '"': part = i[1:sz+1]
+			else: part = i[:sz]
+			if part == dfn: return i
+		return None
+
 	def __build(self, func, target, target_index, source, header, resource, libs, external_libs, not_linked_dependencies, params):
 		parameters = self._dict.copy()
 
@@ -142,13 +150,21 @@ class BuildEnvironment(SConsEnvironment):
 		self.__setupFlags(parameters, target, target_index)
 		self.__setupLibs(parameters, libs, resource, external_libs)
 
+		if not parameters.has_key('CPPDEFINES'):
+			parameters['CPPDEFINES'] = ['"ED_LOG_MODULE=""%s"""' % target.upper(), '"ED_MODULE_NAME=""%s"""' % target.upper()]
+		else:
+			if not self.find_cppdefine(parameters['CPPDEFINES'], 'ED_LOG_MODULE'):
+				parameters['CPPDEFINES'].append('"ED_LOG_MODULE=""%s"""' % target.upper())
+			if not self.find_cppdefine(parameters['CPPDEFINES'], 'ED_MODULE_NAME'):
+				parameters['CPPDEFINES'].append('"ED_MODULE_NAME=""%s"""' % target.upper())	
+
 		obj = func(target = target, source = source, **parameters)
 		self.Precious(obj)
 
 		if not_linked_dependencies:
 			self.Depends(obj, not_linked_dependencies)
 	
-		#self.Depends(obj,'copy_sdk_libs')
+		self.Depends(obj,'copy_sdk_libs')
 
 		return obj
 
