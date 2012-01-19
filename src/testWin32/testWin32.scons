@@ -1,0 +1,37 @@
+Import('env')
+
+#--------------------------------------#
+
+target = 'testWin32'
+
+libs = [
+	'User32'
+	]
+
+not_linked_dependencies = [
+#	'dx11backend',
+	]
+	 
+external_libs = []
+
+#--------------------------------------#
+
+sources=env.Glob("*.cpp")
+headers=env.Glob("*.h")
+
+#--------------------------------------#
+
+env.EdSimProgram(
+	target=target,
+	source=sources,
+	header=headers,
+#	resource = ['Editors/Viewer.rc'],
+	external_libs=external_libs,
+	libs=libs,
+	not_linked_dependencies=not_linked_dependencies,
+
+    CPPPATH = [
+		env['TOP_DIR']+'src/render/dx11backend',
+#		env['TOP_DIR'] + '/src/Plugins/ViewerEditors', 
+        ],
+)

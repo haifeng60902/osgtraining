@@ -18,9 +18,23 @@ else:
 
 CONFIG_PATHS = [os.path.abspath('./'), utils.get_home_dir() + '/.edge/Make']
 
-options = {}
+options = {
+	'MSVS_VERSION':'10.0',
+	'BUILD_DIR':'.build/',
+	'DONT_BUILD_DEPENDENCIES':0,
+	'INSTALL_LINKS':0,
+	'USE_SYMBOLIC_LINKS':1,
+	'NUMBER_JOBS':4,
+	'ENABLE_IMPLICIT_CACHE':0,
+	'USE_BATCH_BUILD':1,
+	'USER_VARIABLES':{},
+	'FORCE_LC_MESSAGES':'EN',
+	'SECRET_CORRECTOR':0
+}
+
 options['TOOL'] = 'msvc' if os.name == 'nt' else 'gcc'
 utils.read_config(CONFIG_PATHS, 'build_options.py', options, {'_MODE_' : mode})
+
 
 #---------------------#
 
@@ -30,6 +44,7 @@ env_config['TOOL'] = options['TOOL']
 env_config['DONT_BUILD_DEPENDENCIES']=options['DONT_BUILD_DEPENDENCIES']
 env_config['USER_VARIABLES']=options['USER_VARIABLES']
 env_config['FORCE_LC_MESSAGES']=options['FORCE_LC_MESSAGES']
+env_config['SECRET_CORRECTOR']=options['SECRET_CORRECTOR']
 
 if options['TOOL']=='mingw':
 	env_config['WINDOWS_INSERT_DEF'] = 1
@@ -80,7 +95,7 @@ if os.name == 'nt':
 
 	# install libraries from sdk to $INSTALL_BIN_PATH
 	try:
-		sdkLibPath = os.environ['SDK_DIR']+'/bin/'+env['ARCHITECTURE']
+		sdkLibPath = os.environ['GSDK_DIR']+'/bin/'+env['ARCHITECTURE']
 		if options['TOOL'] == 'msvc':
 			sdkLibPath += '/vc'+options['MSVS_VERSION'].replace('.','')+'.'
 		else:
@@ -103,7 +118,8 @@ else:
 
 pluginsPath=pluginsPath.replace('\\','/')
 
-CPPPATH = [env['TOP_DIR']+'/inc']
+# to simplify code transfer between lockon and edge
+CPPPATH = [env['TOP_DIR']+'/inc', env['TOP_DIR']+'/inc/Core']
 renderer = env.getUserVariable('renderer') 
 if renderer == 'current':
 	CPPPATH.append(env['TOP_DIR']+'/src/render/inc')

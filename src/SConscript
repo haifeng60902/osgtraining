@@ -2,6 +2,7 @@ Import('env')
 
 env.processSconscripts([
 	'Test1/Test1.scons',
+	'testWin32/testWin32.scons',
 #	'DirectInput/DirectInput.scons'
 	'render/SConscript'
 ])
