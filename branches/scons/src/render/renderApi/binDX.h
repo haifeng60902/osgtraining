@@ -5,11 +5,13 @@ struct binDX
 {
 	binDX():pD(NULL)
 		,pC(NULL)
+		,pSC(NULL)
 	{};
 
 	// Three main DirectX objects used for render
 	ID3D11Device* pD;
 	ID3D11DeviceContext* pC;
+	IDXGISwapChain* pSC;
 	D3D_FEATURE_LEVEL ftLevel;
 };
 
