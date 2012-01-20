@@ -2,11 +2,11 @@ Import('env')
 
 #--------------------------------------#
 
-target = 'renderApi'
+target = 'LogInfo'
 
-libs = ['LogInfo']
+libs = []
 
-external_libs = ['dx11']
+external_libs = []
 
 #--------------------------------------#
 
@@ -24,9 +24,8 @@ env.EdSimStaticLibrary(
 	external_libs=external_libs,
 
 	CPPPATH=[
-		env['TOP_DIR']+'src/LogInfo'
 	],
 	CPPDEFINES = [
-		'RENDER_API_EXPORTS=EDSIM_DLL_EXPORT'
+		'LOG_INFO_EXPORTS=EDSIM_DLL_EXPORT'
 		]
 )
