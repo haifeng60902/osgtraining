@@ -2,6 +2,10 @@
 #define _RENDER_API_H_
 
 #include <d3d11.h>
+#include <d3dcompiler.h>
+#include <d3dx11.h>
+#include <dxerr.h>
+
 #include "binRender.h"
 #include "binDX.h"
 
@@ -10,7 +14,7 @@ using namespace render;
 class renderApi
 {
 public:
-	void init(const binRender& mBinRender=binRender());
+	bool init(const binRender& mBinRender=binRender());
 
 	void close();
 

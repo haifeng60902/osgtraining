@@ -1,8 +1,10 @@
 #include "renderApi.h"
 
+#include "Log.h"
+
 #include <iostream>
 
-void renderApi::init(const binRender& mBinRender)
+bool renderApi::init(const binRender& mBinRender)
 {
 	//запоминаем параметры инициализации
 	m_BinRender=mBinRender;
@@ -20,5 +22,13 @@ void renderApi::init(const binRender& mBinRender)
 		ftLevels, sizeof(ftLevels) / sizeof(D3D_FEATURE_LEVEL), D3D11_SDK_VERSION,
 		&m_DX.pD, &m_DX.ftLevel, &m_DX.pC);
 
+	if (FAILED(hr))
+	{
+		ED_ERROR("DX11Renderer::init() failed - D3D11CreateDevice() returned");
+		return false;
+	}
+
 	std::cout<<"ok";
+
+	return true;
 }
