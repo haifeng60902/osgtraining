@@ -1,6 +1,8 @@
 #ifndef _RENDER_API_H_
 #define _RENDER_API_H_
 
+#include <d3d11.h>
+
 #include "Types.h"
 #include "Enums.h"
 
@@ -15,10 +17,17 @@ public:
 	void close();
 
 private:
-	HWND m_hWnd;
+	tUInt64 m_hWnd;
 	int iWidth;
-	int iHeight=0, bool bFullscreen=false, int iAdapter=0, int vSync=0,
+
+	// Three main DirectX objects used for render
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
+	D3D_FEATURE_LEVEL featureLevel;
+
+	/*int iHeight=0, bool bFullscreen=false, int iAdapter=0, int vSync=0,
 		MSAA_ENUM eMsaa=MSAA_OFF
+		*/
 };
 
 #endif	//_RENDER_API_H_
