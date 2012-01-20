@@ -6,7 +6,8 @@ target = 'testWin32'
 
 libs = [
 	'User32',
-	'renderApi'
+	'renderApi',
+	'LogInfo'
 	]
 
 not_linked_dependencies = [

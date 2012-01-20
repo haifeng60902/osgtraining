@@ -1,5 +1,6 @@
 #include "renderApi.h"
 
+#define LOG_MODULE "RENDERAPI"
 #include "Log.h"
 
 #include <iostream>
@@ -24,11 +25,9 @@ bool renderApi::init(const binRender& mBinRender)
 
 	if (FAILED(hr))
 	{
-		ED_ERROR("DX11Renderer::init() failed - D3D11CreateDevice() returned");
+		LOG_ERROR("DX11Renderer::init() failed - D3D11CreateDevice() returned %s", DXGetErrorString(hr));
 		return false;
 	}
-
-	std::cout<<"ok";
 
 	return true;
 }

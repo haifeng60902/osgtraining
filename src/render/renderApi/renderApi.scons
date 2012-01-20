@@ -4,7 +4,8 @@ Import('env')
 
 target = 'renderApi'
 
-libs = ['LogInfo']
+libs = ['LogInfo'
+		]
 
 external_libs = ['dx11']
 

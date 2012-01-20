@@ -6,7 +6,9 @@ target = 'Test1'
 
 libs = [
 	#'dx11backend',
-	'renderApi'
+	'renderApi',
+	'LogInfo',
+	'User32'
 	]
 
 not_linked_dependencies = [

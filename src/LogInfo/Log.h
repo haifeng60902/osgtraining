@@ -1,35 +1,42 @@
 #ifndef _LOG_H_ 
 #define _LOG_H_
 
+#include <stdarg.h>
+
 // taken from POSIX syslog interface
 enum {
 	//ED_LOG_EMERG  = 1<<0, /**< system is unusable */
-	ED_LOG_ALERT    = 1<<1, /**< action must be taken immediately */
+	E_ALERT    = 1<<1, /**< action must be taken immediately */
 	//ED_LOG_CRIT   = 1<<2, /**< critical conditions */
-	ED_LOG_ERROR    = 1<<3, /**< error conditions */
-	ED_LOG_WARNING  = 1<<4, /**< warning conditions */
+	E_ERROR    = 1<<3, /**< error conditions */
+	E_WARNING  = 1<<4, /**< warning conditions */
 	//ED_LOG_NOTICE = 1<<5, /**< normal, but significant, condition */
-	ED_LOG_INFO     = 1<<6, /**< informational message */
-	ED_LOG_DEBUG    = 1<<7, /**< debug-level message */
+	E_INFO     = 1<<6, /**< informational message */
+	E_DEBUG    = 1<<7, /**< debug-level message */
 
 	/* special log level for debug dumps/traces */
-	ED_LOG_TRACE    = 1<<8, /**< trace message */
+	E_TRACE    = 1<<8, /**< trace message */
 
 	/* Never lose messages: ed_log() becomes blocking. Implied for ED_LOG_TRACE */
-	ED_LOG_RELIABLE = 1<<15,
+	E_RELIABLE = 1<<15,
 };
 
-static inline
-void ed_logf(const char *module, int level, const char *fmt, ...)
-{
+void d_vlogf(const char *module, int level, const char *fmt, va_list args);
 
+static inline
+void d_logf(const char *module, int level, const char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	d_vlogf(module, level, fmt, args);
+	va_end(args);
 }
 
-#define _ED_LOG(level, ...) ed_logf(ED_LOG_MODULE, level, __VA_ARGS__)
+#define _D_LOG(level, ...) d_logf(LOG_MODULE, level, __VA_ARGS__)
 
-#define ED_ALERT(...)    _ED_LOG(ED_LOG_ALERT,   __VA_ARGS__)
-#define ED_ERROR(...)    _ED_LOG(ED_LOG_ERROR,   __VA_ARGS__)
-#define ED_WARNING(...)  _ED_LOG(ED_LOG_WARNING, __VA_ARGS__)
-#define ED_INFO(...)     _ED_LOG(ED_LOG_INFO,    __VA_ARGS__)
+#define LOG_ALERT(...)    _D_LOG(E_ALERT,   __VA_ARGS__)
+#define LOG_ERROR(...)    _D_LOG(E_ERROR,   __VA_ARGS__)
+#define LOG_WARNING(...)  _D_LOG(E_WARNING, __VA_ARGS__)
+#define LOG_INFO(...)     _D_LOG(E_INFO,    __VA_ARGS__)
 
 #endif	//_LOG_H_

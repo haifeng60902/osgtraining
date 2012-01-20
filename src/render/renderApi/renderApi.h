@@ -1,6 +1,8 @@
 #ifndef _RENDER_API_H_
 #define _RENDER_API_H_
 
+#include <Windows.h>
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <d3dx11.h>
