@@ -37,10 +37,17 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	if( FAILED( InitWindow( hInstance, nCmdShow ) ) )
 		return 0;
 
-	int iS=sizeof(HWND);
+	binRender mBinRender;
+	mBinRender.hWnd=(tUInt64)g_hWnd;
+	mBinRender.iWidth=WIN_SIZE_X;
+	mBinRender.iHeight=WIN_SIZE_Y;
+	mBinRender.bFullscreen=false;
+	mBinRender.iAdapter=0;
+	mBinRender.vSync=0;
+	mBinRender.eMsaa=render::MSAA_2x;
 
 	//инициализация рендера
-	mApi.init((tUInt64)g_hWnd, WIN_SIZE_X, WIN_SIZE_Y, false, 0, 0, render::MSAA_2x);
+	mApi.init(mBinRender);
 
 	//Инициализация
 //	Render::Instance().Init(g_hWnd,WIN_SIZE_X, WIN_SIZE_Y);
