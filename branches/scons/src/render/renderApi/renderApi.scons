@@ -6,7 +6,7 @@ target = 'renderApi'
 
 libs = []
 
-external_libs = []
+external_libs = ['dx11']
 
 #--------------------------------------#
 
@@ -24,7 +24,7 @@ env.EdSimStaticLibrary(
 	external_libs=external_libs,
 
 	CPPPATH=[
-		],
+	],
 	CPPDEFINES = [
 		'RENDER_API_EXPORTS=EDSIM_DLL_EXPORT'
 		]

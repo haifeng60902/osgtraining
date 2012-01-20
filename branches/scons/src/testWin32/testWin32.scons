@@ -13,7 +13,7 @@ not_linked_dependencies = [
 #	'dx11backend',
 	]
 	 
-external_libs = []
+external_libs = ['dx11']
 
 #--------------------------------------#
 
