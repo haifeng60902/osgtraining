@@ -14,7 +14,7 @@ not_linked_dependencies = [
 #	'renderApi'
 	]
 	 
-external_libs = []
+external_libs = ['dx11']
 
 #--------------------------------------#
 
