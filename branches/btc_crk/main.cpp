@@ -9,6 +9,9 @@ int main()
 
 	//ждать правильного фокуса
 	mInter.Delay(5);
+
+	//загрузить правила перебора
+	mInter.LoadRules("pass_rule.txt");
 	
 	bool bStop = false;
 	while ( !bStop )
