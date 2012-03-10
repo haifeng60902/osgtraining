@@ -25,6 +25,12 @@ void WinInteract::Delay(int iSec)
 	std::cout<<"\n";
 }
 
+void WinInteract::LoadRules(const char* pFile)
+{
+	//загрузить правила перебора
+	m_StrGen.LoadPassRule(pFile);
+}
+
 bool WinInteract::KeyPressDetect()
 {
 	//определение нажатия на клавиши
@@ -63,12 +69,12 @@ bool WinInteract::Process()
 		//запомнить длину строки
 		m_iStrLen=sTry.size();
 
-		std::cout<<"1";
-	}
-	
-	Sleep(10);
+		Sleep(10);
 
-	return false;
+		return false;
+	}
+
+	return true;
 }
 
 void WinInteract::SendKeyPress(HWND hWnd, const std::string& sTry)

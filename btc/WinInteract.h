@@ -14,6 +14,12 @@ public:
 	//задержка iSec секунд
 	void Delay(int iSec);
 
+	//загрузить правила перебора
+	void LoadRules(const char* pFile);
+
+	//загрузить последний прерванный сеанс
+	void LoadLastSave(const char* pFile);
+
 	//определение нажатия на клавиши
 	bool KeyPressDetect();
 
