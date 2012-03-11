@@ -12,6 +12,9 @@ int main()
 
 	//загрузить правила перебора
 	mInter.LoadRules("pass_rule.txt");
+
+	//загрузить последний прерванный сеанс
+	mInter.LoadLastSave("process.txt");
 	
 	bool bStop = false;
 	while ( !bStop )
