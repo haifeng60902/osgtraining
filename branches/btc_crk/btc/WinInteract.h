@@ -25,6 +25,12 @@ public:
 
 	//обработать шаг логики
 	bool Process();
+
+	//для отладки
+	std::string GenNextStr();
+
+	//сохранить текущий результат
+	void SaveStr();
 private:
 
 	//послать сообщения нажатия на кнопки
@@ -37,7 +43,7 @@ private:
 	void ClearTextEdit(HWND hWnd);
 
 	//произвести обработку ситуации с сообщением об ошибке
-	void ProcessErrorWin(HWND hWnd);
+	void ProcessErrorWin();
 
 	//генерилка строк
 	StrGen m_StrGen;
