@@ -15,9 +15,9 @@
 
 import os
 
-CPPPATH = [os.environ['GSDK_DIR']+'/inc',os.environ['GSDK_DIR']+'/inc/win32']
+CPPPATH = [os.environ['SDK_DIR']+'/inc',os.environ['SDK_DIR']+'/inc/win32']
 
-LIBPATH = [os.environ['GSDK_DIR']+'/lib/'+_ARCHITECTURE_+'/vc'+_MSVS_VERSION_.replace('.','')+'.'+_MODE_]
+LIBPATH = [os.environ['SDK_DIR']+'/lib/'+_ARCHITECTURE_+'/vc'+_MSVS_VERSION_.replace('.','')+'.'+_MODE_]
 
 #-----------------------------------#
 
@@ -49,7 +49,7 @@ PGF_LIBS = ['libpgf.lib']
 
 #-----------------------------------#
 
-TBB_LIBS = ['tbb.lib', 'tbbmalloc.lib']
+TBB_LIBS = ['tbb.lib']
 
 #-----------------------------------#
 
@@ -111,6 +111,14 @@ LUA_LIBS = ['lua.lib']
 
 #-----------------------------------#
 
+NEDMALLOC_LIBS = ['nedmalloc.lib']
+
+#-----------------------------------#
+
+LUASTATIC_LIBS = ['lua_static.lib']
+
+#-----------------------------------#
+
 SDL_LINKFLAGS = ['-SUBSYSTEM:CONSOLE']
 
 SDL_LIBS = ['SDL.lib','SDLmain.lib']
@@ -141,6 +149,10 @@ MD5_LIBS = ['md5.lib']
 #-----------------------------------#
 
 BULLET_LIBS = ['bullet.lib']
+
+#-----------------------------------#
+
+ICONV_LIBS = ['iconv.lib']
 
 #-----------------------------------#
 
@@ -177,4 +189,4 @@ OBJECTARX_CPPPATH = [os.environ['SDK_DIR']+'/inc/ObjectARX']
 
 #-----------------------------------#
 
-SYS_LIBS = ['Kernel32.lib','User32.lib','gdi32.lib','winspool.lib','comdlg32.lib','advapi32.lib','shell32.lib','ole32.lib','oleaut32.lib','uuid.lib','odbc32.lib','odbccp32.lib','winmm.lib','comctl32.lib','rpcrt4.lib','wsock32.lib']
+SYS_LIBS = ['Kernel32.lib','User32.lib','gdi32.lib','winspool.lib','comdlg32.lib','advapi32.lib','shell32.lib','ole32.lib','oleaut32.lib','uuid.lib','odbc32.lib','odbccp32.lib','winmm.lib','comctl32.lib','rpcrt4.lib','wsock32.lib', 'Shlwapi.lib']

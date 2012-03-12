@@ -1,6 +1,6 @@
 Import('env')
 
-env.processSconscripts([   
+env.SConscript([   
 		#'dx11backend/SConscript.edge',
 		'renderApi/renderApi.scons'])
 

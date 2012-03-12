@@ -1,6 +1,6 @@
 Import('env')
 
-env.processSconscripts([
+env.SConscript([
 	'src/SConscript'
 ])
 

@@ -16,7 +16,7 @@ headers = env.Glob("*.h")
 
 #--------------------------------------#
 
-env.EdSimStaticLibrary(
+env.edStaticLibrary(
 	target=target,
 	source=sources,
 	header=headers,

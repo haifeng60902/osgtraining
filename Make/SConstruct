@@ -5,7 +5,7 @@ import os
 #---------------------#
 
 mode=ARGUMENTS.get('mode','debug').lower()
-if not (mode in ['debug', 'release','msvsproj', 'msvsproj_new', 'msvsproj2005', 'msvsproj2008', 'msvsproj2010']):
+if not (mode in ['debug', 'release','msvsproj', 'msvsproj_new', 'msvsproj2008', 'msvsproj2010']):
    print "Error: expected 'debug' or 'release', found: " + mode
    Exit(1)
 
@@ -29,7 +29,8 @@ options = {
 	'USE_BATCH_BUILD':1,
 	'USER_VARIABLES':{},
 	'FORCE_LC_MESSAGES':'EN',
-	'SECRET_CORRECTOR':0
+	'SECRET_CORRECTOR':0,
+	'USE_NEDMALLOC':0
 }
 
 options['TOOL'] = 'msvc' if os.name == 'nt' else 'gcc'
@@ -45,6 +46,7 @@ env_config['DONT_BUILD_DEPENDENCIES']=options['DONT_BUILD_DEPENDENCIES']
 env_config['USER_VARIABLES']=options['USER_VARIABLES']
 env_config['FORCE_LC_MESSAGES']=options['FORCE_LC_MESSAGES']
 env_config['SECRET_CORRECTOR']=options['SECRET_CORRECTOR']
+env_config['USE_NEDMALLOC']=options['USE_NEDMALLOC']
 
 if options['TOOL']=='mingw':
 	env_config['WINDOWS_INSERT_DEF'] = 1
@@ -53,9 +55,6 @@ elif options['TOOL']=='msvc':
 	env_config['MSVC_VERSION'] = options['MSVS_VERSION']
 	env_config['MSVC_BATCH'] = options['USE_BATCH_BUILD']
 
-if mode == 'msvsproj2005':
-	env_config['MSVC_VERSION'] = '8.0'
-	mode = 'msvsproj'
 elif mode == 'msvsproj2008':
 	env_config['MSVC_VERSION'] = '9.0'
 	mode = 'msvsproj'
@@ -95,7 +94,7 @@ if os.name == 'nt':
 
 	# install libraries from sdk to $INSTALL_BIN_PATH
 	try:
-		sdkLibPath = os.environ['GSDK_DIR']+'/bin/'+env['ARCHITECTURE']
+		sdkLibPath = os.environ['SDK_DIR']+'/bin/'+env['ARCHITECTURE']
 		if options['TOOL'] == 'msvc':
 			sdkLibPath += '/vc'+options['MSVS_VERSION'].replace('.','')+'.'
 		else:

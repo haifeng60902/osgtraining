@@ -1,10 +1,11 @@
 Import('env')
 
-env.processSconscripts([
+env.SConscript([
 	'Test1/Test1.scons',
 	'testWin32/testWin32.scons',
 #	'DirectInput/DirectInput.scons'
 	'render/SConscript',
-	'LogInfo/LogInfo.scons'
+	'LogInfo/LogInfo.scons',
+	'lua/SConscript'
 ])
 

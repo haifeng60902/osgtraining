@@ -4,7 +4,7 @@
 # TOOL = 'msvc'
 
 # Sets version of Visual Studio.
-MSVS_VERSION = '9.0'
+MSVS_VERSION = '10.0'
 
 # Sets directory where object files will be store. If it is not 
 # an absolute path name then dir'll be created in the same directory 
@@ -46,3 +46,5 @@ USER_VARIABLES = {}
 USER_VARIABLES['renderer'] = 'current'
 
 FORCE_LC_MESSAGES = 'EN'
+
+USE_NEDMALLOC = 0

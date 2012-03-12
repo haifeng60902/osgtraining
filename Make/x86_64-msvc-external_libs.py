@@ -49,7 +49,7 @@ PGF_LIBS = ['libpgf.lib']
 
 #-----------------------------------#
 
-TBB_LIBS = ['tbb.lib', 'tbbmalloc.lib']
+TBB_LIBS = ['tbb.lib']
 
 #-----------------------------------#
 
@@ -111,6 +111,14 @@ LUA_LIBS = ['lua.lib']
 
 #-----------------------------------#
 
+NEDMALLOC_LIBS = ['nedmalloc.lib']
+
+#-----------------------------------#
+
+LUASTATIC_LIBS = ['lua_static.lib']
+
+#-----------------------------------#
+
 SDL_LINKFLAGS = ['-SUBSYSTEM:CONSOLE']
 
 SDL_LIBS = ['SDL.lib','SDLmain.lib']
@@ -144,6 +152,10 @@ BULLET_LIBS = ['bullet.lib']
 
 #-----------------------------------#
 
+ICONV_LIBS = ['iconv.lib']
+
+#-----------------------------------#
+
 MAXSDK_LIBPATH = []
 
 MAXSDK_CPPPATH = []
@@ -172,4 +184,4 @@ if os.environ.has_key('MAX_SDK'):
 
 #-----------------------------------#
 
-SYS_LIBS = ['Kernel32.lib','User32.lib','gdi32.lib','winspool.lib','comdlg32.lib','advapi32.lib','shell32.lib','ole32.lib','oleaut32.lib','uuid.lib','odbc32.lib','odbccp32.lib','winmm.lib','comctl32.lib','rpcrt4.lib','wsock32.lib']
+SYS_LIBS = ['Kernel32.lib','User32.lib','gdi32.lib','winspool.lib','comdlg32.lib','advapi32.lib','shell32.lib','ole32.lib','oleaut32.lib','uuid.lib','odbc32.lib','odbccp32.lib','winmm.lib','comctl32.lib','rpcrt4.lib','wsock32.lib', 'Shlwapi.lib']
