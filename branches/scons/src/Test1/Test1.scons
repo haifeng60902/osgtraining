@@ -25,7 +25,7 @@ headers=env.Glob("*.h")
 
 #--------------------------------------#
 
-env.EdSimProgram(
+env.edProgram(
 	target=target,
 	source=sources,
 	header=headers,

@@ -17,7 +17,8 @@ CXXFLAGS_COMMON = ['-nologo','-EHsc','-GR','/Zc:forScope',
 		'/wd4503', # 'identifier' : decorated name length exceeded, name was truncated
 		'/wd4200', # a structure or union contains an array with zero size.
 		'/wd4275',
-		'/wd4284']
+		'/wd4284',
+'/FIpragmas24.h']
 
 CPPDEFINES_COMMON = ['WIN64','_WINDOWS','WIN32_LEAN_AND_MEAN','WIN64_LEAN_AND_MEAN','_USE_MATH_DEFINES','NOMINMAX', 'EDGE', '_CRT_SECURE_NO_DEPRECATE']
 

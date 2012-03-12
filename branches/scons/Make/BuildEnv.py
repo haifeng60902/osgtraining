@@ -38,6 +38,9 @@ class BuildEnvironment(SConsEnvironment):
 		utils.read_config(self['CONFIG_PATHS'], 'globals.py', self.globals, {'_MODE_': self['MODE'], '_ARCHITECTURE_': self['ARCHITECTURE']})
 		self['CPPDEFINES'] = self.globals['CPPDEFINES']
 
+		if self['USE_NEDMALLOC']:
+			self['CPPDEFINES'].append('USE_NEDMALLOC_STL_ALLOCATOR')
+
 		el_flags = {}
 		export_vars = {'_MODE_' : self['MODE'], '_ARCHITECTURE_' : self['ARCHITECTURE']}
 		if self['TOOL'] == 'msvc':
@@ -77,9 +80,9 @@ class BuildEnvironment(SConsEnvironment):
 
 		# Generate one solution for both x86 and x64 platforms
 		if self['MODE'] == 'msvsproj' and os.name == 'nt':
-			self.EdSimStaticLibrary = self.__MSVSProj_EdSimStaticLibrary
-			self.EdSimSharedLibrary = self.__MSVSProj_EdSimSharedLibrary
-			self.EdSimProgram = self.__MSVSProj_EdSimProgram
+			self.edStaticLibrary = self.__MSVSProj_edStaticLibrary
+			self.edSharedLibrary = self.__MSVSProj_edSharedLibrary
+			self.edProgram = self.__MSVSProj_edProgram
 			self.buildMSVSProj = self.buildMSVSProj
 
 			self._dict['MSVS_PROJECT_TARGETS'] = [('debug', 'x86', 'Win32'), ('release', 'x86', 'Win32'), ('debug', 'x86_64', 'x64'), ('release', 'x86_64', 'x64')]
@@ -204,7 +207,7 @@ class BuildEnvironment(SConsEnvironment):
 					CPPDEFINES = parameters['CPPDEFINES'] + (params['CPPDEFINES'] if 'CPPDEFINES' in params else [])
 				)
 	
-	def EdSimStaticLibrary(self, target, source, header, resource = None, external_libs = None, not_linked_dependencies = None, **params):
+	def edStaticLibrary(self, target, source, header, resource = None, external_libs = None, not_linked_dependencies = None, **params):
 		if self['DONT_BUILD_DEPENDENCIES']:
 			if not target in SCons.Script.BUILD_TARGETS: return
 
@@ -216,7 +219,7 @@ class BuildEnvironment(SConsEnvironment):
 
 		return lib
 
-	def EdSimSharedLibrary(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
+	def edSharedLibrary(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
 		if self['DONT_BUILD_DEPENDENCIES']:
 			if not target in SCons.Script.BUILD_TARGETS: return
 
@@ -234,7 +237,7 @@ class BuildEnvironment(SConsEnvironment):
 
 		return lib
 
-	def EdSimProgram(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
+	def edProgram(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
 		if self['DONT_BUILD_DEPENDENCIES']:
 			if not target in SCons.Script.BUILD_TARGETS: return
 
@@ -246,21 +249,21 @@ class BuildEnvironment(SConsEnvironment):
 
 		return prog
 	
-	def __MSVSProj_EdSimStaticLibrary(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
+	def __MSVSProj_edStaticLibrary(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
 		fileName = self['LIBPREFIX'] + target + self['LIBSUFFIX']
 		proj = self.buildMSVSProj(target, self.TARGET_LIB, fileName, source, header, resource, libs, external_libs, not_linked_dependencies, params)
 		self.Alias(['install', target], proj)
 
 		return proj
 
-	def __MSVSProj_EdSimSharedLibrary(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
+	def __MSVSProj_edSharedLibrary(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
 		fileName = self['SHLIBPREFIX'] + target + self['SHLIBSUFFIX']
 		proj = self.buildMSVSProj(target, self.TARGET_DLL, fileName, source, header, resource, libs, external_libs, not_linked_dependencies, params)
 		self.Alias(['install', target], proj)
 
 		return proj
 
-	def __MSVSProj_EdSimProgram(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
+	def __MSVSProj_edProgram(self, target, source, header, resource = None, external_libs = None, libs = None, not_linked_dependencies = None, **params):
 		fileName = self['PROGPREFIX'] + target + self['PROGSUFFIX']
 		proj = self.buildMSVSProj(target, self.TARGET_PROG, fileName, source, header, resource, libs, external_libs, not_linked_dependencies, params)
 		self.Alias(['install',target], proj)
@@ -294,19 +297,6 @@ class BuildEnvironment(SConsEnvironment):
 		res=[]
 		self.__rglob(realDir,buildDir,pat,res)
 		return res
-
-	def processSconscripts(self, sconscripts):
-		print 'Processing dir: ', os.getcwd()
-		for i in sconscripts:
-			print '\t',os.path.abspath(i)
-	
-		self.SConscript(sconscripts)
-
-	def isProjGenMode(self):
-		return self['MODE'] == 'msvsproj'
-
-	def getProjectName(self):
-		return "EDGE"
 
 	def getUserVariable(self, name):
 		if not self._dict.has_key('USER_VARIABLES'):
