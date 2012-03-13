@@ -36,8 +36,8 @@ if os.environ.has_key('BUILD_BOT'):
 else:
 	USE_BATCH_BUILD = 0
 
-if not os.environ.has_key('SDK_DIR'):
-	os.environ['SDK_DIR']='k:/projects/extern/sdk/'
+if not os.environ.has_key('GSDK_DIR'):
+	os.environ['GSDK_DIR']='k:/projects/extern/sdk/'
 
 # Holds variables set by user.
 USER_VARIABLES = {}
@@ -47,4 +47,3 @@ USER_VARIABLES['renderer'] = 'current'
 
 FORCE_LC_MESSAGES = 'EN'
 
-USE_NEDMALLOC = 0

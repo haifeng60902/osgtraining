@@ -29,8 +29,6 @@ options = {
 	'USE_BATCH_BUILD':1,
 	'USER_VARIABLES':{},
 	'FORCE_LC_MESSAGES':'EN',
-	'SECRET_CORRECTOR':0,
-	'USE_NEDMALLOC':0
 }
 
 options['TOOL'] = 'msvc' if os.name == 'nt' else 'gcc'
@@ -45,8 +43,6 @@ env_config['TOOL'] = options['TOOL']
 env_config['DONT_BUILD_DEPENDENCIES']=options['DONT_BUILD_DEPENDENCIES']
 env_config['USER_VARIABLES']=options['USER_VARIABLES']
 env_config['FORCE_LC_MESSAGES']=options['FORCE_LC_MESSAGES']
-env_config['SECRET_CORRECTOR']=options['SECRET_CORRECTOR']
-env_config['USE_NEDMALLOC']=options['USE_NEDMALLOC']
 
 if options['TOOL']=='mingw':
 	env_config['WINDOWS_INSERT_DEF'] = 1
@@ -94,7 +90,7 @@ if os.name == 'nt':
 
 	# install libraries from sdk to $INSTALL_BIN_PATH
 	try:
-		sdkLibPath = os.environ['SDK_DIR']+'/bin/'+env['ARCHITECTURE']
+		sdkLibPath = os.environ['GSDK_DIR']+'/bin/'+env['ARCHITECTURE']
 		if options['TOOL'] == 'msvc':
 			sdkLibPath += '/vc'+options['MSVS_VERSION'].replace('.','')+'.'
 		else:
@@ -128,7 +124,7 @@ if renderer == 'old':
 
 env.Append(
 	CPPPATH = CPPPATH,
-	CPPDEFINES = ['EDGE', 'PLUGINS_PATH=\\"'+pluginsPath+'\\"'],
+	CPPDEFINES = ['GEDGE', 'PLUGINS_PATH=\\"'+pluginsPath+'\\"'],
 
 	LIBPATH = [env['INSTALL_LIB_PATH']],
 )
