@@ -15,9 +15,9 @@
 
 import os
 
-CPPPATH = [os.environ['SDK_DIR']+'/inc',os.environ['SDK_DIR']+'/inc/win32']
+CPPPATH = [os.environ['GSDK_DIR']+'/inc',os.environ['GSDK_DIR']+'/inc/win32']
 
-LIBPATH = [os.environ['SDK_DIR']+'/lib/'+_ARCHITECTURE_+'/vc'+_MSVS_VERSION_.replace('.','')+'.'+_MODE_]
+LIBPATH = [os.environ['GSDK_DIR']+'/lib/'+_ARCHITECTURE_+'/vc'+_MSVS_VERSION_.replace('.','')+'.'+_MODE_]
 
 #-----------------------------------#
 
@@ -108,10 +108,6 @@ FFTW_LIBS = ['libfftw3-3.lib']
 #-----------------------------------#
 
 LUA_LIBS = ['lua.lib']
-
-#-----------------------------------#
-
-NEDMALLOC_LIBS = ['nedmalloc.lib']
 
 #-----------------------------------#
 

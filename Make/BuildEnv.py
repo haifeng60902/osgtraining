@@ -38,9 +38,6 @@ class BuildEnvironment(SConsEnvironment):
 		utils.read_config(self['CONFIG_PATHS'], 'globals.py', self.globals, {'_MODE_': self['MODE'], '_ARCHITECTURE_': self['ARCHITECTURE']})
 		self['CPPDEFINES'] = self.globals['CPPDEFINES']
 
-		if self['USE_NEDMALLOC']:
-			self['CPPDEFINES'].append('USE_NEDMALLOC_STL_ALLOCATOR')
-
 		el_flags = {}
 		export_vars = {'_MODE_' : self['MODE'], '_ARCHITECTURE_' : self['ARCHITECTURE']}
 		if self['TOOL'] == 'msvc':
