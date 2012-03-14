@@ -1,0 +1,57 @@
+Import('env')
+
+core_src = '''
+	lapi.c lcode.c ldebug.c ldo.c ldump.c lfunc.c lgc.c \
+	llex.c lmem.c lobject.c lopcodes.c lparser.c lstate.c \
+	lstring.c ltable.c ltm.c lundump.c lvm.c lzio.c print.c
+    '''.split()
+
+lib_src = '''
+	lauxlib.c lbaselib.c ldblib.c liolib.c lmathlib.c \
+	loslib.c ltablib.c lstrlib.c loadlib.c linit.c
+    '''.split()
+
+cppdefs = ['LUAC_UNIVERSAL_BINARIES']
+
+
+env.edSharedLibrary(
+    target = 'lua',
+
+    source = core_src + lib_src + ['lua.def'],
+
+    header = 'lua.h lua.hpp luaconf.h lualib.h lauxlib.h'.split(),
+
+    CPPPATH = [],
+
+    CPPDEFINES = cppdefs,
+
+    LIBS = []
+);
+
+env.edProgram(
+    target = 'luae',
+
+    source = ['lua.c'],
+    header = [], 
+
+    CPPPATH = [],
+
+    CPPDEFINES = [],
+
+    LIBS = ['lua']
+);
+
+env.edProgram(
+    target = 'luac',
+
+    source = ['luac.c'],
+    header = [],
+
+    CPPPATH = [],
+
+    CPPDEFINES = [],
+
+    LIBS = ['lua']
+);
+
+env.SConscript('./SConscript.static', variant_dir = "lua_static", dublicate = 0)
