@@ -8,7 +8,8 @@ libs = [
 	#'dx11backend',
 	'renderApi',
 	'LogInfo',
-	'User32'
+	'User32',
+	'lua_static'
 	]
 
 not_linked_dependencies = [
@@ -36,6 +37,7 @@ env.edProgram(
 
     CPPPATH = [
 	#	env['TOP_DIR']+'src/render/dx11backend',
-		env['TOP_DIR']+'src/render/renderApi'  
+		env['TOP_DIR']+'src/render/renderApi',
+		env['TOP_DIR']+'src/lua/src'  
         ],
 )

@@ -6,8 +6,20 @@
 
 #include "renderApi.h"
 
+extern "C" {
+#    include "lua.h"
+#    include "lauxlib.h"
+#    include "lualib.h"
+}
+
 int main()
-{ 
+{
+	int status;
+	lua_State *L;
+	L = lua_open();//Создаем стэк
+	luaL_openlibs(L);//подключить стандартные библиотеки   
+	//status = luaL_loadfile(L, "script.lua");//загрузить файл
+	
 	renderApi pApi;
 	
 	pApi.init();
