@@ -74,7 +74,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="logic\BtcdLauncher.cpp" />
+    <ClCompile Include="logic\PassGen.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="logic\binState.h" />
+    <ClInclude Include="logic\BtcdLauncher.h" />
+    <ClInclude Include="logic\PassGen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
