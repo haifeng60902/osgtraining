@@ -1,11 +1,15 @@
 #include "PassGen.h"
 
 #include <iostream>
+#include <fstream>
+#include <fstream>
 #include <windows.h>
+
+#define AUTO_SAVE 30
 
 PassGen::PassGen()
 {
-
+	iAutosave=0;
 }
 
 PassGen::~PassGen()
@@ -13,16 +17,21 @@ PassGen::~PassGen()
 
 }
 
-void PassGen::Init(const std::wstring& wConf)
+void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave)
 {
 	//открыть файл с символами перебора
 	
-	//load config
-	LoadConf(wConf);
-
 	//zero memory
 	for (int i=0;i<MAX_PASS;++i)
 		iPassState[i]=0;
+
+	//load config
+	LoadConf(wConf);
+
+	wSave=wAutosave;
+
+	//состояние из файла
+	LoadState();
 }
 
 std::wstring PassGen::GenNextPass()
@@ -30,6 +39,13 @@ std::wstring PassGen::GenNextPass()
 	//generate next password
 	if (wCons.empty())
 		return std::wstring();
+
+	if (iAutosave>AUTO_SAVE)
+	{
+		//автосохранение состояния
+		SaveState();
+		iAutosave=0;
+	}
 
 	bool bCont=true;
 	int i=0;
@@ -65,12 +81,18 @@ std::wstring PassGen::GenNextPass()
 
 	std::wcout<<wConsRes<<std::endl;
 
+	++iAutosave;
+
 	return wPassRes;
 }
 
 void PassGen::SaveSuccessPass(const std::wstring& wConf)
 {
 	//save success password
+
+	if (wConf.empty())
+		return;
+
 	std::wstring wConsRes;
 	for (int i=0;i<MAX_PASS;++i)
 	{
@@ -92,9 +114,11 @@ void PassGen::SaveSuccessPass(const std::wstring& wConf)
 	}
 }
 
-void PassGen::Close()
+void PassGen::Close(bool bSave)
 {
-
+	//автосохранение состояния
+	if (bSave)
+		SaveState();
 }
 
 void PassGen::LoadConf(const std::wstring& wConf)
@@ -144,5 +168,48 @@ void PassGen::LoadConf(const std::wstring& wConf)
 			}
 		}
 
+	}
+}
+
+void PassGen::SaveState()
+{
+	//автосохранение состояния
+	if (wSave.empty())
+		return;
+
+	std::wofstream ofs(wSave);
+	if (ofs.is_open())
+	{
+		for (int i=0;i<MAX_PASS;++i)
+		{
+			ofs<<iPassState[i];
+			ofs<<L" ";
+		}
+		ofs.close();
+	}
+}
+
+void PassGen::LoadState()
+{
+	//состояние из файла
+	if (wSave.empty())
+		return;
+
+	std::wifstream ifs(wSave);
+
+	if (ifs.is_open())
+	{
+		int iP=0;
+		int i=0;
+		std::wcout<<"Load autosave: ";
+		while(!ifs.eof())
+		{
+			ifs>>iP;
+			iPassState[i]=iP;
+			++i;
+			std::wcout<<iP<<" ";
+		}
+		ifs.close();
+		std::wcout<<std::endl;
 	}
 }

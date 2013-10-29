@@ -12,7 +12,7 @@ public:
 	PassGen();
 	~PassGen();
 
-	void Init(const std::wstring& wConf);
+	void Init(const std::wstring& wConf, const std::wstring& wAutosave);
 
 	//generate next password
 	std::wstring GenNextPass();
@@ -20,7 +20,7 @@ public:
 	//save success password
 	void SaveSuccessPass(const std::wstring& wConf);
 
-	void Close();
+	void Close(bool bSave);
 
 private:
 
@@ -33,16 +33,25 @@ private:
 		int num;
 	};
 
+	//сохранение состояния
+	void SaveState();
+
+	//состояние из файла
+	void LoadState();
+
 	//load config
 	void LoadConf(const std::wstring& wConf);
 
 	std::wstring wPass;//for password
 	std::wstring wCons;//for console output
 
+	std::wstring wSave;
+
 	std::vector<binConvert> vConvert;
 
 	int iPassState[MAX_PASS];
 
+	int iAutosave;
 };
 
 #endif	//_PASS_GEN_H_

@@ -49,10 +49,11 @@ int main(int argc, char** argv)
 		}
 	}
 
-	m_PassGen.Init(wConf);
+	m_PassGen.Init(wConf, wAutosave);
 
 	bool bStop = false;
 	pswTry tryStatus=pswNext;
+	int iCount=0;
 	while(!bStop)
 	{
 		if (tryStatus==pswNext)
@@ -68,6 +69,7 @@ int main(int argc, char** argv)
 
 		//определение нажатия на клавиши
 		bStop = bStop||KeyPressDetect();
+		++iCount;
 	}
 
 	switch (tryStatus)
@@ -80,7 +82,10 @@ int main(int argc, char** argv)
 		break;
 	}
 
-	m_PassGen.Close();
+	bool bSave=false;
+	if (iCount>1)
+		bSave=true;
+	m_PassGen.Close(bSave);
 }
 
 bool KeyPressDetect()
