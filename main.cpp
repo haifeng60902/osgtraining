@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	m_PassGen.Init(wConf, wAutosave);
+	m_PassGen.Init(wConf);
 
 	bool bStop = false;
 	pswTry tryStatus=pswNext;
