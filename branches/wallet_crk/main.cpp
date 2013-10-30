@@ -11,6 +11,7 @@
 std::wstring wConf;
 std::wstring wAutosave;
 std::wstring wSuccess;
+std::wstring wPhrase;
 
 PassGen m_PassGen;
 BtcdLauncher m_BtcdLauncher;
@@ -47,9 +48,16 @@ int main(int argc, char** argv)
 			wSuccess=std::wstring(sConf.begin(), sConf.end());
 			continue;
 		}
+		else if (strcmp(argv[i], "-phrase") == 0)
+		{
+			i++; if (i >= argc) break;
+			std::string sConf = argv[i];
+			wPhrase=std::wstring(sConf.begin(), sConf.end());
+			continue;
+		}
 	}
 
-	m_PassGen.Init(wConf, wAutosave);
+	m_PassGen.Init(wConf, wAutosave, wPhrase);
 
 	bool bStop = false;
 	pswTry tryStatus=pswNext;
@@ -67,9 +75,14 @@ int main(int argc, char** argv)
 		if (tryStatus!=pswNext)
 			bStop=true;
 
+		if (tryStatus==pswTryAgain)
+			bStop=false;
+
 		//определение нажатия на клавиши
 		bStop = bStop||KeyPressDetect();
-		++iCount;
+		
+		if (tryStatus!=pswTryAgain)
+			++iCount;
 	}
 
 	switch (tryStatus)

@@ -17,7 +17,7 @@ PassGen::~PassGen()
 
 }
 
-void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave)
+void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase)
 {
 	//открыть файл с символами перебора
 	
@@ -26,7 +26,10 @@ void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave)
 		iPassState[i]=0;
 
 	//load config
-	LoadConf(wConf);
+	LoadConf(wConf, &wPass, &wCons, &vConvert);
+
+	//load phrase
+	LoadConf(wPhrase, &wPhrasePass, &wPhraseCons, &vPhrareConv);
 
 	wSave=wAutosave;
 
@@ -63,8 +66,8 @@ std::wstring PassGen::GenNextPass()
 		}
 	}
 	
-	std::wstring wPassRes;
-	std::wstring wConsRes;
+	std::wstring wPassRes=wPhrasePass;
+	std::wstring wConsRes=wPhraseCons;
 	for (int i=0;i<MAX_PASS;++i)
 	{
 		int j=iPassState[i]-1;
@@ -121,7 +124,7 @@ void PassGen::Close(bool bSave)
 		SaveState();
 }
 
-void PassGen::LoadConf(const std::wstring& wConf)
+void PassGen::LoadConf(const std::wstring& wConf, std::wstring* pPass, std::wstring* pCons, tVecConv *pConv)
 {
 	//load config
 
@@ -147,27 +150,26 @@ void PassGen::LoadConf(const std::wstring& wConf)
 		MultiByteToWideChar(CP_THREAD_ACP, 0, sUtf8, 8192, wsUtf16p, 8192 ); // convert for password
 		MultiByteToWideChar(CP_UTF8, 0, sUtf8, 8192, wsUtf16c, 8192 ); // convert for console
 
-		wPass=wsUtf16p;
-		wCons=wsUtf16c;
+		(*pPass)=wsUtf16p;
+		(*pCons)=wsUtf16c;
 		fclose(pzInFile);
 
 		int j=0;
-		vConvert.resize(wCons.size());
-		for(int i=0;i<wCons.size();++i)
+		pConv->resize(pCons->size());
+		for(int i=0;i<pCons->size();++i)
 		{
-			if (wPass[j]!=wCons[i])
+			if ((*pPass)[j]!=(*pCons)[i])
 			{
-				vConvert[i].pos=j;
-				vConvert[i].num=2;
+				(*pConv)[i].pos=j;
+				(*pConv)[i].num=2;
 				j+=2;
 			}
 			else
 			{
-				vConvert[i].pos=j;
+				(*pConv)[i].pos=j;
 				++j;
 			}
 		}
-
 	}
 }
 

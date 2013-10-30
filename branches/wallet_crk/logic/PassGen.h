@@ -12,7 +12,7 @@ public:
 	PassGen();
 	~PassGen();
 
-	void Init(const std::wstring& wConf, const std::wstring& wAutosave);
+	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase);
 
 	//generate next password
 	std::wstring GenNextPass();
@@ -33,6 +33,8 @@ private:
 		int num;
 	};
 
+	typedef std::vector<binConvert> tVecConv;
+
 	//сохранение состояния
 	void SaveState();
 
@@ -40,14 +42,18 @@ private:
 	void LoadState();
 
 	//load config
-	void LoadConf(const std::wstring& wConf);
+	void LoadConf(const std::wstring& wConf, std::wstring* pPass, std::wstring* pCons, tVecConv *pConv);
 
 	std::wstring wPass;//for password
 	std::wstring wCons;//for console output
 
+	std::wstring wPhrasePass;//for password
+	std::wstring wPhraseCons;//for console output
+
 	std::wstring wSave;
 
-	std::vector<binConvert> vConvert;
+	tVecConv vConvert;
+	tVecConv vPhrareConv;
 
 	int iPassState[MAX_PASS];
 
