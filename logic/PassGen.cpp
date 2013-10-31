@@ -10,6 +10,7 @@
 PassGen::PassGen()
 {
 	iAutosave=0;
+	bFirstTime=true;
 }
 
 PassGen::~PassGen()
@@ -48,6 +49,14 @@ std::wstring PassGen::GenNextPass()
 		//автосохранение состояния
 		SaveState();
 		iAutosave=0;
+	}
+
+	//если есть ключевая фраза то первый раз выдать только ее
+	if ((bFirstTime)&&(!wPhraseCons.empty()))
+	{
+		std::wcout<<wPhraseCons<<std::endl;
+		bFirstTime=false;
+		return wPhrasePass;
 	}
 
 	bool bCont=true;

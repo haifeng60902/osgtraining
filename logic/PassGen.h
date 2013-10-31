@@ -58,6 +58,8 @@ private:
 	int iPassState[MAX_PASS];
 
 	int iAutosave;
+
+	bool bFirstTime;
 };
 
 #endif	//_PASS_GEN_H_
