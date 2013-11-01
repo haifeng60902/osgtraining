@@ -1,0 +1,29 @@
+Import('env')
+
+core_src = '''
+	lapi.c lcode.c ldebug.c ldo.c ldump.c lfunc.c lgc.c \
+	llex.c lmem.c lobject.c lopcodes.c lparser.c lstate.c \
+	lstring.c ltable.c ltm.c lundump.c lvm.c lzio.c print.c
+    '''.split()
+
+lib_src = '''
+	lauxlib.c lbaselib.c ldblib.c liolib.c lmathlib.c \
+	loslib.c ltablib.c lstrlib.c loadlib.c linit.c
+    '''.split()
+
+cppdefs = ['LUAC_UNIVERSAL_BINARIES']
+
+env.edStaticLibrary(
+    target = 'lua_static',
+
+    source = core_src + lib_src,
+
+    header = 'lua.h lua.hpp luaconf.h lualib.h lauxlib.h'.split(),
+
+    CPPPATH = [],
+
+    CPPDEFINES = cppdefs,
+
+    LIBS = []
+);
+
