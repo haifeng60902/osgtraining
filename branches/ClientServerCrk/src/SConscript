@@ -1,6 +1,6 @@
 Import('env')
 
 env.SConscript([
-#	'Core/SConscript.edge',
+	'Core/SConscript.edge',
 	'Server/Server.scons'
 ])

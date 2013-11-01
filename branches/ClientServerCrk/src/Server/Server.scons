@@ -6,7 +6,7 @@ Import('env')
 
 target = 'Server'
 
-libs = []
+libs = ['edCore']
 
 not_linked_dependencies = []
 
