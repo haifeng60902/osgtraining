@@ -1,0 +1,35 @@
+# encoding: utf-8
+
+Import('env')
+
+#--------------------------------------#
+
+target = 'Server'
+
+libs = []
+
+not_linked_dependencies = []
+
+	 
+external_libs = ['lua']
+
+#--------------------------------------#
+
+sources=env.Glob("*.cpp")
+headers=env.Glob("*.h")
+sources+=env.Glob("Editors/*.cpp")
+headers+=env.Glob("Editors/*.h")
+
+#--------------------------------------#
+
+env.edProgram(
+	target=target,
+	source=sources,
+	header=headers,
+	external_libs=external_libs,
+	libs=libs,
+	not_linked_dependencies=not_linked_dependencies,
+
+    CPPPATH = [],
+
+)
