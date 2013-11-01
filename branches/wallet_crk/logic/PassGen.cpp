@@ -137,6 +137,9 @@ void PassGen::LoadConf(const std::wstring& wConf, std::wstring* pPass, std::wstr
 {
 	//load config
 
+	if (wConf.empty())
+		return;
+
 	FILE * pzInFile;
 	char   sUtf8[8192];
 
