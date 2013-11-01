@@ -1,23 +1,16 @@
 #include <iostream>
 
-#include "lua/lua.hpp"
-
+//#include "lua/lua.hpp"
+#include "core/Lua/Lua_vm.h"
 
 int main()
 {
-	lua_State *L = lua_open();
-	luaL_openlibs(L);
+	
+	Lua_vm lvm("options.conf");
 
-	int s = luaL_loadfile(L, "options.conf");
-
-	if ( s==0 ) {
-		// execute Lua program
-		//s = lua_pcall(L, 0, LUA_MULTRET, 0);
-
-		lua_getglobal(L,"sdf");
-	}
-
-	lua_close(L);
+	std::cout << "vol is " << lvm.get_double("vol") << "\n";
+	std::cout << "rho is " << lvm.get_int("rho") << "\n";
+	std::cout << "method is " << lvm.get_string("method").c_str() << "\n";
 
 	std::cout<<"ok\n";
 }
