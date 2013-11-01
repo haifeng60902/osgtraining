@@ -2,8 +2,8 @@ import os
 from make.msvc_warnings_as_errors import WARNINGS_AS_ERRORS
 
 CPPPATH_COMMON = [
-    os.path.join(env.environ['SDK_DIR'], 'inc'),
-    os.path.join(env.environ['SDK_DIR'], 'inc', 'win32'),
+    os.path.join(env.environ['GSDK_DIR'], 'inc'),
+    os.path.join(env.environ['GSDK_DIR'], 'inc', 'win32'),
 
     os.path.join(env['EDGE_SDK_DIR'], 'inc'),
 
@@ -14,7 +14,7 @@ CPPPATH_COMMON = [
 ]
 
 if env['MSVC_VERSION'] == "10.0":
-	CPPPATH_COMMON += [env.environ['SDK_DIR'] + '/inc/vc10compat']
+	CPPPATH_COMMON += [env.environ['GSDK_DIR'] + '/inc/vc10compat']
 
 LIBPATH_COMMON = [
     env['INSTALL_LIB_DIR'],
