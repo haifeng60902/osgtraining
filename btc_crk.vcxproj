@@ -75,12 +75,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="btc\StrDecode.cpp" />
     <ClCompile Include="btc\StrGen.cpp" />
     <ClCompile Include="btc\WinInteract.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="btc\binDecode.h" />
     <ClInclude Include="btc\binStr.h" />
+    <ClInclude Include="btc\StrDecode.h" />
     <ClInclude Include="btc\StrGen.h" />
     <ClInclude Include="btc\WinInteract.h" />
   </ItemGroup>
