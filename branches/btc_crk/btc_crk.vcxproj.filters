@@ -8,6 +8,9 @@
     <ClCompile Include="btc\WinInteract.cpp">
       <Filter>btc</Filter>
     </ClCompile>
+    <ClCompile Include="btc\StrDecode.cpp">
+      <Filter>btc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="btc\WinInteract.h">
@@ -17,6 +20,12 @@
       <Filter>btc</Filter>
     </ClInclude>
     <ClInclude Include="btc\binStr.h">
+      <Filter>btc</Filter>
+    </ClInclude>
+    <ClInclude Include="btc\StrDecode.h">
+      <Filter>btc</Filter>
+    </ClInclude>
+    <ClInclude Include="btc\binDecode.h">
       <Filter>btc</Filter>
     </ClInclude>
   </ItemGroup>

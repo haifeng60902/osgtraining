@@ -28,7 +28,8 @@ void WinInteract::Delay(int iSec)
 void WinInteract::LoadRules(const char* pFile)
 {
 	//загрузить правила перебора
-	m_StrGen.LoadPassRule(pFile);
+	//m_StrGen.LoadPassRule(pFile);
+	m_StrDecode.LoadTable(pFile);
 }
 
 bool WinInteract::KeyPressDetect()
@@ -47,7 +48,8 @@ bool WinInteract::KeyPressDetect()
 std::string WinInteract::GenNextStr()
 {
 	//для отладки
-	return m_StrGen.GenNextStr();
+	//return m_StrGen.GenNextStr();
+	return m_StrDecode.GenNextStr();
 }
 
 bool WinInteract::Process()
@@ -61,14 +63,18 @@ bool WinInteract::Process()
 		ClearTextEdit(hWnd);
 
 		//следующая последовательность
-		std::string sTry=m_StrGen.GenNextStr();
+		//std::string sTry=m_StrGen.GenNextStr();
+		std::string sTry=m_StrDecode.GenNextStr();
 
-		std::cout<<sTry<<" ";
+		if(!sTry.empty())
+			std::cout<<sTry<<" ";
+		else
+			std::cout<<"\nThe End\n";
 
 		//послать сообщения нажатия на кнопки
 		SendKeyPress(hWnd, sTry);
 
-		Sleep(500);
+		Sleep(200);
 
 		//сообщение о нажатии на enter посылаем отдельно
 		SendEnterPress(hWnd);
@@ -142,18 +148,19 @@ void WinInteract::ProcessErrorWin()
 	}
 
 	//сохранить в файл текущую строку
-	m_StrGen.SaveResult();
+	//m_StrGen.SaveResult();
 	exit(1);
 }
 
 void WinInteract::SaveStr()
 {
 	//сохранить текущий результат
-	m_StrGen.SaveResult();
+	//m_StrGen.SaveResult();
 }
 
 void WinInteract::LoadLastSave(const char* pFile)
 {
 	//загрузить последний прерванный сеанс
-	m_StrGen.LoadLastSave(pFile);
+	//m_StrGen.LoadLastSave(pFile);
+	m_StrDecode.LoadLastSave(pFile);
 }

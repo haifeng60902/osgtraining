@@ -10,11 +10,11 @@ int main()
 	//ждать правильного фокуса
 	mInter.Delay(5);
 
-	//загрузить правила перебора
-	mInter.LoadRules("pass_rule.txt");
+	//загрузить правила перебора pass_rule.txt
+	mInter.LoadRules("keys.txt");
 
 	//загрузить последний прерванный сеанс
-	mInter.LoadLastSave("process.txt");
+	mInter.LoadLastSave("try.txt");
 	
 	bool bStop = false;
 	while ( !bStop )

@@ -4,6 +4,7 @@
 #include <Windows.h>
 
 #include "StrGen.h"
+#include "StrDecode.h"
 
 class WinInteract
 {
@@ -19,6 +20,9 @@ public:
 
 	//загрузить последний прерванный сеанс
 	void LoadLastSave(const char* pFile);
+
+	//загрузить последний прерванный сеанс
+	void LoadEncode(const char* pFile);
 
 	//определение нажатия на клавиши
 	bool KeyPressDetect();
@@ -47,6 +51,9 @@ private:
 
 	//генерилка строк
 	StrGen m_StrGen;
+
+	//перебор кодов символов
+	StrDecode m_StrDecode;
 
 	//длина предыдущей строки, которую нужно стереть 
 	int m_iStrLen;
