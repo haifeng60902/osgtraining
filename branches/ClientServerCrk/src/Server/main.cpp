@@ -9,6 +9,8 @@ int iPort=9999;
 int main(int argc, char **argv)
 {
 	
+	Sleep(1000);
+
 	//имя конфига
 	for(int i=1; i<argc; i++)
 	{
