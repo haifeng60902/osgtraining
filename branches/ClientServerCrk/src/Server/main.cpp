@@ -1,16 +1,14 @@
 #include <iostream>
 
 #include "Core/Lua/Lua_vm.h"
-#include "Tcp/TCPAcceptor.h"
+#include "ServerLogic.h"
+//#include "Tcp/TCPAcceptor.h"
 
 std::string sAddress("127.0.0.1");
 int iPort=9999;
 
 int main(int argc, char **argv)
 {
-	
-	Sleep(1000);
-
 	//имя конфига
 	for(int i=1; i<argc; i++)
 	{
@@ -23,26 +21,10 @@ int main(int argc, char **argv)
 			continue;
 		}
 	}
+//////////////////////////////////////////////////////////////////////////
+	ServerLogic m_ServerLogic;
 
-	TCPAcceptor acceptor(iPort, sAddress.c_str());
-
-	if (acceptor.start()==0)
-	{
-		TCPStream* stream = acceptor.accept();
-		if (stream != NULL)
-		{
-			size_t len;
-			char line[256];
-			while ((len = stream->receive(line, sizeof(line))) > 0)
-			{
-				line[len] = NULL;
-				std::cout<<"received - "<<line<<std::endl;
-				stream->send(line, len);
-			}
-
-			delete stream;
-		}
-	}
-
-	std::cout<<"ok\n";
+	m_ServerLogic.Init(iPort, sAddress);
+	m_ServerLogic.Process();
+	m_ServerLogic.Close();
 }
