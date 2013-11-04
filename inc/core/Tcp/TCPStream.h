@@ -8,6 +8,7 @@ class TCPStream
 {
 public:
 	friend class TCPAcceptor;
+	friend class TCPConnector;
 
 	~TCPStream();
 

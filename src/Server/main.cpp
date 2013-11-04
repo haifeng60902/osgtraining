@@ -1,18 +1,44 @@
 #include <iostream>
 
-#include "core/Lua/Lua_vm.h"
-#include "tcp/tcpacceptor.h"
+#include "Core/Lua/Lua_vm.h"
+#include "Tcp/TCPAcceptor.h"
 
-int main()
+std::string sAddress("127.0.0.1");
+int iPort=9999;
+
+int main(int argc, char **argv)
 {
 	
-	Lua_vm lvm("options.conf");
+	//имя конфига
+	for(int i=1; i<argc; i++)
+	{
+		if (strcmp(argv[i], "-config") == 0)
+		{
+			i++; if (i >= argc) break;
+			Lua_vm lvm(argv[i]);
+			sAddress=lvm.get_string("address");
+			iPort=lvm.get_int("port");
+			continue;
+		}
+	}
 
-	std::cout << "vol is " << lvm.get_double("vol") << "\n";
-	std::cout << "rho is " << lvm.get_int("rho") << "\n";
-	std::cout << "method is " << lvm.get_string("method").c_str() << "\n";
+	TCPAcceptor acceptor(iPort, sAddress.c_str());
 
-	TCPAcceptor acceptor(9999,"127.0.0.1");
+	if (acceptor.start()==0)
+	{
+		TCPStream* stream = acceptor.accept();
+		if (stream != NULL)
+		{
+			size_t len;
+			char line[256];
+			while ((len = stream->receive(line, sizeof(line))) > 0)
+			{
+				line[len] = NULL;
+				std::cout<<"received - "<<line<<std::endl;
+				stream->send(line, len);
+			}
+		}
+	}
 
 	std::cout<<"ok\n";
 }
