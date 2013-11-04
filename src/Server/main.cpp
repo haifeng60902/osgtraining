@@ -37,6 +37,8 @@ int main(int argc, char **argv)
 				std::cout<<"received - "<<line<<std::endl;
 				stream->send(line, len);
 			}
+
+			delete stream;
 		}
 	}
 

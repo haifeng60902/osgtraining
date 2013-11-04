@@ -21,7 +21,8 @@ TCPAcceptor::TCPAcceptor(int port, const char* address)
 
 TCPAcceptor::~TCPAcceptor()
 {
-  
+	closesocket(listen_socket);
+	WSACleanup();
 }
 
 int TCPAcceptor::start()

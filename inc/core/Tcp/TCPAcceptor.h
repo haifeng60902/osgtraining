@@ -24,7 +24,7 @@ class TCPAcceptor
 
 	WSADATA wsaData;
 	struct sockaddr_in local;
-	SOCKET listen_socket, msgsock;
+	SOCKET listen_socket;
 };
 
 #endif
