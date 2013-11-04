@@ -10,6 +10,7 @@ class TCPConnector
 public:
 
 	TCPConnector();
+	~TCPConnector();
 
 	TCPStream* connect(int port, const char* server_name);
 

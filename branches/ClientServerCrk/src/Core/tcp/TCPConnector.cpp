@@ -18,6 +18,11 @@ TCPConnector::TCPConnector()
 		std::cout<<"Server: WSAStartup() is OK."<<std::endl;
 }
 
+TCPConnector::~TCPConnector()
+{
+	WSACleanup();
+}
+
 TCPStream* TCPConnector::connect(int port, const char* server_name)
 {
 	// Attempt to detect if we should call gethostbyname() or gethostbyaddr()
