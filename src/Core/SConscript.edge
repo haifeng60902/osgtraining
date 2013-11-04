@@ -1,0 +1,63 @@
+import os
+
+Import('env')
+
+if env.getUserVariable('USE_NEDMALLOC'):
+	USE_NEDMALLOC_FOR_PHYSFS = 1
+	USE_NEDMALLOC_FOR_LUA = 1
+	USE_NEDMALLOC_POOL = 1
+else:
+	USE_NEDMALLOC_FOR_PHYSFS = 0
+	USE_NEDMALLOC_FOR_LUA = 0
+	USE_NEDMALLOC_POOL = 0
+
+#--------------------------------------#
+
+target = 'edCore'
+
+libs = []
+
+external_libs = ['lua']
+
+CPPDEFINES = ['COMMON_DLL', 'ED_CORE_INTERNALS', '_USRDLL']
+
+if USE_NEDMALLOC_FOR_PHYSFS:
+	CPPDEFINES.append('USE_NEDMALLOC_FOR_PHYSFS')
+
+if USE_NEDMALLOC_FOR_LUA:
+	CPPDEFINES.append('USE_NEDMALLOC_FOR_LUA')
+
+if USE_NEDMALLOC_POOL:
+	CPPDEFINES.append('USE_NEDMALLOC_POOL')
+
+#--------------------------------------#
+
+sources = env.RGlob("*.cpp") + env.RGlob('*.c')
+headers = env.RGlob(env['TOP_DIR'] + 'inc/Core/*.h')
+
+# Do not compile some old crap needed only in lockon
+ignorelist = ['ConfigParser', 'Misc', 'Math', 'Sync', 'Utilities', 'PathfinderThread.cpp',
+	'ed_system.cpp', 'Common/FPS_Controller.cpp', 'Lua/lua_loader.cpp', 'ed_vfs_win32.c',
+	'ed_vfs_posix.c', 'Common/Profiler.cpp', 'backtrace.c', 'retrace.c']
+ 
+for i in ignorelist:
+ prefix = os.path.join(env['TOP_DIR'], 'src', 'Core', i).replace('\\', '/').lower()
+ sources = filter(lambda x: not str(x).replace('\\', '/').lower().startswith(prefix), sources)
+
+
+#--------------------------------------#
+
+env.edStaticLibrary(
+	target = target,
+	source = sources,
+	header = headers,
+	libs = libs,
+	external_libs = external_libs,
+	
+	CPPPATH = [
+		os.path.join(env['TOP_DIR'], 'inc'),
+		os.path.join(env['TOP_DIR'], 'inc', 'Core')
+	],
+
+	CPPDEFINES = CPPDEFINES,
+) 
