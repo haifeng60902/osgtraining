@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Core/Lua/Lua_vm.h"
-#include "Tcp/TCPConnector.h"
+#include "ClientLogic.h"
 
 std::string sAddress("127.0.0.1");
 std::string sNode("local");
@@ -23,21 +23,10 @@ int main(int argc, char **argv)
 		}
 	}
 
-	TCPConnector connector;
-	TCPStream* stream = connector.connect(iPort, sAddress.c_str());
+//////////////////////////////////////////////////////////////////////////
+	ClientLogic m_ClientLogic;
 
-	if (stream)
-	{
-		std::string message = "Is there life on Mars?";
-		stream->send(message.c_str(), message.size());
-		printf("sent - %s\n", message.c_str());
-		
-		char line[256];
-		int len = stream->receive(line, sizeof(line));
-		line[len] = NULL;
-		printf("received - %s\n", line);
-		delete stream;
-	}
-
-	std::cout<<"ok\n";
+	m_ClientLogic.Init(iPort, sAddress, sNode);
+	m_ClientLogic.Process();
+	m_ClientLogic.Close();
 }

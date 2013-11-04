@@ -40,7 +40,7 @@ TCPStream* TCPConnector::connect(int port, const char* server_name)
 	if (hp == NULL )
 	{
 		std::cout<<"Client: Cannot resolve address "<<server_name<<": Error "<<WSAGetLastError()<<std::endl;
-		WSACleanup();
+		//WSACleanup();
 		return NULL;
 	}
 	else
@@ -58,7 +58,7 @@ TCPStream* TCPConnector::connect(int port, const char* server_name)
 	if (conn_socket <0 )
 	{
 		std::cout<<"Client: Error Opening socket: Error "<<WSAGetLastError()<<std::endl;
-		WSACleanup();
+		//WSACleanup();
 		return NULL;
 	}
 	else
@@ -68,7 +68,8 @@ TCPStream* TCPConnector::connect(int port, const char* server_name)
 	if (::connect(conn_socket, (struct sockaddr*)&server, sizeof(server)) == SOCKET_ERROR)
 	{
 		std::cout<<"Client: connect() failed: "<<WSAGetLastError()<<std::endl;
-		WSACleanup();
+		closesocket(conn_socket);
+		//WSACleanup();
 		return NULL;
 	}
 	else
