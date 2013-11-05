@@ -22,6 +22,10 @@ public:
 	void Process();
 
 private:
+
+	//заполнить выходной буфер
+	void FillOutBuffer(int i);
+
 	//буфер для приема сообщений
 	char inBuff[32768];
 	char inBuffTmp[32768];

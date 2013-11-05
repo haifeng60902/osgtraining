@@ -27,6 +27,8 @@ TCPAcceptor::~TCPAcceptor()
 
 int TCPAcceptor::start()
 {
+	static bool bLog=true;
+
     if (m_listening == true)
 	{
         return 0;
@@ -47,7 +49,8 @@ int TCPAcceptor::start()
 		return -1;
 	}
 	else
-		std::cout<<"Server: socket() is OK."<<std::endl;
+		if (bLog)
+			std::cout<<"Server: socket() is OK."<<std::endl;
 
 	// bind() associates a local address and port combination with the socket just created.
 	// This is most useful when the application is a 
@@ -59,7 +62,8 @@ int TCPAcceptor::start()
 		return -1;
 	}
 	else
-		std::cout<<"Server: bind() is OK."<<std::endl;
+		if (bLog)
+			std::cout<<"Server: bind() is OK."<<std::endl;
 
 	// So far, everything we did was applicable to TCP as well as UDP.
 	// However, there are certain steps that do not work when the server is
@@ -71,17 +75,21 @@ int TCPAcceptor::start()
 		return -1;
 	}
 	else
-		std::cout<<"Server: listen() is OK."<<std::endl;
+		if (bLog)
+			std::cout<<"Server: listen() is OK."<<std::endl;
 
+	bLog=false;
 	m_listening = true;
 	return 0;
 }
 
 TCPStream* TCPAcceptor::accept() 
 {
-    if (m_listening == false) {
+    if (m_listening == false)
+	{
         return NULL;
     }
+	static bool bLog=true;
 
     struct sockaddr_in from;
     int len = sizeof(from);
@@ -95,9 +103,12 @@ TCPStream* TCPAcceptor::accept()
 		return NULL;
 	}
 	else
-		std::cout<<"Server: accept() is OK."<<std::endl;
+		if (bLog)
+			std::cout<<"Server: accept() is OK."<<std::endl;
+	
+	if (bLog)
+		std::cout<<"Server: accepted connection from "<<inet_ntoa(from.sin_addr)<<", port "<<htons(from.sin_port)<<std::endl;
 
-	std::cout<<"Server: accepted connection from "<<inet_ntoa(from.sin_addr)<<", port "<<htons(from.sin_port)<<std::endl;
-
+	bLog=false;
     return new TCPStream(msgsock, &from);
 }

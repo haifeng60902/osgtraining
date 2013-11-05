@@ -26,6 +26,8 @@ TCPConnector::~TCPConnector()
 TCPStream* TCPConnector::connect(int port, const char* server_name)
 {
 	// Attempt to detect if we should call gethostbyname() or gethostbyaddr()
+	
+	static bool bLog=true;
 	struct hostent *hp=NULL;
 	if (isalpha(server_name[0]))
 	{   // server address is a name
@@ -44,7 +46,8 @@ TCPStream* TCPConnector::connect(int port, const char* server_name)
 		return NULL;
 	}
 	else
-		std::cout<<"Client: gethostbyaddr() is OK."<<std::endl;
+		if (bLog)
+			std::cout<<"Client: gethostbyaddr() is OK."<<std::endl;
 
 	// Copy the resolved information into the sockaddr_in structure
 	struct sockaddr_in server;
@@ -62,9 +65,11 @@ TCPStream* TCPConnector::connect(int port, const char* server_name)
 		return NULL;
 	}
 	else
-		std::cout<<"Client: socket() is OK."<<std::endl;
+		if (bLog)
+			std::cout<<"Client: socket() is OK."<<std::endl;
 
-	std::cout<<"Client: Client connecting to: "<<hp->h_name<<std::endl;
+	if (bLog)
+		std::cout<<"Client: Client connecting to: "<<hp->h_name<<std::endl;
 	if (::connect(conn_socket, (struct sockaddr*)&server, sizeof(server)) == SOCKET_ERROR)
 	{
 		std::cout<<"Client: connect() failed: "<<WSAGetLastError()<<std::endl;
@@ -73,7 +78,9 @@ TCPStream* TCPConnector::connect(int port, const char* server_name)
 		return NULL;
 	}
 	else
-		std::cout<<"Client: connect() is OK."<<std::endl;
+		if (bLog)
+			std::cout<<"Client: connect() is OK."<<std::endl;
 
+	bLog=false;
 	return new TCPStream(conn_socket, &server);
 }

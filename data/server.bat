@@ -1,3 +1,3 @@
-..\bin\x86_64\vc100.release\server.exe -config options.conf
+..\bin\x86\vc100.release\server.exe -config server.conf
 
 pause

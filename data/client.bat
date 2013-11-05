@@ -1,3 +1,2 @@
-..\bin\x86_64\vc100.release\client.exe -config options.conf
-
+..\bin\x86\vc100.release\client.exe -config client.conf
 pause
