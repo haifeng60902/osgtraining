@@ -2,6 +2,7 @@
 #define _CLIENT_LOGIC_H_
 
 #include <string>
+#include "Time/Timer.h"
 #include "EmulLogic.h"
 
 class TCPConnector;
@@ -25,6 +26,8 @@ private:
 	TCPConnector* pConnector;
 
 	EmulLogic m_EmulLogic;
+
+	Timer m_Timer;
 
 	int iPort;
 	std::string sAddress;

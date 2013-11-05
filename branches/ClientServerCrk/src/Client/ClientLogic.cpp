@@ -28,6 +28,7 @@ void ClientLogic::Process()
 	bool bExit=false;
 	while(!bExit)
 	{
+		float fConnectBegin=m_Timer.GetTime();
 		TCPStream* stream = pConnector->connect(iPort, sAddress.c_str());
 		if (stream)
 		{
@@ -38,10 +39,14 @@ void ClientLogic::Process()
 			//получить ответ от сервера
 			m_EmulLogic.Accumulate(stream);
 
+			delete stream;
+
+			float fAccumulateTime=m_Timer.GetTime();
+
+			std::cout<<" ful:"<<(fAccumulateTime-fConnectBegin)*1000.0f<<" ";
+
 			//обработать входные данные
 			m_EmulLogic.Process();
-
-			delete stream;
 		}
 		else
 			Sleep(1000);

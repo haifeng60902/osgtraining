@@ -33,7 +33,7 @@ void EmulLogic::Process()
 
 	int* pRes=(int*)(&inBuff[iNameSize+1]);
 
-	std::cout<<"Node: "<<sName<<" Result:"<<(*pRes)<<std::endl;
+	std::cout<<"Node: "<<sName<<" Result:"<<(*pRes);
 
 	inSize=0;
 }

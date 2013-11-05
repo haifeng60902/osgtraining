@@ -26,16 +26,18 @@ void ServerLogic::Process()
 {
 	if (iResult==0)
 	{
-		bool bProc=true;
-		while(bProc)
+		bool bExit=false;
+		while(!bExit)
 		{
 			TCPStream* stream = pAcceptor->accept();
+			float fAcceptTime=m_Timer.GetTime();
 			if (stream)
 			{
 				int len=0;
-				while ((len = stream->receive(inBuff, sizeof(inBuff))) > 0)
-					//данные могут приниматся частями
-					m_EmulLogic.Accumulate(inBuff, len);
+				len = stream->receive(inBuff, sizeof(inBuff));
+
+				//данные могут приниматся частями
+				m_EmulLogic.Accumulate(inBuff, len);
 
 				//обработать входные данные
 				m_EmulLogic.Process();
@@ -45,12 +47,16 @@ void ServerLogic::Process()
 
 				stream->send(pRes, len);
 
+				float fSendTime=m_Timer.GetTime();
+
+				std::cout<<" ful:"<<(fSendTime-fAcceptTime)*1000.0f<<std::endl;
+
 				delete stream;
 			}
 			else
-				bProc=false;
+				bExit=true;
 
-			bProc=bProc&&KeyPressDetect();
+			bExit=bExit||KeyPressDetect();
 		}
 	}
 }

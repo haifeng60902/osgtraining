@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "Time/Timer.h"
 #include "EmulLogic.h"
 
 class TCPAcceptor;
@@ -25,6 +26,8 @@ private:
 
 	//logic emulator
 	EmulLogic m_EmulLogic;
+
+	Timer m_Timer;
 
 	TCPAcceptor* pAcceptor;
 
