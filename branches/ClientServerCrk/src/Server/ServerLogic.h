@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Time/Timer.h"
-#include "EmulLogic.h"
+#include "PassGenLogic.h"
 
 class TCPAcceptor;
 
@@ -16,6 +16,9 @@ public:
 
 	void Init(int iPort, const std::string& sAddress);
 
+	//pass generator logic init
+	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase);
+
 	void Process();
 
 	void Close();
@@ -24,8 +27,8 @@ private:
 	//определение нажатия на клавиши
 	bool KeyPressDetect();
 
-	//logic emulator
-	EmulLogic m_EmulLogic;
+	//real logic
+	PassGenLogic m_PassGenLogic;
 
 	Timer m_Timer;
 

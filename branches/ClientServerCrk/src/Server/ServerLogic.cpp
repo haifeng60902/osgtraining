@@ -22,6 +22,12 @@ void ServerLogic::Init(int iPort, const std::string& sAddress)
 	iResult=pAcceptor->start();
 }
 
+void ServerLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase)
+{
+	//pass generator logic init
+	m_PassGenLogic.InitPassLogic(wConf, wAutosave, wPhrase);
+}
+
 void ServerLogic::Process()
 {
 	if (iResult==0)
@@ -29,6 +35,10 @@ void ServerLogic::Process()
 		bool bExit=false;
 		while(!bExit)
 		{
+
+#ifdef _DEBUG
+			m_PassGenLogic.TestLogic();
+#endif
 			TCPStream* stream = pAcceptor->accept();
 			float fAcceptTime=m_Timer.GetTime();
 			if (stream)
@@ -37,13 +47,13 @@ void ServerLogic::Process()
 				len = stream->receive(inBuff, sizeof(inBuff));
 
 				//данные могут приниматся частями
-				m_EmulLogic.Accumulate(inBuff, len);
+				m_PassGenLogic.Accumulate(inBuff, len);
 
 				//обработать входные данные
-				m_EmulLogic.Process();
+				m_PassGenLogic.Process();
 
 				//результат для отправки в сеть
-				const char* pRes=m_EmulLogic.GetResult(&len);
+				const char* pRes=m_PassGenLogic.GetResult(&len);
 
 				stream->send(pRes, len);
 
