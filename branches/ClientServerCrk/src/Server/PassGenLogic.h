@@ -27,6 +27,8 @@ public:
 
 private:
 
+	typedef std::vector<std::wstring> tVecWStr;
+
 	//read node name
 	int DetectName(int pos);
 
@@ -40,13 +42,28 @@ private:
 	void Analyse();
 
 	//first client connect
-	void FirstClientConnect();
+	void ClientConnect();
+
+	//client do not find password
+	void ClientDoNotFindPass();
 
 	//generate file name
 	std::string GenFileName(char* pChain);
 
 	//debug logic
 	void TestFillInBuff();
+
+	//fill output buffer
+	void FillOutBuff(char* pChain, const tVecWStr& vPass, const tVecWStr& vCons);
+
+	//restore output buffer(for test purpose)
+	void RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vPConsChk);
+
+	//check result code-decode
+	void CheckCodeDecode(const tVecWStr& vPass, const tVecWStr& vCons);
+
+	//write to file network output buffer
+	void Write2File(const std::string& sFile);
 
 	PassGen m_PassGen;
 
