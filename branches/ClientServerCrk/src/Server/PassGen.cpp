@@ -5,8 +5,6 @@
 #include <fstream>
 #include <windows.h>
 
-#define AUTO_SAVE 30
-
 PassGen::PassGen()
 {
 	iAutosave=0;
@@ -44,7 +42,7 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 	if (wCons.empty())
 		return;
 
-	if (iAutosave>AUTO_SAVE)
+	if (iAutosave>PASS_IN_ONE_MSG)
 	{
 		//автосохранение состояния
 		SaveState();
