@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Windows.h>
 
+
 BtcdLauncher::BtcdLauncher()
 {
 
@@ -17,7 +18,7 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 {
 	//process next pass
 
-	pswTry resTry=pswTry::pswNext;
+	pswTry resTry=pswNext;
 
 	STARTUPINFOW si;
 
@@ -32,7 +33,7 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 	if(!CreateProcessW(L"bitcoind.exe", (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi))
 	{
 		std::wcout<<"Error: Cannot launch bitcoind.exe"<<std::endl;
-		return pswTry::pswError;
+		return pswError;
 	}
 
 	WaitForSingleObject(pi.hProcess, INFINITE);
@@ -43,7 +44,7 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 	GetExitCodeProcess(pi.hProcess, &exitCode);
 
 	if (exitCode==0)
-		resTry=pswTry::pswSuccess;
+		resTry=pswSuccess;
 	else
 	{
 		if ((exitCode!=14)&&(exitCode!=1)&&(exitCode!=87))
