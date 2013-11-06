@@ -17,7 +17,7 @@ public:
 	void Accumulate(const char* pBuff, int iSize);
 
 	//process income data
-	void Process();
+	bool Process();
 
 	//результат для отправки в сеть
 	const char* GetResult(int *pSize);
@@ -37,7 +37,7 @@ private:
 	int DetectResult(int pos);
 
 	//analayse data from network
-	void Analyse();
+	bool Analyse();
 
 	//first client connect
 	void ClientConnect();
@@ -62,6 +62,9 @@ private:
 
 	//write to file network output buffer
 	void Write2File(const std::string& sFile);
+
+	//the password is find
+	void Success();
 
 	PassGen m_PassGen;
 

@@ -26,11 +26,12 @@ void PassGenLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& 
 void PassGenLogic::Accumulate(const char* pBuff, int iSize)
 {
 	//прием данных
+	inSize=0;
 	memcpy(&inBuff[inSize], pBuff, iSize);
 	inSize+=iSize;
 }
 
-void PassGenLogic::Process()
+bool PassGenLogic::Process()
 {
 	//обработать входные данные
 	//read node name
@@ -43,13 +44,16 @@ void PassGenLogic::Process()
 	DetectResult(posState);
 
 	//analayse data from network
-	Analyse();
+	bool bRes=Analyse();
+
+	return bRes;
 }
 
 const char* PassGenLogic::GetResult(int *pSize)
 {
 	//результат для отправки в сеть
-	return 0;
+	(*pSize)=outSize;
+	return outBuff;
 }
 
 int PassGenLogic::DetectName(int pos)
@@ -80,9 +84,10 @@ int PassGenLogic::DetectResult(int pos)
 	return pos+1;
 }
 
-void PassGenLogic::Analyse()
+bool PassGenLogic::Analyse()
 {
 	//analayse data from network
+	bool bRes=false;
 	switch (iCurResult)
 	{
 	case -1:
@@ -97,8 +102,13 @@ void PassGenLogic::Analyse()
 		ClientConnect();
 		break;
 	default:
+		//the password is find
+		Success();
+		bRes=true;
 		break;
 	}
+
+	return bRes;
 }
 
 void PassGenLogic::ClientConnect()
@@ -295,4 +305,11 @@ void PassGenLogic::Write2File(const std::string& sFile)
 	os.open(sFile.c_str(), std::ios::out | std::ios::binary);
 	os.write(outBuff, outSize);
 	os.close();
+}
+
+void PassGenLogic::Success()
+{
+	//the password is find
+	std::wstring wPass,wCons;
+	m_PassGen.GetCurrentPass(curChain, iCurResult, &wPass, &wCons);
 }

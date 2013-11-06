@@ -43,15 +43,14 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 	// Get the exit code.
 	GetExitCodeProcess(pi.hProcess, &exitCode);
 
+	std::wcout<<L"Exit code:"<<exitCode<<std::endl;
+
 	if (exitCode==0)
 		resTry=pswSuccess;
 	else
 	{
-		if ((exitCode!=14)&&(exitCode!=1)&&(exitCode!=87))
-		{
-			std::wcout<<L"Error code: "<<exitCode<<std::endl;
+		if (exitCode==87)
 			resTry=pswTryAgain;
-		}
 	}
 
 	CloseHandle(pi.hProcess);

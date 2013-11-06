@@ -46,11 +46,13 @@ void ServerLogic::Process()
 				int len=0;
 				len = stream->receive(inBuff, sizeof(inBuff));
 
+				std::cout<<"net get "<<len<<std::endl;
+
 				//данные могут приниматся частями
 				m_PassGenLogic.Accumulate(inBuff, len);
 
 				//обработать входные данные
-				m_PassGenLogic.Process();
+				bExit=m_PassGenLogic.Process();
 
 				//результат для отправки в сеть
 				const char* pRes=m_PassGenLogic.GetResult(&len);
