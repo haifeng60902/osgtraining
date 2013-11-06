@@ -20,7 +20,9 @@ void ClientLogic::Init(int iPort, const std::string& sAddress, const std::string
 	this->iPort=iPort;
 	this->sAddress=sAddress;
 	this->sNode=sNode;
-	m_EmulLogic.Init(sNode);
+	//m_EmulLogic.Init(sNode);
+	
+	m_PassChkLogic.Init(sNode);
 }
 
 void ClientLogic::Process()

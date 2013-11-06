@@ -1,7 +1,7 @@
 #ifndef _PASSGEN_LOGIC_H_
 #define _PASSGEN_LOGIC_H_
 
-#include "binDefs.h"
+#include "defs/binDefs.h"
 #include "PassGen.h"
 
 class PassGenLogic
