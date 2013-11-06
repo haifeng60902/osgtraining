@@ -87,13 +87,19 @@ void PassGenLogic::Analyse()
 	}
 }
 
+#include <io.h>
+#include <fcntl.h>
+#include <iostream>
 void PassGenLogic::FirstClientConnect()
 {
 	//first client connect
 	m_PassGen.GetPassState(curChain);
 
 	//generate file name
-	std::wstring sFile=GenFileName(curChain);
+	std::string sFile=GenFileName(curChain);
+
+	//для отображения юникода в консоли
+	_setmode(_fileno(stdout), _O_WTEXT);	//_O_WTEXT	_O_TEXT
 
 	std::vector<std::wstring> vPass;
 	std::vector<std::wstring> vCons;
@@ -104,15 +110,25 @@ void PassGenLogic::FirstClientConnect()
 
 		vPass.push_back(wPass);
 		vCons.push_back(wCons);
+
+		std::wcout<<i<<" "<<wPass<<L" "<<wCons<<std::endl;
 	}
 
-
+	//для отображения юникода в консоли
+	_setmode(_fileno(stdout), _O_TEXT);	//_O_WTEXT	_O_TEXT
 }
 
-std::wstring PassGenLogic::GenFileName(char* pChain)
+std::string PassGenLogic::GenFileName(char* pChain)
 {
 	//generate file name
-	return std::wstring();
+	std::string sName;
+	for (int i=0;i<MAX_LEN_PASS;++i)
+	{
+		_Longlong iV=pChain[i];
+		sName=sName+std::to_string(iV);
+	}
+
+	return std::string();
 }
 
 void PassGenLogic::TestLogic()

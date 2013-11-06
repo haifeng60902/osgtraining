@@ -43,7 +43,7 @@ private:
 	void FirstClientConnect();
 
 	//generate file name
-	std::wstring GenFileName(char* pChain);
+	std::string GenFileName(char* pChain);
 
 	//debug logic
 	void TestFillInBuff();
