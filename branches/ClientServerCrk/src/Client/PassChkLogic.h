@@ -5,6 +5,8 @@
 
 #include "BtcdLauncher.h"
 
+class TCPStream;
+
 class PassChkLogic
 {
 public:
@@ -13,6 +15,15 @@ public:
 
 	//set node name
 	void Init(const std::string& sNode);
+
+	//get result for network sending
+	const char* GetResult(int* pSize);
+
+	//wait server response
+	void Accumulate(TCPStream* stream);
+
+	//process income data
+	void Process();
 
 private:
 

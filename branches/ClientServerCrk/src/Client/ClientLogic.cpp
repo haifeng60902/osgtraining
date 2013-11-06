@@ -35,11 +35,11 @@ void ClientLogic::Process()
 		if (stream)
 		{
 			int iSize=0;
-			const char* pBuff=m_EmulLogic.GetResult(&iSize);
+			const char* pBuff=m_PassChkLogic.GetResult(&iSize);
 			stream->send(pBuff, iSize);
 
-			//получить ответ от сервера
-			m_EmulLogic.Accumulate(stream);
+			//wait server response
+			m_PassChkLogic.Accumulate(stream);
 
 			delete stream;
 
@@ -47,8 +47,8 @@ void ClientLogic::Process()
 
 			std::cout<<" ful:"<<(fAccumulateTime-fConnectBegin)*1000.0f<<" ";
 
-			//обработать входные данные
-			m_EmulLogic.Process();
+			//process income data
+			m_PassChkLogic.Process();
 		}
 		else
 			Sleep(1000);
