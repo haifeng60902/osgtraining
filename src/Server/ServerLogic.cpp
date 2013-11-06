@@ -37,7 +37,7 @@ void ServerLogic::Process()
 		{
 
 #ifdef _DEBUG
-			m_PassGenLogic.TestLogic();
+			//m_PassGenLogic.TestLogic();
 #endif
 			TCPStream* stream = pAcceptor->accept();
 			float fAcceptTime=m_Timer.GetTime();

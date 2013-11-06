@@ -93,8 +93,6 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 		}
 	}
 
-	std::wcout<<wConsRes<<std::endl;
-
 	++iAutosave;
 
 	(*pPass)=wPassRes;
