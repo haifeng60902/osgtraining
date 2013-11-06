@@ -27,8 +27,6 @@ public:
 
 private:
 
-	typedef std::vector<std::wstring> tVecWStr;
-
 	//read node name
 	int DetectName(int pos);
 
@@ -57,7 +55,7 @@ private:
 	void FillOutBuff(char* pChain, const tVecWStr& vPass, const tVecWStr& vCons);
 
 	//restore output buffer(for test purpose)
-	void RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vPConsChk);
+	void RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vConsChk);
 
 	//check result code-decode
 	void CheckCodeDecode(const tVecWStr& vPass, const tVecWStr& vCons);

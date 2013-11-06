@@ -6,7 +6,7 @@
 
 ClientLogic::ClientLogic():pConnector(NULL)
 {
-
+	iSuccess=-1;
 }
 
 ClientLogic::~ClientLogic()
@@ -48,10 +48,22 @@ void ClientLogic::Process()
 			std::cout<<" ful:"<<(fAccumulateTime-fConnectBegin)*1000.0f<<" ";
 
 			//process income data
-			m_PassChkLogic.Process();
+			int iRes=m_PassChkLogic.Process();
+
+			if (iRes<0)
+				return;
+
+			if (iRes>0)
+				iSuccess=0;
 		}
 		else
 			Sleep(1000);
+
+		if (iSuccess>-1)
+			++iSuccess;
+
+		if (iSuccess>1)
+			return;
 
 		bExit=KeyPressDetect();
 	}

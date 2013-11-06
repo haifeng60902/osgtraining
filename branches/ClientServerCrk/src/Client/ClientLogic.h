@@ -33,6 +33,8 @@ private:
 	int iPort;
 	std::string sAddress;
 	std::string sNode;
+
+	int iSuccess;
 };
 
 #endif	//_CLIENT_LOGIC_H_
