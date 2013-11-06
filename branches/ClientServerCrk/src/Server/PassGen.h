@@ -25,6 +25,9 @@ public:
 	//get password state
 	void GetPassState(char* pDest);
 
+	//get exact password
+	void GetCurrentPass(char* pDest, int iPos, std::wstring* pPass, std::wstring* pCons);
+
 private:
 
 	struct binConvert
@@ -46,6 +49,9 @@ private:
 
 	//load config
 	void LoadConf(const std::wstring& wConf, std::wstring* pPass, std::wstring* pCons, tVecConv *pConv);
+
+	//is all elements zero
+	bool ZeroChk(char* pDest); 
 
 	std::wstring wPass;//for password
 	std::wstring wCons;//for console output

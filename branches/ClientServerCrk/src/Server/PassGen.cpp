@@ -99,6 +99,21 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 	(*pCons)=wConsRes;
 }
 
+void PassGen::GetCurrentPass(char* pDest, int iPos, std::wstring* pPass, std::wstring* pCons)
+{
+	
+}
+
+bool PassGen::ZeroChk(char* pDest)
+{
+	//is all elements zero
+	bool bZero=true;
+	for (int i=0;i<MAX_LEN_PASS;++i)
+		if (pDest[i]>0)
+			bZero=false;
+	return bZero;
+}
+
 void PassGen::SaveSuccessPass(const std::wstring& wConf)
 {
 	//save success password

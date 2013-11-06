@@ -47,6 +47,10 @@ void PassChkLogic::FillOutBuffer(int iRes)
 	memcpy(&outBuff[x], cChain, MAX_LEN_PASS);
 	x+=MAX_LEN_PASS;
 	outBuff[x]=iRes;
+
+	std::cout<<"Result:"<<iRes<<std::endl;
+
+	Sleep(1000);
 }
 
 const char* PassChkLogic::GetResult(int* pSize)
