@@ -4,7 +4,6 @@
 #include <string>
 #include "Time/Timer.h"
 
-#include "EmulLogic.h"
 #include "PassChkLogic.h"
 
 class TCPConnector;
@@ -27,7 +26,6 @@ private:
 
 	TCPConnector* pConnector;
 
-	EmulLogic m_EmulLogic;
 	PassChkLogic m_PassChkLogic;
 
 	Timer m_Timer;
