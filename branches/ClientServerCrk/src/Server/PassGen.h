@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "binDefs.h"
+#include "defs/binDefs.h"
 
 class PassGen
 {
