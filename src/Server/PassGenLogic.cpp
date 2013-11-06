@@ -121,14 +121,17 @@ void PassGenLogic::FirstClientConnect()
 std::string PassGenLogic::GenFileName(char* pChain)
 {
 	//generate file name
-	std::string sName;
-	for (int i=0;i<MAX_LEN_PASS;++i)
+	_Longlong iV=pChain[0];
+	std::string sName=std::to_string(iV);
+	for (int i=1;i<MAX_LEN_PASS;++i)
 	{
 		_Longlong iV=pChain[i];
-		sName=sName+std::to_string(iV);
+		sName=sName+"_"+std::to_string(iV);
 	}
 
-	return std::string();
+	std::cout<<sName<<std::endl;
+
+	return sName;
 }
 
 void PassGenLogic::TestLogic()
