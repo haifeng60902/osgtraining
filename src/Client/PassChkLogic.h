@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "defs/binDefs.h"
 #include "BtcdLauncher.h"
 
 class TCPStream;
@@ -23,12 +24,21 @@ public:
 	void Accumulate(TCPStream* stream);
 
 	//process income data
-	void Process();
+	int Process();
 
 private:
 
 	//first time init output buffer
 	void FirstTimeInit();
+
+	//fill output buffer with results
+	void FillOutBuffer(int iRes);
+
+	//restore data from input buffer
+	void RestoreRawMemory(tVecWStr& vPass, tVecWStr& vCons);
+
+	//try unlock wallet
+	int TryPass(const tVecWStr& vPass, const tVecWStr& vCons);
 	
 	std::string sNode;
 
@@ -41,6 +51,8 @@ private:
 	//результат
 	char outBuff[32768];
 	int outSize;
+
+	char cChain[MAX_LEN_PASS];
 };
 
 #endif	//_PASS_CHK_LOGIC_H_

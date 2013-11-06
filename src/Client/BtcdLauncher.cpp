@@ -29,10 +29,13 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 
 	std::wstring wFull=L" walletpassphrase "+wPass+L" 20";
 
-	if(!CreateProcessW(L"bitcoind.exe", (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi ) )
+	if(!CreateProcessW(L"bitcoind.exe", (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi))
+	{
+		std::wcout<<"Error: Cannot launch bitcoind.exe"<<std::endl;
 		return pswTry::pswError;
+	}
 
-	WaitForSingleObject( pi.hProcess, INFINITE );
+	WaitForSingleObject(pi.hProcess, INFINITE);
 
 	DWORD exitCode=0;
 

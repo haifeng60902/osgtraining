@@ -4,7 +4,6 @@
 #include <fcntl.h>
 #include <iostream>
 #include <fstream>
-#include <vector>
 
 PassGenLogic::PassGenLogic()
 {
@@ -212,7 +211,7 @@ void PassGenLogic::FillOutBuff(char* pChain, const tVecWStr& vPass, const tVecWS
 	outSize=x;
 }
 
-void PassGenLogic::RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vPConsChk)
+void PassGenLogic::RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vConsChk)
 {
 	//restore output buffer(for test purpose)
 	int iPassInOneMsg=outBuff[0];
@@ -236,7 +235,6 @@ void PassGenLogic::RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vPConsChk)
 		vPassChk.push_back(wPass);
 	}
 
-	tVecWStr vCons;
 	for (int i=0;i<PASS_IN_ONE_MSG;++i)
 	{
 		std::wstring wCons;
@@ -249,7 +247,7 @@ void PassGenLogic::RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vPConsChk)
 			wCons[j]=(*wC);
 			x+=sizeof(wchar_t);
 		}
-		vPConsChk.push_back(wCons);
+		vConsChk.push_back(wCons);
 	}
 }
 
