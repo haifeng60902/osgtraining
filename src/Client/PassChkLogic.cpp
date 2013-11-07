@@ -1,10 +1,9 @@
 #include "PassChkLogic.h"
 
-#include <io.h>
-#include <fcntl.h>
 #include <iostream>
 
 #include "Tcp/TCPStream.h"
+#include "Unicode/UnicodeOnOff.h"
 #include "binState.h"
 
 PassChkLogic::PassChkLogic()
@@ -17,13 +16,18 @@ PassChkLogic::~PassChkLogic()
 
 }
 
-void PassChkLogic::Init(const std::string& sNode)
+bool PassChkLogic::Init(const std::string& sNode)
 {
 	//set node name
 	this->sNode=sNode;
 
 	//first time init output buffer
 	FirstTimeInit();
+
+	//is bitcoind lunch like a daemon?
+	bool bRes=BtcdDetect();
+
+	return bRes;
 }
 
 void PassChkLogic::FirstTimeInit()
@@ -87,14 +91,8 @@ int PassChkLogic::Process()
 	//restore data from input buffer
 	RestoreRawMemory(vPass, vCons);
 
-	//for output ansi text purpose
-	_setmode(_fileno(stdout),_O_WTEXT);	//_O_WTEXT	_O_TEXT
-
 	//try unlock wallet
 	int iRes=TryPass(vPass, vCons);
-
-	//for output Unicode text purpose
-	_setmode(_fileno(stdout),  _O_TEXT);	//_O_WTEXT	_O_TEXT
 
 	if (iRes>-1)
 		//fill output buffer with results
@@ -151,7 +149,10 @@ int PassChkLogic::TryPass(const tVecWStr& vPass, const tVecWStr& vCons)
 	int i=0;
 	while (bProcess)
 	{
-		std::wcout<<vCons[i]<<std::endl;
+		{
+			UnicodeOnOff on;
+			std::wcout<<vCons[i]<<std::endl;
+		}
 
 		pswTry tryStatus=m_BtcdLauncher.Process(vPass[i]);
 
@@ -161,7 +162,10 @@ int PassChkLogic::TryPass(const tVecWStr& vPass, const tVecWStr& vCons)
 			++i;
 			break;
 		case pswSuccess:
-			std::wcout<<L"Success:<"<<vCons[i]<<L">"<<std::endl;
+			{
+				UnicodeOnOff on;
+				std::wcout<<L"Success:<"<<vCons[i]<<L">"<<std::endl;
+			}
 			return i+1;
 			break;
 		case pswError:
@@ -172,4 +176,23 @@ int PassChkLogic::TryPass(const tVecWStr& vPass, const tVecWStr& vCons)
 			bProcess=false;
 	}
 	return 0;
+}
+
+bool PassChkLogic::BtcdDetect()
+{
+	//is bitcoind lunch like a daemon?
+	bool bRes=true;
+	while(true)
+	{
+		pswTry tryStatus=m_BtcdLauncher.Process(L"1a2b3d");
+		if (tryStatus==pswError)
+		{
+			bRes=false;
+			break;
+		}
+
+		if (tryStatus!=pswTryAgain)
+			break;
+	}
+	return bRes;
 }

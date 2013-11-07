@@ -1,9 +1,9 @@
 #include "PassGenLogic.h"
 
-#include <io.h>
-#include <fcntl.h>
 #include <iostream>
 #include <fstream>
+
+#include "Unicode/UnicodeOnOff.h"
 
 PassGenLogic::PassGenLogic()
 {
@@ -116,9 +116,6 @@ void PassGenLogic::ClientConnect()
 	//first client connect
 	m_PassGen.GetPassState(curChain);
 
-	//for output Unicode text purpose
-	_setmode(_fileno(stdout), _O_WTEXT);	//_O_WTEXT	_O_TEXT
-
 	//generate file name
 	std::string sFile=GenFileName(curChain);
 
@@ -141,9 +138,6 @@ void PassGenLogic::ClientConnect()
 
 	//write to file network output buffer
 	Write2File(sFile);
-
-	//for output ansi text purpose
-	_setmode(_fileno(stdout), _O_TEXT);	//_O_WTEXT	_O_TEXT
 }
 
 void PassGenLogic::ClientDoNotFindPass()
@@ -182,6 +176,8 @@ void PassGenLogic::CheckCodeDecode(const tVecWStr& vPass, const tVecWStr& vCons)
 
 	for (int i=0;i<PASS_IN_ONE_MSG;++i)
 	{
+		UnicodeOnOff on;
+
 		if (vPass[i]!=vPassChk[i])
 			std::wcout<<L"Error Pass Check"<<i<<L" "<<vPass[i]<<"!="<<vPassChk[i]<<std::endl;
 
@@ -310,6 +306,42 @@ void PassGenLogic::Write2File(const std::string& sFile)
 void PassGenLogic::Success()
 {
 	//the password is find
-	std::wstring wPass,wCons;
-	m_PassGen.GetCurrentPass(curChain, iCurResult, &wPass, &wCons);
+	bool bZero=ZerroChainDetect(curChain);
+	tVecWStr vPass,vCons;
+	for (int i=0;i<iCurResult;++i)
+	{
+		std::wstring wPass,wCons;
+		m_PassGen.GenNextChainPass(&wPass, &wCons, curChain, bZero);
+		vPass.push_back(wPass);
+		vCons.push_back(wCons);
+		bZero=false;
+	}
+
+	{
+		UnicodeOnOff on;
+		std::wcout<<"Success password is:"<<vCons.back()<<std::endl;
+	}
+
+	FILE * pzInFile;
+	_wfopen_s( &pzInFile, L"success.txt", L"w" );
+	if (pzInFile)
+	{
+		fprintf(pzInFile, "%s", vCons.back().c_str());
+		fclose(pzInFile);
+	}
+	else
+	{
+		UnicodeOnOff on;
+		std::wcout<<"Error create succes file"<<std::endl;
+	}
+}
+
+bool PassGenLogic::ZerroChainDetect(const char* pChain)
+{
+	//check zero chain
+	bool bZero=true;
+	for (int i=0;i<MAX_LEN_PASS;++i)
+		if (pChain[i])
+			bZero=false;
+	return bZero;
 }

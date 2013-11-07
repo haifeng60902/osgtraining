@@ -1,3 +1,3 @@
-..\bin\x86\vc100.release\server.exe -config server.conf -rule rul_ru.txt
+..\bin\x86\vc100.release\server.exe -config server.conf -rule rul_ru.txt -autosave chain.txt
 
 pause

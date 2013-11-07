@@ -14,15 +14,16 @@ ClientLogic::~ClientLogic()
 
 }
 
-void ClientLogic::Init(int iPort, const std::string& sAddress, const std::string& sNode)
+bool ClientLogic::Init(int iPort, const std::string& sAddress, const std::string& sNode)
 {
 	pConnector=new TCPConnector();
 	this->iPort=iPort;
 	this->sAddress=sAddress;
 	this->sNode=sNode;
-	//m_EmulLogic.Init(sNode);
 	
-	m_PassChkLogic.Init(sNode);
+	bool bRes=m_PassChkLogic.Init(sNode);
+
+	return bRes;
 }
 
 void ClientLogic::Process()

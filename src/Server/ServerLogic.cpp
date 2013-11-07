@@ -46,22 +46,20 @@ void ServerLogic::Process()
 				int len=0;
 				len = stream->receive(inBuff, sizeof(inBuff));
 
-				std::cout<<"net get "<<len<<std::endl;
-
-				//данные могут приниматся частями
+				//get data from net
 				m_PassGenLogic.Accumulate(inBuff, len);
 
-				//обработать входные данные
+				//process income data
 				bExit=m_PassGenLogic.Process();
 
-				//результат для отправки в сеть
+				//get data for network
 				const char* pRes=m_PassGenLogic.GetResult(&len);
 
 				stream->send(pRes, len);
 
 				float fSendTime=m_Timer.GetTime();
 
-				std::cout<<" ful:"<<(fSendTime-fAcceptTime)*1000.0f<<std::endl;
+				std::cout<<m_PassGenLogic.GetNodeName()<<":"<<(int)((fSendTime-fAcceptTime)*1000.0f)<<"ms"<<std::endl;
 
 				delete stream;
 			}
@@ -80,7 +78,7 @@ void ServerLogic::Close()
 
 bool ServerLogic::KeyPressDetect()
 {
-	//определение нажатия на клавиши
+	//key press detect
 	bool bStop = false;
 
 	char cT('_');

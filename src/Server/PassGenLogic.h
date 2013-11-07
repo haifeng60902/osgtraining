@@ -13,14 +13,17 @@ public:
 	//pass generator logic init
 	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase);
 
-	//прием данных
+	//get data from net
 	void Accumulate(const char* pBuff, int iSize);
 
 	//process income data
 	bool Process();
 
-	//результат для отправки в сеть
+	//get data for network
 	const char* GetResult(int *pSize);
+
+	//node name connected
+	std::string GetNodeName(){return sNode;};
 
 	//debug logic
 	void TestLogic();
@@ -62,6 +65,9 @@ private:
 
 	//write to file network output buffer
 	void Write2File(const std::string& sFile);
+
+	//check zero chain
+	bool ZerroChainDetect(const char* pChain);
 
 	//the password is find
 	void Success();

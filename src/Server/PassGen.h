@@ -16,6 +16,9 @@ public:
 
 	//generate next password
 	void GenNextPass(std::wstring* pPass, std::wstring* pCons);
+	
+	//generate next password with separate chain
+	void GenNextChainPass(std::wstring* pPass, std::wstring* pCons, char* pChain, bool bZero);
 
 	//save success password
 	void SaveSuccessPass(const std::wstring& wConf);
@@ -24,9 +27,6 @@ public:
 
 	//get password state
 	void GetPassState(char* pDest);
-
-	//get exact password
-	void GetCurrentPass(char* pDest, int iPos, std::wstring* pPass, std::wstring* pCons);
 
 private:
 

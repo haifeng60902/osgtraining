@@ -15,7 +15,7 @@ public:
 	~PassChkLogic();
 
 	//set node name
-	void Init(const std::string& sNode);
+	bool Init(const std::string& sNode);
 
 	//get result for network sending
 	const char* GetResult(int* pSize);
@@ -39,6 +39,9 @@ private:
 
 	//try unlock wallet
 	int TryPass(const tVecWStr& vPass, const tVecWStr& vCons);
+
+	//is bitcoind lunch like a daemon?
+	bool BtcdDetect();
 	
 	std::string sNode;
 

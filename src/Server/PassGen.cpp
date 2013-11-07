@@ -5,6 +5,8 @@
 #include <fstream>
 #include <windows.h>
 
+#include "Unicode/UnicodeOnOff.h"
+
 PassGen::PassGen()
 {
 	iAutosave=0;
@@ -42,7 +44,7 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 	if (wCons.empty())
 		return;
 
-	if (iAutosave>PASS_IN_ONE_MSG)
+	if (iAutosave>=PASS_IN_ONE_MSG)
 	{
 		//автосохранение состояния
 		SaveState();
@@ -52,6 +54,8 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 	//если есть ключевая фраза то первый раз выдать только ее
 	if ((bFirstTime)&&(!wPhraseCons.empty()))
 	{
+		UnicodeOnOff on;
+
 		std::wcout<<wPhraseCons<<std::endl;
 		bFirstTime=false;
 
@@ -99,9 +103,58 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 	(*pCons)=wConsRes;
 }
 
-void PassGen::GetCurrentPass(char* pDest, int iPos, std::wstring* pPass, std::wstring* pCons)
+void PassGen::GenNextChainPass(std::wstring* pPass, std::wstring* pCons, char* pChain, bool bZero)
 {
-	
+	//generate next password with separate chain
+	if (wCons.empty())
+		return;
+
+	//если есть ключевая фраза то первый раз выдать только ее
+	if ((bZero)&&(!wPhraseCons.empty()))
+	{
+		UnicodeOnOff on;
+		std::wcout<<wPhraseCons<<std::endl;
+		
+		(*pPass)=wPhrasePass;
+		(*pCons)=wPhraseCons;
+
+		return ;
+	}
+
+	bool bCont=true;
+	int i=0;
+	while (bCont)
+	{
+		++pChain[i];
+		bCont=false;
+
+		if (pChain[i]>wCons.size())
+		{
+			//overflow
+			pChain[i]=1;
+			++i;
+			bCont=true;
+		}
+	}
+
+	std::wstring wPassRes=wPhrasePass;
+	std::wstring wConsRes=wPhraseCons;
+	for (int i=0;i<MAX_LEN_PASS;++i)
+	{
+		int j=pChain[i]-1;
+		if (j>-1)
+		{
+			int k=vConvert[j].pos;
+			wPassRes=wPassRes+wPass[k];
+			if(vConvert[j].num>1)
+				wPassRes=wPassRes+wPass[k+1];
+
+			wConsRes=wConsRes+wCons[j];
+		}
+	}
+
+	(*pPass)=wPassRes;
+	(*pCons)=wConsRes;
 }
 
 bool PassGen::ZeroChk(char* pDest)
@@ -138,6 +191,7 @@ void PassGen::SaveSuccessPass(const std::wstring& wConf)
 	}
 	else
 	{
+		UnicodeOnOff on;
 		std::wcout<<"Error create succes file: "<<wConf.c_str()<<std::endl;
 	}
 }
@@ -207,13 +261,13 @@ void PassGen::SaveState()
 	if (wSave.empty())
 		return;
 
-	std::wofstream ofs(wSave);
+	std::ofstream ofs("test.txt");
 	if (ofs.is_open())
 	{
 		for (int i=0;i<MAX_LEN_PASS;++i)
 		{
 			ofs<<cPassState[i];
-			ofs<<L" ";
+			ofs<<" ";
 		}
 		ofs.close();
 	}
@@ -225,22 +279,22 @@ void PassGen::LoadState()
 	if (wSave.empty())
 		return;
 
-	std::wifstream ifs(wSave);
+	std::ifstream ifs(wSave);
 
 	if (ifs.is_open())
 	{
 		int iP=0;
 		int i=0;
-		std::wcout<<"Load autosave: ";
+		std::cout<<"Load autosave: ";
 		while(!ifs.eof())
 		{
 			ifs>>iP;
 			cPassState[i]=iP;
 			++i;
-			std::wcout<<iP<<" ";
+			std::cout<<iP<<" ";
 		}
 		ifs.close();
-		std::wcout<<std::endl;
+		std::cout<<std::endl;
 	}
 }
 
