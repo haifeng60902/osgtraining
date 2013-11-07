@@ -26,7 +26,10 @@ int main(int argc, char **argv)
 //////////////////////////////////////////////////////////////////////////
 	ClientLogic m_ClientLogic;
 
-	m_ClientLogic.Init(iPort, sAddress, sNode);
-	m_ClientLogic.Process();
-	m_ClientLogic.Close();
+	bool bRes=m_ClientLogic.Init(iPort, sAddress, sNode);
+	if (bRes)
+	{
+		m_ClientLogic.Process();
+		m_ClientLogic.Close();
+	}
 }

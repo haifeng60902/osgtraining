@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Windows.h>
 
+#include "Unicode/UnicodeOnOff.h"
 
 BtcdLauncher::BtcdLauncher()
 {
@@ -32,6 +33,7 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 
 	if(!CreateProcessW(L"bitcoind.exe", (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi))
 	{
+		UnicodeOnOff on;
 		std::wcout<<"Error: Cannot launch bitcoind.exe"<<std::endl;
 		return pswError;
 	}
@@ -43,7 +45,10 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 	// Get the exit code.
 	GetExitCodeProcess(pi.hProcess, &exitCode);
 
-	std::wcout<<L"Exit code:"<<exitCode<<std::endl;
+	{
+		UnicodeOnOff on;
+		std::wcout<<L"Exit code:"<<exitCode<<std::endl;
+	}
 
 	if (exitCode==0)
 		resTry=pswSuccess;

@@ -24,7 +24,7 @@ public:
 	void Close();
 
 private:
-	//определение нажатия на клавиши
+	//key press detect
 	bool KeyPressDetect();
 
 	//real logic
