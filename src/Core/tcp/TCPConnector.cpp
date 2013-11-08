@@ -4,9 +4,11 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-TCPConnector::TCPConnector()
+TCPConnector::TCPConnector(bool bWSA):m_bWSA(bWSA)
 {
 	int retval=0;
+	if (!bWSA)
+		return;
 
 	// Request Winsock version 2.2
 	if ((retval = WSAStartup(0x202, &wsaData)) != 0)
@@ -20,7 +22,8 @@ TCPConnector::TCPConnector()
 
 TCPConnector::~TCPConnector()
 {
-	WSACleanup();
+	if (m_bWSA)
+		WSACleanup();
 }
 
 TCPStream* TCPConnector::connect(int port, const char* server_name)

@@ -9,7 +9,7 @@
 class TCPAcceptor
 {    
   public:
-    TCPAcceptor(int port, const char* address="");
+    TCPAcceptor(int port, const char* address="", bool bWSA=true);
     ~TCPAcceptor();
 
     int start();
@@ -25,6 +25,7 @@ class TCPAcceptor
 	WSADATA wsaData;
 	struct sockaddr_in local;
 	SOCKET listen_socket;
+	bool m_bWSA;
 };
 
 #endif
