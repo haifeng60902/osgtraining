@@ -15,6 +15,7 @@ std::wstring wPhrase;
 
 int iPort=9999;
 float fTimeout=60.0f;
+int iPASS_IN_ONE_MSG=30;
 
 int main(int argc, char **argv)
 {
@@ -31,6 +32,7 @@ int main(int argc, char **argv)
 			sAddress=lvm.get_string("address");
 			fTimeout=lvm.get_int("timeout");
 			iPort=lvm.get_int("port");
+			iPASS_IN_ONE_MSG=lvm.get_int("PASS_IN_ONE_MSG");
 
 			continue;
 		}
@@ -68,7 +70,7 @@ int main(int argc, char **argv)
 	ServerLogic m_ServerLogic;
 
 	m_ServerLogic.Init(iPort, sAddress);
-	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase, fTimeout);
+	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase, fTimeout, iPASS_IN_ONE_MSG);
 	m_ServerLogic.Process();
 	m_ServerLogic.Close();
 }

@@ -18,10 +18,11 @@ PassGen::~PassGen()
 
 }
 
-void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase)
+void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase,
+				   int iPASS_IN_ONE_MSG)
 {
-	//открыть файл с символами перебора
-	
+	m_iPASS_IN_ONE_MSG=iPASS_IN_ONE_MSG;
+
 	//zero memory
 	for (int i=0;i<MAX_LEN_PASS;++i)
 		cPassState[i]=0;
@@ -44,7 +45,7 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 	if (wCons.empty())
 		return;
 
-	if (iAutosave>=PASS_IN_ONE_MSG)
+	if (iAutosave>=m_iPASS_IN_ONE_MSG)
 	{
 		//автосохранение состояния
 		SaveState();
