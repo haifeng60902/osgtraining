@@ -9,7 +9,7 @@ class TCPConnector
 {
 public:
 
-	TCPConnector();
+	TCPConnector(bool bWSA=true);
 	~TCPConnector();
 
 	TCPStream* connect(int port, const char* server_name);
@@ -18,6 +18,8 @@ private:
 	int resolveHost(const char* host, struct in_addr* addr);
 
 	WSADATA wsaData;
+
+	bool m_bWSA;
 };
 
 #endif	//_TCP_CONNECTOR_H_

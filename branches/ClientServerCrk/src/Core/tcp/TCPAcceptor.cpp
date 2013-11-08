@@ -4,9 +4,12 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-TCPAcceptor::TCPAcceptor(int port, const char* address) 
-    : m_port(port), m_address(address), m_listening(false)
+TCPAcceptor::TCPAcceptor(int port, const char* address, bool bWSA) 
+    : m_port(port), m_address(address), m_listening(false), m_bWSA(bWSA)
 {
+	if (!bWSA)
+		return;
+
 	int retval=0;
 	
 	// Request Winsock version 2.2
@@ -22,7 +25,8 @@ TCPAcceptor::TCPAcceptor(int port, const char* address)
 TCPAcceptor::~TCPAcceptor()
 {
 	closesocket(listen_socket);
-	WSACleanup();
+	if (m_bWSA)
+		WSACleanup();
 }
 
 int TCPAcceptor::start()
