@@ -447,7 +447,6 @@ bool PassGenLogic::CheckMapFileTime(float fTime)
 		if (!bRemove)
 			++it;
 	}
-
 	return false;
 }
 
@@ -459,7 +458,7 @@ void PassGenLogic::LogPerfomance(float fTime)
 	if (iCTime!=iPTime)
 	{
 		m_iSumPass+=m_iPASS_IN_ONE_MSG;
-		std::cout<<"Statistic: "<<m_iSumPass<<" per minutes("<<fTime<<")\n";
+		std::cout<<"Statistic: "<<m_iSumPass<<" per minute("<<fTime<<")\n";
 		m_iSumPass=0;
 	}
 	else
