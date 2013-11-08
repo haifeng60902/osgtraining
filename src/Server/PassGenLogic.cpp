@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <windows.h>
+
 #include "Unicode/UnicodeOnOff.h"
 
 PassGenLogic::PassGenLogic()
@@ -10,6 +12,8 @@ PassGenLogic::PassGenLogic()
 	inSize=0;
 	outSize=0;
 	iCurResult=-1;
+	m_fPrevTime=-1;
+	m_iSumPass=0;
 }
 
 PassGenLogic::~PassGenLogic()
@@ -17,10 +21,16 @@ PassGenLogic::~PassGenLogic()
 
 }
 
-void PassGenLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase)
+void PassGenLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase
+								 , float fTimeout)
 {
+	m_fTimeout=fTimeout;
+
 	//pass generator logic init
 	m_PassGen.Init(wConf, wAutosave, wPhrase);
+
+	//read files from previous start
+	ReadPreviousFiles();
 }
 
 void PassGenLogic::Accumulate(const char* pBuff, int iSize)
@@ -31,7 +41,7 @@ void PassGenLogic::Accumulate(const char* pBuff, int iSize)
 	inSize+=iSize;
 }
 
-bool PassGenLogic::Process()
+bool PassGenLogic::Process(float fTime)
 {
 	//обработать входные данные
 	//read node name
@@ -44,7 +54,7 @@ bool PassGenLogic::Process()
 	DetectResult(posState);
 
 	//analayse data from network
-	bool bRes=Analyse();
+	bool bRes=Analyse(fTime);
 
 	return bRes;
 }
@@ -84,22 +94,25 @@ int PassGenLogic::DetectResult(int pos)
 	return pos+1;
 }
 
-bool PassGenLogic::Analyse()
+bool PassGenLogic::Analyse(float fTime)
 {
 	//analayse data from network
+	if (m_fPrevTime<0.0f)
+		m_fPrevTime=fTime;
+
 	bool bRes=false;
 	switch (iCurResult)
 	{
 	case -1:
 		//first client connect
-		ClientConnect();
+		ClientConnect(fTime);
 		break;
 	case 0:
 		//client do not find password
 		ClientDoNotFindPass();
 
 		//client connect
-		ClientConnect();
+		ClientConnect(fTime);
 		break;
 	default:
 		//the password is find
@@ -108,12 +121,23 @@ bool PassGenLogic::Analyse()
 		break;
 	}
 
+	//display performance
+	LogPerfomance(fTime);
+
+	m_fPrevTime=fTime;
+
 	return bRes;
 }
 
-void PassGenLogic::ClientConnect()
+void PassGenLogic::ClientConnect(float fTime)
 {
-	//first client connect
+	//client connect
+
+	//check files
+	bool bFile=CheckMapFileTime(fTime);
+	if (bFile)
+		return;
+
 	m_PassGen.GetPassState(curChain);
 
 	//generate file name
@@ -138,6 +162,9 @@ void PassGenLogic::ClientConnect()
 
 	//write to file network output buffer
 	Write2File(sFile);
+
+	//save to map
+	m_mFileTime[sFile]=fTime;
 }
 
 void PassGenLogic::ClientDoNotFindPass()
@@ -160,7 +187,7 @@ void PassGenLogic::ClientDoNotFindPass()
 
 	if (bFile)
 		//file is exist, remove it
-			remove(sFile.c_str());
+		remove(sFile.c_str());
 	else
 		std::cout<<"Error: "<<sFile<<" file do not found"<<std::endl;
 }
@@ -278,7 +305,7 @@ void PassGenLogic::TestLogic()
 	TestFillInBuff();
 
 	//process income data
-	Process();
+	Process(0.0f);
 }
 
 void PassGenLogic::TestFillInBuff()
@@ -344,4 +371,90 @@ bool PassGenLogic::ZerroChainDetect(const char* pChain)
 		if (pChain[i])
 			bZero=false;
 	return bZero;
+}
+
+void PassGenLogic::ReadPreviousFiles()
+{
+	//read files from previous start
+	WIN32_FIND_DATA found;
+
+	HANDLE hFind=FindFirstFile("*.cin", &found);
+	if (hFind == INVALID_HANDLE_VALUE) 
+		return;
+	
+	std::string sFile=found.cFileName;
+	m_mFileTime[sFile]=-1.0f;
+	while(true)
+	{
+		int chk=FindNextFile(hFind,&found);
+		if (chk)
+		{
+			sFile=found.cFileName;
+			m_mFileTime[sFile]=-1.0f;
+		}
+		else
+			break;
+	}
+}
+
+bool PassGenLogic::CheckMapFileTime(float fTime)
+{
+	//check files
+	tMapFileTime::const_iterator it=m_mFileTime.begin();
+	while (it!=m_mFileTime.end())
+	{
+		bool bRemove=false;
+		float fChkTime=fTime-it->second;
+		if (it->second<0.0)
+			fChkTime=it->second;
+		
+
+		//files with below zero time have highest priority
+		if ((fChkTime<0.0)||(fChkTime>m_fTimeout))
+		{
+			std::ifstream in(it->first, std::ios::in | std::ios::binary);
+			if (in.is_open())
+			{
+				// get its size:
+				in.seekg(0, std::ios::end);
+				outSize = in.tellg();
+				in.seekg (0, std::ios::beg);
+
+				in.read(outBuff, outSize);
+				in.close();
+				std::cout<<"Timeout("<<fChkTime<<") Resend file:"<<it->first<<" \n";
+
+				return true;
+			}
+			else
+			{
+				//file is exist, remove it
+				remove(it->first.c_str());
+				it=m_mFileTime.erase(it);
+				bRemove=true;
+			}
+		}
+
+		if (!bRemove)
+			++it;
+	}
+
+	return false;
+}
+
+void PassGenLogic::LogPerfomance(float fTime)
+{
+	//display performance
+	int iCTime=fTime/60.0f;
+	int iPTime=m_fPrevTime/60.0f;
+	if (iCTime!=iPTime)
+	{
+		m_iSumPass+=PASS_IN_ONE_MSG;
+		std::cout<<"Statistic: "<<m_iSumPass<<" per minutes("<<fTime<<")\n";
+		m_iSumPass=0;
+	}
+	else
+	{
+		m_iSumPass+=PASS_IN_ONE_MSG;
+	}
 }

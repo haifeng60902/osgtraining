@@ -261,7 +261,8 @@ void PassGen::SaveState()
 	if (wSave.empty())
 		return;
 
-	std::ofstream ofs("test.txt");
+	std::ofstream ofs;
+	ofs.open(wSave, std::ios::out);
 	if (ofs.is_open())
 	{
 		for (int i=0;i<MAX_LEN_PASS;++i)
@@ -279,20 +280,24 @@ void PassGen::LoadState()
 	if (wSave.empty())
 		return;
 
-	std::ifstream ifs(wSave);
+	std::ifstream ifs(wSave,std::ios::in|std::ios::binary);
 
 	if (ifs.is_open())
 	{
-		int iP=0;
+		char cP=0;
 		int i=0;
 		std::cout<<"Load autosave: ";
 		while(!ifs.eof())
 		{
-			ifs>>iP;
-			cPassState[i]=iP;
+			if (i>=MAX_LEN_PASS)
+				break;
+
+			ifs>>cP;
+			cPassState[i]=cP;
 			++i;
-			std::cout<<iP<<" ";
+			std::cout<<(int)cP<<" ";
 		}
+		std::cout<<std::endl;
 		ifs.close();
 		std::cout<<std::endl;
 	}

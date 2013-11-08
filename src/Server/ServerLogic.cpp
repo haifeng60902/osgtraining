@@ -22,10 +22,10 @@ void ServerLogic::Init(int iPort, const std::string& sAddress)
 	iResult=pAcceptor->start();
 }
 
-void ServerLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase)
+void ServerLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase, float fTimeout)
 {
 	//pass generator logic init
-	m_PassGenLogic.InitPassLogic(wConf, wAutosave, wPhrase);
+	m_PassGenLogic.InitPassLogic(wConf, wAutosave, wPhrase, fTimeout);
 }
 
 void ServerLogic::Process()
@@ -50,7 +50,7 @@ void ServerLogic::Process()
 				m_PassGenLogic.Accumulate(inBuff, len);
 
 				//process income data
-				bExit=m_PassGenLogic.Process();
+				bExit=m_PassGenLogic.Process(fAcceptTime);
 
 				//get data for network
 				const char* pRes=m_PassGenLogic.GetResult(&len);
