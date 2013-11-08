@@ -12,7 +12,8 @@ public:
 	PassGen();
 	~PassGen();
 
-	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase);
+	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase,
+		int iPASS_IN_ONE_MSG);
 
 	//generate next password
 	void GenNextPass(std::wstring* pPass, std::wstring* pCons);
@@ -69,6 +70,8 @@ private:
 	int iAutosave;
 
 	bool bFirstTime;
+
+	int m_iPASS_IN_ONE_MSG;
 };
 
 #endif	//_PASS_GEN_H_

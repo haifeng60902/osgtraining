@@ -22,10 +22,11 @@ void ServerLogic::Init(int iPort, const std::string& sAddress)
 	iResult=pAcceptor->start();
 }
 
-void ServerLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase, float fTimeout)
+void ServerLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase,
+								float fTimeout, int iPASS_IN_ONE_MSG)
 {
 	//pass generator logic init
-	m_PassGenLogic.InitPassLogic(wConf, wAutosave, wPhrase, fTimeout);
+	m_PassGenLogic.InitPassLogic(wConf, wAutosave, wPhrase, fTimeout, iPASS_IN_ONE_MSG);
 }
 
 void ServerLogic::Process()

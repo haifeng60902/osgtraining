@@ -108,7 +108,7 @@ void PassChkLogic::RestoreRawMemory(tVecWStr& vPass, tVecWStr& vCons)
 	memcpy(cChain, &inBuff[2], MAX_LEN_PASS);
 	int x=MAX_LEN_PASS+2;
 
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<iPassInOneMsg;++i)
 	{
 		std::wstring wPass;
 		int s=inBuff[x];
@@ -123,7 +123,7 @@ void PassChkLogic::RestoreRawMemory(tVecWStr& vPass, tVecWStr& vCons)
 		vPass.push_back(wPass);
 	}
 
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<iPassInOneMsg;++i)
 	{
 		std::wstring wCons;
 		int s=inBuff[x];

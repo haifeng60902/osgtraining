@@ -17,7 +17,8 @@ public:
 	void Init(int iPort, const std::string& sAddress);
 
 	//pass generator logic init
-	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase, float fTimeout);
+	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase, 
+		float fTimeout, int iPASS_IN_ONE_MSG);
 
 	void Process();
 

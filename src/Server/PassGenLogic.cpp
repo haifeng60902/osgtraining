@@ -22,12 +22,13 @@ PassGenLogic::~PassGenLogic()
 }
 
 void PassGenLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase
-								 , float fTimeout)
+								 , float fTimeout, int iPASS_IN_ONE_MSG)
 {
+	m_iPASS_IN_ONE_MSG=iPASS_IN_ONE_MSG;
 	m_fTimeout=fTimeout;
 
 	//pass generator logic init
-	m_PassGen.Init(wConf, wAutosave, wPhrase);
+	m_PassGen.Init(wConf, wAutosave, wPhrase, iPASS_IN_ONE_MSG);
 
 	//read files from previous start
 	ReadPreviousFiles();
@@ -145,7 +146,7 @@ void PassGenLogic::ClientConnect(float fTime)
 
 	tVecWStr vPass;
 	tVecWStr vCons;
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<m_iPASS_IN_ONE_MSG;++i)
 	{
 		std::wstring wPass, wCons;
 		m_PassGen.GenNextPass(&wPass, &wCons);
@@ -201,7 +202,7 @@ void PassGenLogic::CheckCodeDecode(const tVecWStr& vPass, const tVecWStr& vCons)
 	//restore output buffer
 	RestoreRawMemory(vPassChk, vConsChk);
 
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<m_iPASS_IN_ONE_MSG;++i)
 	{
 		UnicodeOnOff on;
 
@@ -216,13 +217,13 @@ void PassGenLogic::CheckCodeDecode(const tVecWStr& vPass, const tVecWStr& vCons)
 void PassGenLogic::FillOutBuff(char* pChain, const tVecWStr& vPass, const tVecWStr& vCons)
 {
 	//fill output buffer
-	outBuff[0]=PASS_IN_ONE_MSG;
+	outBuff[0]=m_iPASS_IN_ONE_MSG;
 	outBuff[1]=MAX_LEN_PASS;
 	for (int i=0;i<MAX_LEN_PASS;++i)
 		outBuff[2+i]=pChain[i];
 
 	int x=MAX_LEN_PASS+2;
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<m_iPASS_IN_ONE_MSG;++i)
 	{
 		int s=vPass[i].size();
 		int ws=sizeof(wchar_t);
@@ -232,7 +233,7 @@ void PassGenLogic::FillOutBuff(char* pChain, const tVecWStr& vPass, const tVecWS
 		x+=s*ws;
 	}
 
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<m_iPASS_IN_ONE_MSG;++i)
 	{
 		int s=vCons[i].size();
 		int ws=sizeof(wchar_t);
@@ -253,7 +254,7 @@ void PassGenLogic::RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vConsChk)
 	memcpy(cChain, &outBuff[2], MAX_LEN_PASS);
 	int x=MAX_LEN_PASS+2;
 	
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<m_iPASS_IN_ONE_MSG;++i)
 	{
 		std::wstring wPass;
 		int s=outBuff[x];
@@ -268,7 +269,7 @@ void PassGenLogic::RestoreRawMemory(tVecWStr& vPassChk, tVecWStr& vConsChk)
 		vPassChk.push_back(wPass);
 	}
 
-	for (int i=0;i<PASS_IN_ONE_MSG;++i)
+	for (int i=0;i<m_iPASS_IN_ONE_MSG;++i)
 	{
 		std::wstring wCons;
 		int s=outBuff[x];
@@ -449,12 +450,12 @@ void PassGenLogic::LogPerfomance(float fTime)
 	int iPTime=m_fPrevTime/60.0f;
 	if (iCTime!=iPTime)
 	{
-		m_iSumPass+=PASS_IN_ONE_MSG;
+		m_iSumPass+=m_iPASS_IN_ONE_MSG;
 		std::cout<<"Statistic: "<<m_iSumPass<<" per minutes("<<fTime<<")\n";
 		m_iSumPass=0;
 	}
 	else
 	{
-		m_iSumPass+=PASS_IN_ONE_MSG;
+		m_iSumPass+=m_iPASS_IN_ONE_MSG;
 	}
 }
