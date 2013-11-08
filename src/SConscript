@@ -3,5 +3,6 @@ Import('env')
 env.SConscript([
 	'Core/SConscript.edge',
 	'Server/Server.scons',
-	'Client/Client.scons'
+	'Client/Client.scons',
+	'Proxy/Proxy.scons'
 ])
