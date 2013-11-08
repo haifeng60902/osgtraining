@@ -187,8 +187,15 @@ void PassGenLogic::ClientDoNotFindPass()
 	}
 
 	if (bFile)
+	{
 		//file is exist, remove it
 		remove(sFile.c_str());
+		tMapFileTime::iterator it=m_mFileTime.find(sFile);
+		if (it!=m_mFileTime.end())
+			m_mFileTime.erase(it);
+		else
+			std::cout<<"Remove file: "<<sFile<<" but record in map do not exist.\n";
+	}
 	else
 		std::cout<<"Error: "<<sFile<<" file do not found"<<std::endl;
 }
@@ -401,7 +408,7 @@ void PassGenLogic::ReadPreviousFiles()
 bool PassGenLogic::CheckMapFileTime(float fTime)
 {
 	//check files
-	tMapFileTime::const_iterator it=m_mFileTime.begin();
+	tMapFileTime::iterator it=m_mFileTime.begin();
 	while (it!=m_mFileTime.end())
 	{
 		bool bRemove=false;
@@ -425,12 +432,13 @@ bool PassGenLogic::CheckMapFileTime(float fTime)
 				in.close();
 				std::cout<<"Timeout("<<fChkTime<<") Resend file:"<<it->first<<" \n";
 
+				it->second=fTime;
+
 				return true;
 			}
 			else
 			{
-				//file is exist, remove it
-				remove(it->first.c_str());
+				std::cout<<"Try to resend file: "<<it->first<<"("<<it->second<<") but file do not exist.\n";
 				it=m_mFileTime.erase(it);
 				bRemove=true;
 			}
