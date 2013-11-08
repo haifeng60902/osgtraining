@@ -1,6 +1,9 @@
 #ifndef _PASSGEN_LOGIC_H_
 #define _PASSGEN_LOGIC_H_
 
+#include <map>
+#include <string>
+
 #include "defs/binDefs.h"
 #include "PassGen.h"
 
@@ -11,13 +14,14 @@ public:
 	~PassGenLogic();
 
 	//pass generator logic init
-	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase);
+	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase
+		, float fTimeout);
 
 	//get data from net
 	void Accumulate(const char* pBuff, int iSize);
 
 	//process income data
-	bool Process();
+	bool Process(float fTime);
 
 	//get data for network
 	const char* GetResult(int *pSize);
@@ -30,6 +34,9 @@ public:
 
 private:
 
+	//key - file name, value - create time
+	typedef std::map<std::string,float> tMapFileTime;
+
 	//read node name
 	int DetectName(int pos);
 
@@ -40,10 +47,10 @@ private:
 	int DetectResult(int pos);
 
 	//analayse data from network
-	bool Analyse();
+	bool Analyse(float fTime);
 
-	//first client connect
-	void ClientConnect();
+	//client connect
+	void ClientConnect(float fTime);
 
 	//client do not find password
 	void ClientDoNotFindPass();
@@ -72,20 +79,39 @@ private:
 	//the password is find
 	void Success();
 
+	//read files from previous start
+	void ReadPreviousFiles();
+
+	//check files
+	bool CheckMapFileTime(float fTime);
+
+	//display performance
+	void LogPerfomance(float fTime);
+
 	PassGen m_PassGen;
 
 	std::string sNode;
 
+	//for password time control
+	tMapFileTime m_mFileTime;
+
 	char curChain[MAX_LEN_PASS];
 	int iCurResult;
 
+	//max time for disconnected client
+	float m_fTimeout;
+
 	//буфер для приема сообщений
+	//buffer for in
 	char inBuff[32768];
 	int inSize;
 
-	//результат
+	//result
 	char outBuff[32768];
 	int outSize;
+
+	float m_fPrevTime;
+	int m_iSumPass;
 };
 
 #endif	//_PASSGEN_LOGIC_H_

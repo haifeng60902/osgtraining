@@ -14,6 +14,7 @@ std::wstring wSuccess;
 std::wstring wPhrase;
 
 int iPort=9999;
+float fTimeout=60.0f;
 
 int main(int argc, char **argv)
 {
@@ -28,7 +29,9 @@ int main(int argc, char **argv)
 			i++; if (i >= argc) break;
 			Lua_vm lvm(argv[i]);
 			sAddress=lvm.get_string("address");
+			fTimeout=lvm.get_int("timeout");
 			iPort=lvm.get_int("port");
+
 			continue;
 		}
 		else if (strcmp(argv[i], "-rule") == 0)
@@ -65,7 +68,7 @@ int main(int argc, char **argv)
 	ServerLogic m_ServerLogic;
 
 	m_ServerLogic.Init(iPort, sAddress);
-	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase);
+	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase, fTimeout);
 	m_ServerLogic.Process();
 	m_ServerLogic.Close();
 }
