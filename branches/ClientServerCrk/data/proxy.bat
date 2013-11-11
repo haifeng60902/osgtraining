@@ -1,0 +1,1 @@
+..\bin\x86_64\vc110.release\proxy.exe -config proxy.conf
