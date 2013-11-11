@@ -59,5 +59,19 @@ void ProxyLogic::Process()
 
 int ProxyLogic::Accumulate(TCPStream* streamClient)
 {
-	return 0;
+	//wait server response
+	int inSize=0;
+	bool bProc=true;
+	while(bProc)
+	{
+		int len=streamClient->receive(inBuffClient, sizeof(inBuffClient));
+		if (len)
+		{
+			inSize=len;
+
+			//данные получены, можно выходить
+			bProc=false;
+		}
+	}
+	return inSize;
 }
