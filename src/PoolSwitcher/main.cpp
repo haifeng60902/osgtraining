@@ -3,6 +3,7 @@
 #include "binHosts.h"
 #include "HostsCfg.h"
 #include "BatGen.h"
+#include "BatStart.h"
 
 int main(int argc, char **argv)
 {
@@ -40,4 +41,8 @@ int main(int argc, char **argv)
 		else
 			std::cout<<"FAILED\n";
 	}
+
+	std::cout<<"Bat file start pass:\n";
+	BatStart batStart;
+	batStart.Process(vHosts);
 }
