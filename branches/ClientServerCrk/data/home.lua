@@ -1,19 +1,11 @@
 hosts=
 {
 	{
-		host="asus1215b-pc";
-		user="asus1215b";
+		host="fm0";
+		user="asmzx";
 		pass="specyzx";
-		path="c:/Test";
+		path="c:\\Test\372";
 		exec="note.bat";
-		miner="start cgminer.exe --scrypt -u dbhec.7970h -p x --worksize 256 -g 2 --intensity 13";
-	},
-	{
-		host="asus1215b1-pc";
-		user="asus1215b";
-		pass="specyzx";
-		path="c:/Test";
-		exec="note.bat";
-		miner="start cgminer.exe --scrypt -u dbhec.7970w -p x --worksize 256 -g 2 --intensity 13";
+		miner="start cgminer.exe -u dbhec.fm0 -p x -d 0,1,2 --scrypt --worksize 256 --lookup-gap 2 -g 1 --thread-concurrency 24000,24000,24600 --intensity 20,20,20 --gpu-powertune 20,20,30 --gpu-memclock 1500,1500,1500 --gpu-engine 950,1000,980 --scan-time 1 --queue 4 --no-submit-stale";
 	}
 }
