@@ -12,6 +12,7 @@ std::wstring wRule;
 std::wstring wAutosave;
 std::wstring wSuccess;
 std::wstring wPhrase;
+bool bReverse=false;
 
 int iPort=9999;
 float fTimeout=60.0f;
@@ -64,13 +65,17 @@ int main(int argc, char **argv)
 			wPhrase=std::wstring(sConf.begin(), sConf.end());
 			continue;
 		}
-
+		else if (strcmp(argv[i], "-reverse") == 0)
+		{
+			bReverse=true;
+			continue;
+		}
 	}
 //////////////////////////////////////////////////////////////////////////
 	ServerLogic m_ServerLogic;
 
 	m_ServerLogic.Init(iPort, sAddress);
-	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase, fTimeout, iPASS_IN_ONE_MSG);
+	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase, fTimeout, iPASS_IN_ONE_MSG, bReverse);
 	m_ServerLogic.Process();
 	m_ServerLogic.Close();
 }

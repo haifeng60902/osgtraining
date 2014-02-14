@@ -14,14 +14,15 @@ ClientLogic::~ClientLogic()
 
 }
 
-bool ClientLogic::Init(int iPort, const std::string& sAddress, const std::string& sNode)
+bool ClientLogic::Init(int iPort, const std::string& sAddress, const std::string& sNode,
+					   const std::string& sCrypto)
 {
 	pConnector=new TCPConnector();
 	this->iPort=iPort;
 	this->sAddress=sAddress;
 	this->sNode=sNode;
 	
-	bool bRes=m_PassChkLogic.Init(sNode);
+	bool bRes=m_PassChkLogic.Init(sNode, sCrypto);
 
 	return bRes;
 }

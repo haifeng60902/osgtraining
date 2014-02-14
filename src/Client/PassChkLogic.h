@@ -15,7 +15,7 @@ public:
 	~PassChkLogic();
 
 	//set node name
-	bool Init(const std::string& sNode);
+	bool Init(const std::string& sNode, const std::string& sCrypto);
 
 	//get result for network sending
 	const char* GetResult(int* pSize);

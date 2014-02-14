@@ -10,8 +10,13 @@ public:
 	BtcdLauncher();
 	~BtcdLauncher();
 
+	void Init(const std::string& sCrypto);
+
 	//process next pass
 	pswTry Process(const std::wstring& wPass);
+
+private:
+	std::wstring wCrypto;
 };
 
 #endif	//_BTCD_LAUNCHER_H_
