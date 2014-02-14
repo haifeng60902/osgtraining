@@ -14,7 +14,8 @@ public:
 	ClientLogic();
 	~ClientLogic();
 
-	bool Init(int iPort, const std::string& sAddress, const std::string& sNode);
+	bool Init(int iPort, const std::string& sAddress, const std::string& sNode,
+		const std::string& sCrypto);
 
 	void Process();
 

@@ -13,7 +13,7 @@ public:
 	~PassGen();
 
 	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase,
-		int iPASS_IN_ONE_MSG);
+		int iPASS_IN_ONE_MSG, bool bReverse);
 
 	//generate next password
 	void GenNextPass(std::wstring* pPass, std::wstring* pCons);
@@ -72,6 +72,8 @@ private:
 	bool bFirstTime;
 
 	int m_iPASS_IN_ONE_MSG;
+
+	bool m_bReverse;
 };
 
 #endif	//_PASS_GEN_H_

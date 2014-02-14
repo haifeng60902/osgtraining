@@ -16,10 +16,12 @@ PassChkLogic::~PassChkLogic()
 
 }
 
-bool PassChkLogic::Init(const std::string& sNode)
+bool PassChkLogic::Init(const std::string& sNode, const std::string& sCrypto)
 {
 	//set node name
 	this->sNode=sNode;
+
+	m_BtcdLauncher.Init(sCrypto);
 
 	//first time init output buffer
 	FirstTimeInit();

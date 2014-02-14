@@ -5,6 +5,7 @@
 
 std::string sAddress("127.0.0.1");
 std::string sNode("local");
+std::string sCrypto("bitcoind.exe");
 int iPort=9999;
 
 int main(int argc, char **argv)
@@ -18,6 +19,7 @@ int main(int argc, char **argv)
 			Lua_vm lvm(argv[i]);
 			sAddress=lvm.get_string("address");
 			sNode=lvm.get_string("node");
+			sCrypto=lvm.get_string("crypto");
 			iPort=lvm.get_int("port");
 			continue;
 		}
@@ -26,7 +28,7 @@ int main(int argc, char **argv)
 //////////////////////////////////////////////////////////////////////////
 	ClientLogic m_ClientLogic;
 
-	bool bRes=m_ClientLogic.Init(iPort, sAddress, sNode);
+	bool bRes=m_ClientLogic.Init(iPort, sAddress, sNode, sCrypto);
 	if (bRes)
 	{
 		m_ClientLogic.Process();

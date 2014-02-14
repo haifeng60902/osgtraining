@@ -22,13 +22,13 @@ PassGenLogic::~PassGenLogic()
 }
 
 void PassGenLogic::InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase
-								 , float fTimeout, int iPASS_IN_ONE_MSG)
+								 , float fTimeout, int iPASS_IN_ONE_MSG, bool bReverse)
 {
 	m_iPASS_IN_ONE_MSG=iPASS_IN_ONE_MSG;
 	m_fTimeout=fTimeout;
 
 	//pass generator logic init
-	m_PassGen.Init(wConf, wAutosave, wPhrase, iPASS_IN_ONE_MSG);
+	m_PassGen.Init(wConf, wAutosave, wPhrase, iPASS_IN_ONE_MSG, bReverse);
 
 	//read files from previous start
 	ReadPreviousFiles();

@@ -11,6 +11,7 @@ PassGen::PassGen()
 {
 	iAutosave=0;
 	bFirstTime=true;
+	m_bReverse=false;
 }
 
 PassGen::~PassGen()
@@ -19,8 +20,9 @@ PassGen::~PassGen()
 }
 
 void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase,
-				   int iPASS_IN_ONE_MSG)
+				   int iPASS_IN_ONE_MSG, bool bReverse)
 {
+	m_bReverse=bReverse;
 	m_iPASS_IN_ONE_MSG=iPASS_IN_ONE_MSG;
 
 	//zero memory
@@ -82,8 +84,14 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 		}
 	}
 	
-	std::wstring wPassRes=wPhrasePass;
-	std::wstring wConsRes=wPhraseCons;
+	std::wstring wPassRes;
+	std::wstring wConsRes;
+	if (!m_bReverse)
+	{
+		wPassRes=wPhrasePass;
+		wConsRes=wPhraseCons;
+	}
+
 	for (int i=0;i<MAX_LEN_PASS;++i)
 	{
 		int j=cPassState[i]-1;
@@ -96,6 +104,12 @@ void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
 
 			wConsRes=wConsRes+wCons[j];
 		}
+	}
+	
+	if (m_bReverse)
+	{
+		wPassRes=wPassRes+wPhrasePass;
+		wConsRes=wConsRes+wPhraseCons;
 	}
 
 	++iAutosave;

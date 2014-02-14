@@ -15,6 +15,11 @@ BtcdLauncher::~BtcdLauncher()
 
 }
 
+void BtcdLauncher::Init(const std::string& sCrypto)
+{
+	wCrypto=std::wstring(sCrypto.begin(), sCrypto.end());
+}
+
 pswTry BtcdLauncher::Process(const std::wstring& wPass)
 {
 	//process next pass
@@ -31,10 +36,10 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 
 	std::wstring wFull=L" walletpassphrase "+wPass+L" 20";
 
-	if(!CreateProcessW(L"bitcoind.exe", (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi))
+	if(!CreateProcessW((LPWSTR)wCrypto.c_str(), (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi))
 	{
 		UnicodeOnOff on;
-		std::wcout<<"Error: Cannot launch bitcoind.exe"<<std::endl;
+		std::wcout<<"Error: Cannot launch "<<wCrypto<<std::endl;
 		return pswError;
 	}
 
