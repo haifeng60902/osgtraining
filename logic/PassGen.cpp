@@ -41,6 +41,9 @@ void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, con
 std::wstring PassGen::GenNextPass()
 {
 	//generate next password
+	if (!wvVocab.empty())
+		return GetNextVocab();
+
 	if (wCons.empty())
 		return std::wstring();
 
@@ -226,4 +229,31 @@ void PassGen::LoadState()
 		ifs.close();
 		std::wcout<<std::endl;
 	}
+}
+
+void PassGen::InitVocab(const std::wstring& wVocab)
+{
+	std::wifstream ifs(wVocab);
+
+	if (ifs.is_open())
+	{
+		int iP=0;
+		int i=0;
+		std::wcout<<"Load Vocab"<<std::endl;
+		while(!ifs.eof())
+		{
+			std::wstring wPass;
+			ifs>>wPass;
+			wvVocab.push_back(wPass);
+		}
+		ifs.close();
+	}
+}
+
+std::wstring PassGen::GetNextVocab()
+{
+	std::wstring sPass=wvVocab.back();
+	std::wcout<<L"Try: "<<sPass<<std::endl;
+	wvVocab.pop_back();
+	return sPass;
 }

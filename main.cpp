@@ -12,6 +12,7 @@ std::wstring wConf;
 std::wstring wAutosave;
 std::wstring wSuccess;
 std::wstring wPhrase;
+std::wstring wVocab;
 std::wstring wCrypto(L"bitcoind.exe");
 
 PassGen m_PassGen;
@@ -56,6 +57,13 @@ int main(int argc, char** argv)
 			wPhrase=std::wstring(sConf.begin(), sConf.end());
 			continue;
 		}
+		else if (strcmp(argv[i], "-vocab") == 0)
+		{
+			i++; if (i >= argc) break;
+			std::string sConf = argv[i];
+			wVocab=std::wstring(sConf.begin(), sConf.end());
+			continue;
+		}
 		else if (strcmp(argv[i], "-crypto") == 0)
 		{
 			i++; if (i >= argc) break;
@@ -66,7 +74,11 @@ int main(int argc, char** argv)
 	}
 
 	m_BtcdLauncher.Init(wCrypto);
-	m_PassGen.Init(wConf, wAutosave, wPhrase);
+	
+	if (!wVocab.empty())
+		m_PassGen.InitVocab(wVocab);
+	else
+		m_PassGen.Init(wConf, wAutosave, wPhrase);
 
 	bool bStop = false;
 	pswTry tryStatus=pswNext;
@@ -78,7 +90,13 @@ int main(int argc, char** argv)
 			//generate next password
 			std::wstring sPass=m_PassGen.GenNextPass();
 
-			tryStatus=m_BtcdLauncher.Process(sPass);
+			if (!sPass.empty())
+				tryStatus=m_BtcdLauncher.Process(sPass);
+			else
+			{
+				std::wcout<<"End of vocab."<<std::endl;
+				tryStatus=pswError;
+			}
 		}
 
 		if (tryStatus!=pswNext)
