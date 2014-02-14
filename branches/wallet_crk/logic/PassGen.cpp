@@ -115,13 +115,12 @@ void PassGen::SaveSuccessPass(const std::wstring& wConf)
 		if (j>-1)
 			wConsRes=wConsRes+wCons[j];
 	}
-
-	FILE * pzInFile;
-	_wfopen_s( &pzInFile, wConf.c_str(), L"w" );
-	if (pzInFile)
+	
+	std::wofstream ofs(wConf);
+	if (ofs.is_open())
 	{
-		fprintf(pzInFile, "%s", wConsRes.c_str());
-		fclose(pzInFile);
+		ofs<<wConsRes;
+		ofs.close();
 	}
 	else
 	{
