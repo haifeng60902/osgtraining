@@ -14,6 +14,8 @@ public:
 
 	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase);
 
+	void InitVocab(const std::wstring& wVocab);
+
 	//generate next password
 	std::wstring GenNextPass();
 
@@ -44,6 +46,8 @@ private:
 	//load config
 	void LoadConf(const std::wstring& wConf, std::wstring* pPass, std::wstring* pCons, tVecConv *pConv);
 
+	std::wstring GetNextVocab();
+
 	std::wstring wPass;//for password
 	std::wstring wCons;//for console output
 
@@ -56,6 +60,8 @@ private:
 	tVecConv vPhrareConv;
 
 	int iPassState[MAX_PASS];
+
+	std::vector<std::wstring> wvVocab;
 
 	int iAutosave;
 
