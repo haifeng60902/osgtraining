@@ -13,6 +13,11 @@ BtcdLauncher::~BtcdLauncher()
 
 }
 
+void BtcdLauncher::Init(const std::wstring& wCrpt)
+{
+	wCrypto=wCrpt;
+}
+
 pswTry BtcdLauncher::Process(const std::wstring& wPass)
 {
 	//process next pass
@@ -29,7 +34,7 @@ pswTry BtcdLauncher::Process(const std::wstring& wPass)
 
 	std::wstring wFull=L" walletpassphrase "+wPass+L" 20";
 
-	if(!CreateProcessW(L"bitcoind.exe", (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi ) )
+	if(!CreateProcessW((LPWSTR)wCrypto.c_str(), (LPWSTR)wFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi ) )
 		return pswTry::pswError;
 
 	WaitForSingleObject( pi.hProcess, INFINITE );

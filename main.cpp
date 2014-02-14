@@ -12,6 +12,7 @@ std::wstring wConf;
 std::wstring wAutosave;
 std::wstring wSuccess;
 std::wstring wPhrase;
+std::wstring wCrypto(L"bitcoind.exe");
 
 PassGen m_PassGen;
 BtcdLauncher m_BtcdLauncher;
@@ -55,8 +56,16 @@ int main(int argc, char** argv)
 			wPhrase=std::wstring(sConf.begin(), sConf.end());
 			continue;
 		}
+		else if (strcmp(argv[i], "-crypto") == 0)
+		{
+			i++; if (i >= argc) break;
+			std::string sConf = argv[i];
+			wCrypto=std::wstring(sConf.begin(), sConf.end());
+			continue;
+		}
 	}
 
+	m_BtcdLauncher.Init(wCrypto);
 	m_PassGen.Init(wConf, wAutosave, wPhrase);
 
 	bool bStop = false;
