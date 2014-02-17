@@ -20,7 +20,7 @@ PassGen::~PassGen()
 }
 
 void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase,
-				   int iPASS_IN_ONE_MSG, bool bReverse)
+				   int iPASS_IN_ONE_MSG, bool bReverse, int iPASS_START_LEN)
 {
 	m_bReverse=bReverse;
 	m_iPASS_IN_ONE_MSG=iPASS_IN_ONE_MSG;
@@ -38,7 +38,7 @@ void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, con
 	wSave=wAutosave;
 
 	//состояние из файла
-	LoadState();
+	LoadState(iPASS_START_LEN);
 }
 
 void PassGen::GenNextPass(std::wstring* pPass, std::wstring* pCons)
@@ -289,7 +289,7 @@ void PassGen::SaveState()
 	}
 }
 
-void PassGen::LoadState()
+void PassGen::LoadState(int iPASS_START_LEN)
 {
 	//состояние из файла
 	if (wSave.empty())
@@ -315,6 +315,11 @@ void PassGen::LoadState()
 		std::cout<<std::endl;
 		ifs.close();
 		std::cout<<std::endl;
+	}
+	else
+	{
+		for (int i=1;i<iPASS_START_LEN;++i)
+			cPassState[i]=1;
 	}
 }
 

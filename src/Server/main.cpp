@@ -17,6 +17,7 @@ bool bReverse=false;
 int iPort=9999;
 float fTimeout=60.0f;
 int iPASS_IN_ONE_MSG=30;
+int iPASS_START_LEN=1;
 
 int main(int argc, char **argv)
 {
@@ -70,12 +71,18 @@ int main(int argc, char **argv)
 			bReverse=true;
 			continue;
 		}
+		else if (strcmp(argv[i], "-start_len") == 0)
+		{
+			i++; if (i >= argc) break;
+			iPASS_START_LEN=atoi(argv[i]);
+			continue;
+		}
 	}
 //////////////////////////////////////////////////////////////////////////
 	ServerLogic m_ServerLogic;
 
 	m_ServerLogic.Init(iPort, sAddress);
-	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase, fTimeout, iPASS_IN_ONE_MSG, bReverse);
+	m_ServerLogic.InitPassLogic(wRule, wAutosave, wPhrase, fTimeout, iPASS_IN_ONE_MSG, bReverse, iPASS_START_LEN);
 	m_ServerLogic.Process();
 	m_ServerLogic.Close();
 }

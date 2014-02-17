@@ -18,7 +18,7 @@ public:
 
 	//pass generator logic init
 	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase, 
-		float fTimeout, int iPASS_IN_ONE_MSG, bool bReverse=false);
+		float fTimeout, int iPASS_IN_ONE_MSG, bool bReverse=false, int iPASS_START_LEN=1);
 
 	void Process();
 
