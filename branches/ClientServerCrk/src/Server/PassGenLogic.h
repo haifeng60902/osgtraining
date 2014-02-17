@@ -15,7 +15,7 @@ public:
 
 	//pass generator logic init
 	void InitPassLogic(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase
-		, float fTimeout, int iPASS_IN_ONE_MSG, bool bReverse);
+		, float fTimeout, int iPASS_IN_ONE_MSG, bool bReverse, int iPASS_START_LEN);
 
 	//get data from net
 	void Accumulate(const char* pBuff, int iSize);

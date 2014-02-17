@@ -13,7 +13,7 @@ public:
 	~PassGen();
 
 	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase,
-		int iPASS_IN_ONE_MSG, bool bReverse);
+		int iPASS_IN_ONE_MSG, bool bReverse, int iPASS_START_LEN);
 
 	//generate next password
 	void GenNextPass(std::wstring* pPass, std::wstring* pCons);
@@ -46,7 +46,7 @@ private:
 	void SaveState();
 
 	//состояние из файла
-	void LoadState();
+	void LoadState(int iPASS_START_LEN);
 
 	//load config
 	void LoadConf(const std::wstring& wConf, std::wstring* pPass, std::wstring* pCons, tVecConv *pConv);
