@@ -12,7 +12,7 @@ public:
 	PassGen();
 	~PassGen();
 
-	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase);
+	void Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase, bool bReverse);
 
 	void InitVocab(const std::wstring& wVocab);
 
@@ -66,6 +66,8 @@ private:
 	int iAutosave;
 
 	bool bFirstTime;
+
+	bool m_bReverse;
 };
 
 #endif	//_PASS_GEN_H_
