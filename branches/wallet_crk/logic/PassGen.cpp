@@ -11,6 +11,7 @@ PassGen::PassGen()
 {
 	iAutosave=0;
 	bFirstTime=true;
+	m_bReverse=false;
 }
 
 PassGen::~PassGen()
@@ -18,10 +19,11 @@ PassGen::~PassGen()
 
 }
 
-void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase)
+void PassGen::Init(const std::wstring& wConf, const std::wstring& wAutosave, const std::wstring& wPhrase, bool bReverse)
 {
 	//открыть файл с символами перебора
-	
+	m_bReverse=bReverse;
+
 	//zero memory
 	for (int i=0;i<MAX_PASS;++i)
 		iPassState[i]=0;
@@ -78,8 +80,8 @@ std::wstring PassGen::GenNextPass()
 		}
 	}
 	
-	std::wstring wPassRes=wPhrasePass;
-	std::wstring wConsRes=wPhraseCons;
+	std::wstring wPassRes;//=wPhrasePass;
+	std::wstring wConsRes;//=wPhraseCons;
 	for (int i=0;i<MAX_PASS;++i)
 	{
 		int j=iPassState[i]-1;
@@ -92,6 +94,17 @@ std::wstring PassGen::GenNextPass()
 
 			wConsRes=wConsRes+wCons[j];
 		}
+	}
+
+	if (m_bReverse)
+	{
+		wPassRes=wPassRes+wPhrasePass;
+		wConsRes=wConsRes+wPhraseCons;
+	}
+	else
+	{
+		wPassRes=wPhrasePass+wPassRes;
+		wConsRes=wPhraseCons+wConsRes;
 	}
 
 	std::wcout<<wConsRes<<std::endl;

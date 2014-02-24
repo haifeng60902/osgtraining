@@ -14,6 +14,7 @@ std::wstring wSuccess;
 std::wstring wPhrase;
 std::wstring wVocab;
 std::wstring wCrypto(L"bitcoind.exe");
+bool bReverse=false;
 
 PassGen m_PassGen;
 BtcdLauncher m_BtcdLauncher;
@@ -71,6 +72,11 @@ int main(int argc, char** argv)
 			wCrypto=std::wstring(sConf.begin(), sConf.end());
 			continue;
 		}
+		else if (strcmp(argv[i], "-reverse") == 0)
+		{
+			bReverse=true;
+			continue;
+		}
 	}
 
 	m_BtcdLauncher.Init(wCrypto);
@@ -78,7 +84,7 @@ int main(int argc, char** argv)
 	if (!wVocab.empty())
 		m_PassGen.InitVocab(wVocab);
 	else
-		m_PassGen.Init(wConf, wAutosave, wPhrase);
+		m_PassGen.Init(wConf, wAutosave, wPhrase, bReverse);
 
 	bool bStop = false;
 	pswTry tryStatus=pswNext;
