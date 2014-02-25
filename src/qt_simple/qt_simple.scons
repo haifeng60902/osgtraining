@@ -1,0 +1,46 @@
+# encoding: utf-8
+
+Import('env')
+
+#--------------------------------------#
+
+target = 'qt_simple'
+
+libs = ['edCore','Qt5Widgets','Qt5Core','Qt5Gui','qtmain']
+
+not_linked_dependencies = []
+
+	 
+external_libs = ['lua']
+
+#--------------------------------------#
+
+sources=env.Glob("*.cpp")
+headers=env.Glob("*.h")
+sources+=env.Glob("Editors/*.cpp")
+headers+=env.Glob("Editors/*.h")
+
+#--------------------------------------#
+
+GSDK_PATH = env.environ.get('GSDK_DIR', '$TOP_DIR') 
+
+env.edProgram(
+	target=target,
+	source=sources,
+	header=headers,
+	external_libs=external_libs,
+	libs=libs,
+	not_linked_dependencies=not_linked_dependencies,
+
+    CPPPATH = [
+		#env['SDK_DIR']+'qt',
+		GSDK_PATH+'/inc/qt/',
+		GSDK_PATH+'/inc/qt/QtWidgets'
+	],
+	
+	CPPDEFINES=[
+	],
+	LINKFLAGS = [
+        '/SUBSYSTEM:WINDOWS'
+        ]
+)
