@@ -7,5 +7,6 @@ env.SConscript([
 	'Proxy/Proxy.scons',
 	'PoolSwitcher/PoolSwitcher.scons',
 	'ServerTest/ServerTest.scons',
-	'ClientTest/ClientTest.scons'
+	'ClientTest/ClientTest.scons',
+	'qt_simple/qt_simple.scons'
 ])
