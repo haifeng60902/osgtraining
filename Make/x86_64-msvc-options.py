@@ -42,7 +42,7 @@ else:
 #-----------------------------------#
 
 CPPDEFINES_RELEASE = ['NDEBUG']
-CPPDEFINES_DEBUG   = ['_DEBUG', 'DEBUG', '_ITERATOR_DEBUG_LEVEL=0']
+CPPDEFINES_DEBUG   = ['_DEBUG', 'DEBUG', '_ITERATOR_DEBUG_LEVEL=2']
 
 #-----------------------------------#
  
