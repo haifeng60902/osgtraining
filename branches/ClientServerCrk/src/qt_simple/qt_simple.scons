@@ -6,7 +6,7 @@ Import('env')
 
 target = 'qt_simple'
 
-libs = ['edCore','Qt5Widgets','Qt5Core','Qt5Gui','qtmain']
+libs = ['edCore','Qt5Widgets','Qt5Core','Qt5Gui','qtmain','libEGL','libGLESv2']
 
 not_linked_dependencies = []
 
@@ -35,10 +35,17 @@ env.edProgram(
     CPPPATH = [
 		#env['SDK_DIR']+'qt',
 		GSDK_PATH+'/inc/qt/',
-		GSDK_PATH+'/inc/qt/QtWidgets'
+		GSDK_PATH+'/inc/qt/QtWidgets',
+		GSDK_PATH+'/inc/qt/QtGui',
+		GSDK_PATH+'/inc/qt/QtANGLE',
 	],
 	
 	CPPDEFINES=[
+		'QT_WIDGETS_LIB',
+		'QT_GUI_LIB',
+		'QT_CORE_LIB',
+		'QT_OPENGL_ES_2',
+		'QT_OPENGL_ES_2_ANGLE'
 	],
 	LINKFLAGS = [
         '/SUBSYSTEM:WINDOWS'
