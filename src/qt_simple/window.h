@@ -38,49 +38,79 @@
 **
 ****************************************************************************/
 
-#include <QApplication>
+#ifndef WINDOW_H
+#define WINDOW_H
+
+#include <QSystemTrayIcon>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-#include <QMessageBox>
-#include "window.h"
+#include <QDialog>
 
-int main(int argc, char *argv[])
+QT_BEGIN_NAMESPACE
+class QAction;
+class QCheckBox;
+class QComboBox;
+class QGroupBox;
+class QLabel;
+class QLineEdit;
+class QMenu;
+class QPushButton;
+class QSpinBox;
+class QTextEdit;
+QT_END_NAMESPACE
+
+	//! [0]
+class Window : public QDialog
 {
-	Q_INIT_RESOURCE(systray);
+	//Q_OBJECT
+public:
+	Window();
 
-	QApplication app(argc, argv);
+	void setVisible(bool visible);
 
-	if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-		QMessageBox::critical(0, QObject::tr("Systray"),
-			QObject::tr("I couldn't detect any system tray "
-			"on this system."));
-		return 1;
-	}
-	QApplication::setQuitOnLastWindowClosed(false);
+protected:
+	void closeEvent(QCloseEvent *event);
 
-	Window window;
-	window.show();
-	return app.exec();
-}
+	private slots:
+		void setIcon(int index);
+		void iconActivated(QSystemTrayIcon::ActivationReason reason);
+		void showMessage();
+		void messageClicked();
 
-#else
+private:
+	void createIconGroupBox();
+	void createMessageGroupBox();
+	void createActions();
+	void createTrayIcon();
 
-#include <QLabel>
-#include <QDebug>
+	QGroupBox *iconGroupBox;
+	QLabel *iconLabel;
+	QComboBox *iconComboBox;
+	QCheckBox *showIconCheckBox;
 
-int main(int argc, char *argv[])
-{
-	QApplication app(argc, argv);
-	QString text("QSystemTrayIcon is not supported on this platform");
+	QGroupBox *messageGroupBox;
+	QLabel *typeLabel;
+	QLabel *durationLabel;
+	QLabel *durationWarningLabel;
+	QLabel *titleLabel;
+	QLabel *bodyLabel;
+	QComboBox *typeComboBox;
+	QSpinBox *durationSpinBox;
+	QLineEdit *titleEdit;
+	QTextEdit *bodyEdit;
+	QPushButton *showMessageButton;
 
-	QLabel *label = new QLabel(text);
-	label->setWordWrap(true);
+	QAction *minimizeAction;
+	QAction *maximizeAction;
+	QAction *restoreAction;
+	QAction *quitAction;
 
-	label->show();
-	qDebug() << text;
+	QSystemTrayIcon *trayIcon;
+	QMenu *trayIconMenu;
+};
+//! [0]
 
-	app.exec();
-}
+#endif // QT_NO_SYSTEMTRAYICON
 
 #endif
