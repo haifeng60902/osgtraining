@@ -7,13 +7,16 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 
+#include "binRigs.h"
+#include "luaParseConf.h"
+
 class window
 {
 public:
 	window();
 	~window();
 
-	void init();
+	void init(const char* conf);
 
 	void show();
 
@@ -25,8 +28,8 @@ private:
 	struct  binRigLine
 	{
 		QHBoxLayout* lineLayout;			//one line in vertical grid
-		tVecGroupbox vRigs;					//line of group boxs 
-		tVecVBoxLayout vGroupInfoLayout;	//a vertical layout for one group box
+		tVecGroupbox vGroupBox;					//line of group boxs 
+		tVecVBoxLayout vLayoutInGroupBox;	//a vertical layout for one group box
 	};
 	typedef std::vector<binRigLine> tVecRigLine;
 	
@@ -35,6 +38,9 @@ private:
 	QWidget *mainWindow;
 	QVBoxLayout* mainLayout;
 	tVecRigLine vRigLine;
+
+	//settings from lua config
+	binSetting settins;
 };
 
 #endif	//_WINDOW_H_

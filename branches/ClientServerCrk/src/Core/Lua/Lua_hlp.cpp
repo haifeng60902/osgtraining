@@ -117,3 +117,30 @@ bool Lua::Config::pop(std::string* v)
 	return res;
 #endif
 }
+
+// wrappers
+template<typename T> static inline
+	bool popnumber(Lua::Config& conf, T* res)
+{
+	bool valid = lua_isnumber(conf, -1) ? true : false;
+	if( valid )
+		*res = (T)lua_tonumber(conf, -1);
+	conf.pop(1);
+	return valid;
+}
+
+
+bool Lua::Config::pop(int* v)
+{
+	return popnumber(*this, v);
+}
+
+bool Lua::Config::pop(float* v)
+{
+	return popnumber(*this, v);
+}
+
+bool Lua::Config::pop(double* v)
+{
+	return popnumber(*this, v);
+}
