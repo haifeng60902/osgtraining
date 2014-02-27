@@ -1,0 +1,66 @@
+--number rig info in a row
+row=4;
+
+rigs=
+{
+	{
+		rig="fm0";
+	},
+	{
+		rig="fm1";
+	},
+	{
+		rig="fm2";
+	},
+	{
+		rig="fm3";
+	},
+	{
+		rig="fm4";
+	},
+	{
+		rig="fm5";
+	},
+	{
+		rig="fm6";
+	},
+	{
+		rig="fm7";
+	},
+	{
+		rig="fm8";
+	},
+	{
+		rig="fm9";
+	},
+	{
+		rig="fm10";
+	},
+	{
+		rig="fm11";
+	},
+	{
+		rig="fm12";
+	},
+	{
+		rig="fm13";
+	},
+	{
+		rig="fm14";
+	},
+	{
+		rig="fm15";
+	},
+	{
+		rig="7970w";
+	},
+	{
+		rig="7970x2";
+	},
+	{
+		rig="6990";
+	},
+	{
+		rig="59701";
+	}
+}
