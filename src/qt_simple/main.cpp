@@ -5,11 +5,11 @@
 
 int main(int argc, char *argv[])
 {
+	//get settings from lua config
 	QApplication app(argc, argv);
 
 	window win;
-	win.init();
-	//QLabel *label = new QLabel("Hello Qt!");
-	//label->show();
+	win.init("rigs.lua");
+
 	return app.exec();
 }
