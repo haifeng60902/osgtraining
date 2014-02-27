@@ -1,5 +1,5 @@
 --number rig info in a row
-row=4;
+column=4;
 
 rigs=
 {
