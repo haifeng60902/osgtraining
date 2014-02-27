@@ -39,6 +39,11 @@ namespace Lua
 		T get(const char* path, const T& v) { T r(v); get(path); pop(&r); return r; }
 
 		bool pop(std::string*);
+		bool pop(bool*);
+		bool pop(int*);
+		bool pop(float*);
+		bool pop(double*);
+
 	private:
 		// push value onto stack
 		void get(const char* path);
