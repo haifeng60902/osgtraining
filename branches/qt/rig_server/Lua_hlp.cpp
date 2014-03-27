@@ -118,6 +118,15 @@ bool Lua::Config::pop(std::string* v)
 #endif
 }
 
+bool Lua::Config::getStr(std::string* v)
+{
+	// string type only
+	bool valid = lua_isstring(L, -1) ? true : false;
+	if( valid )
+		*v = lua_tostring(L, -1);
+	return valid;
+}
+
 // wrappers
 template<typename T> static inline
 	bool popnumber(Lua::Config& conf, T* res)
