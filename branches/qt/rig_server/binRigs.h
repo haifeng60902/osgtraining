@@ -15,6 +15,7 @@ struct binMode
 {
 	std::string sCoin;
 	std::string sMiner;
+	std::string sIcon;
 	tVecString vPools;
 };
 

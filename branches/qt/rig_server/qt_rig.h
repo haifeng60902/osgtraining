@@ -10,9 +10,10 @@
 #include <QGroupBox>
 #include <QTimer>
 
-#include "ui_qt_rig.h"
+//#include "ui_qt_rig.h"
 #include "luaParseConf.h"
 #include "RigInfo.h"
+#include "RigSett.h"
 
 class qt_rig : public QDialog
 {
@@ -37,10 +38,13 @@ private:
 	
 	QTimer *timer;
 
-	Ui::qt_rigClass ui;
+	//Ui::qt_rigClass ui;
 
 	//rig info tab
 	RigInfo rigInfo;
+
+	//rig settings tab
+	RigSett rigSett;
 
 	//settings from lua config
 	binSetting settings;

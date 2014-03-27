@@ -103,6 +103,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;lua_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>getQtMoc.bat</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generate Qt Mocs</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -135,6 +141,10 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;lua_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>getQtMoc.bat</Command>
+      <Message>Generate Qt Mocs</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\Debug\moc_qt_rig.cpp">
@@ -154,8 +164,15 @@
     <ClCompile Include="luaParseConf.cpp" />
     <ClCompile Include="Lua_hlp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="moc_binRigs.cpp" />
+    <ClCompile Include="moc_luaParseConf.cpp" />
+    <ClCompile Include="moc_Lua_hlp.cpp" />
+    <ClCompile Include="moc_qt_rig.cpp" />
+    <ClCompile Include="moc_RigInfo.cpp" />
+    <ClCompile Include="moc_RigSett.cpp" />
     <ClCompile Include="qt_rig.cpp" />
     <ClCompile Include="RigInfo.cpp" />
+    <ClCompile Include="RigSett.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt_rig.h">
@@ -203,6 +220,12 @@
     <ClInclude Include="luaParseConf.h" />
     <ClInclude Include="Lua_hlp.h" />
     <ClInclude Include="RigInfo.h" />
+    <CustomBuild Include="RigSett.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB  "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I$(GSDK_DIR)\inc"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing RigSett.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt_rig.qrc">

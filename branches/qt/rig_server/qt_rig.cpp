@@ -18,7 +18,7 @@ qt_rig::qt_rig(QWidget *parent)
 	timer->start(1000);
 	connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
 
-	ui.setupUi(this);
+	//ui.setupUi(this);
 }
 
 qt_rig::~qt_rig()
@@ -35,12 +35,11 @@ void qt_rig::addTabs()
 	rigInfo.Init(settings);
 	QWidget* rigInfoWidget=rigInfo.GetWidget();
 
-	tab2=new QWidget;
+	rigSett.Init(settings);
+	QWidget* rigSettWidget=rigSett.GetWidget();
+
 	tabWidget->addTab(rigInfoWidget, tr("Rigs info"));
-	tabWidget->addTab(tab2,tr("Settings"));
-	
-	tab2Layout=new QHBoxLayout;
-	tab2->setLayout(tab2Layout);	
+	tabWidget->addTab(rigSettWidget, tr("Settings"));
 }
 
 void qt_rig::timerTick()
