@@ -4,6 +4,7 @@
 #include <QtWidgets/QDialog>
 #include <vector>
 
+#include <QTabWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -11,6 +12,7 @@
 
 #include "ui_qt_rig.h"
 #include "luaParseConf.h"
+#include "RigInfo.h"
 
 class qt_rig : public QDialog
 {
@@ -24,30 +26,24 @@ private slots:
 	void timerTick();
 
 private:
-	typedef std::vector<QVBoxLayout*> tVecVBoxLayout;
-	typedef std::vector<QHBoxLayout*> tVecHBoxLayout;
-	typedef std::vector<QGroupBox*> tVecGroupbox;
+	void addTabs();
 
-	struct  binRigLine
-	{
-		QHBoxLayout* lineLayout;			//one line in vertical grid
-		tVecGroupbox vGroupBox;					//line of group boxs 
-		tVecVBoxLayout vLayoutInGroupBox;	//a vertical layout for one group box
-	};
-	typedef std::vector<binRigLine> tVecRigLine;
-
-	void addGroups();
+	QTabWidget *tabWidget;
+	QWidget* tab2;
+	QHBoxLayout* tab2Layout;
 
 	QWidget *mainWindow;
 	QVBoxLayout* mainLayout;
-	tVecRigLine vRigLine;
-
+	
 	QTimer *timer;
 
 	Ui::qt_rigClass ui;
 
+	//rig info tab
+	RigInfo rigInfo;
+
 	//settings from lua config
-	binSetting settins;
+	binSetting settings;
 };
 
 #endif // QT_RIG_H
