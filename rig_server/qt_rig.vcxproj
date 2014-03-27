@@ -151,14 +151,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_qt_rig.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="luaParseConf.cpp" />
     <ClCompile Include="Lua_hlp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="qt_rig.cpp" />
+    <ClCompile Include="RigInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt_rig.h">
@@ -205,6 +202,7 @@
     <ClInclude Include="GeneratedFiles\ui_qt_rig.h" />
     <ClInclude Include="luaParseConf.h" />
     <ClInclude Include="Lua_hlp.h" />
+    <ClInclude Include="RigInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt_rig.qrc">
@@ -234,7 +232,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="qt521" Qt5Version_x0020_x64="qt521" />
+      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="qt521" Qt5Version_x0020_x64="520" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

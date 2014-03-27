@@ -4,14 +4,15 @@ qt_rig::qt_rig(QWidget *parent)
 	: QDialog(parent)
 {
 	luaParseConf luaConf;
-	luaConf.parse("rigs.lua", &settins);
+	luaConf.parse("rigs.lua", &settings);
 
 	setWindowTitle("Rigs Monitor");
 
 	mainLayout=new QVBoxLayout;
 	setLayout(mainLayout);
-
-	addGroups();
+	
+	addTabs();
+	//addGroups();
 
 	timer = new QTimer(this);
 	timer->start(1000);
@@ -25,38 +26,21 @@ qt_rig::~qt_rig()
 
 }
 
-void qt_rig::addGroups()
+void qt_rig::addTabs()
 {
-	int row=settins.vRigs.size()/settins.iColumn;
-	int last=settins.vRigs.size()%settins.iColumn;
-	if (last>0)
-		++row;
+	tabWidget = new QTabWidget(this);
 
-	int k=0;
-	for (int i=0;i<row;++i)
-	{
-		binRigLine line;
-		line.lineLayout=new QHBoxLayout;
-		mainLayout->addLayout(line.lineLayout);
-		for (int j=0;j<settins.iColumn;++j)
-		{
-			QGroupBox* box=new QGroupBox;
-			QVBoxLayout* layoutBox=new QVBoxLayout;
-			box->setTitle(settins.vRigs[k].sRig.c_str());
-			box->setLayout(layoutBox);
+	mainLayout->addWidget(tabWidget);
 
-			line.vGroupBox.push_back(box);
-			line.vLayoutInGroupBox.push_back(layoutBox);
+	rigInfo.Init(settings);
+	QWidget* rigInfoWidget=rigInfo.GetWidget();
 
-			line.lineLayout->addWidget(box);
-
-			++k;
-
-			if (k==settins.vRigs.size())
-				break;
-		}
-		vRigLine.push_back(line);
-	}
+	tab2=new QWidget;
+	tabWidget->addTab(rigInfoWidget, tr("Rigs info"));
+	tabWidget->addTab(tab2,tr("Settings"));
+	
+	tab2Layout=new QHBoxLayout;
+	tab2->setLayout(tab2Layout);	
 }
 
 void qt_rig::timerTick()
