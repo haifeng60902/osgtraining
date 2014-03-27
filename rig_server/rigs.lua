@@ -6,21 +6,25 @@ modes=
 	{
 		coin="VTC(Vertcoin)";
 		miner="exeminer";
+		icon="icons/vtc.png";
 		pools={"stratum+tcp://vtc.poolz.net:3333","stratum+tcp://pool.verters.com:3333"};
 	},
 	{
 		coin="EXE(Execoin)";
 		miner="exeminer";
+		icon="icons/exe.png";
 		pools={"stratum+tcp://exe.coinsprofit.com:3341","stratum+tcp://stratum-exe.poolz.net:3333"};
 	},
 	{
 		coin="CSC(Casinocoin)";
 		miner="cgminer";
+		icon="icons/csc.png";
 		pools={"stratum+tcp://pool-eu.hash.so:1337","stratum+tcp://pool-us.hash.so:1337"};
 	},
 	{
 		coin="LTC(Litecoin)";
 		miner="cgminer";
+		icon="icons/ltc.png";
 		pools={"stratum+tcp://united.wemineltc.com:3333","stratum+tcp://freedom.wemineltc.com:80"};
 	}
 }

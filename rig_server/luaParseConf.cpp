@@ -54,6 +54,7 @@ void luaParseConf::parseModes(Lua::Config& config, tVecMode *modes)
 			binMode mode;
 			mode.sCoin=config.get("coin", std::string(""));
 			mode.sMiner=config.get("miner", std::string(""));
+			mode.sIcon=config.get("icon", std::string(""));
 			
 			if(config.open("pools"))
 			{
