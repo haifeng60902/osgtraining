@@ -1,8 +1,10 @@
 #ifndef QT_RIG_H
 #define QT_RIG_H
 
-#include <QtWidgets/QDialog>
 #include <vector>
+#include <string>
+
+#include <QtWidgets/QDialog>
 
 #include <QTabWidget>
 #include <QHBoxLayout>
@@ -20,7 +22,7 @@ class qt_rig : public QDialog
 	Q_OBJECT
 
 public:
-	qt_rig(QWidget *parent = 0);
+	qt_rig(const std::string sConf, QWidget *parent = 0);
 	~qt_rig();
 
 private slots:

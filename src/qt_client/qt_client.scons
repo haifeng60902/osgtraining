@@ -1,0 +1,54 @@
+# encoding: utf-8
+
+Import('env')
+
+#--------------------------------------#
+
+target = 'qt_client'
+
+libs = ['edCore','qtmain','Qt5Widgets','Qt5Core','Qt5Gui','libEGL','libGLESv2','Qt5WinExtras','Qt5Network']
+
+not_linked_dependencies = []
+
+	 
+external_libs = ['lua']
+
+#--------------------------------------#
+
+sources=env.Glob("*.cpp")
+headers=env.Glob("*.h")
+sources+=env.Glob("Editors/*.cpp")
+headers+=env.Glob("Editors/*.h")
+
+#--------------------------------------#
+
+GSDK_PATH = env.environ.get('GSDK_DIR', '$TOP_DIR') 
+
+env.edProgram(
+	target=target,
+	source=sources,
+	header=headers,
+	external_libs=external_libs,
+	libs=libs,
+	not_linked_dependencies=not_linked_dependencies,
+
+    CPPPATH = [
+		GSDK_PATH+'/inc/qt/',
+		GSDK_PATH+'/inc/qt/QtWidgets',
+		GSDK_PATH+'/inc/qt/QtGui',
+		GSDK_PATH+'/inc/qt/QtANGLE',
+		GSDK_PATH+'/inc/qt/QtCore',
+		GSDK_PATH+'/inc/qt/QtNetwork'
+	],
+	
+	CPPDEFINES=[
+		'QT_WIDGETS_LIB',
+		'QT_GUI_LIB',
+		'QT_CORE_LIB',
+		'QT_OPENGL_ES_2',
+		'QT_OPENGL_ES_2_ANGLE'
+	],
+	LINKFLAGS = [
+        '/SUBSYSTEM:WINDOWS'
+        ]
+)

@@ -1,10 +1,10 @@
 #include "qt_rig.h"
 
-qt_rig::qt_rig(QWidget *parent)
+qt_rig::qt_rig(const std::string sConf, QWidget *parent)
 	: QDialog(parent)
 {
 	luaParseConf luaConf;
-	luaConf.parse("rigs.lua", &settings);
+	luaConf.parse(sConf.c_str(), &settings);
 
 	setWindowTitle("Rigs Monitor");
 
