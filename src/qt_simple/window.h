@@ -3,15 +3,19 @@
 
 #include <vector>
 
+#include <QDialog>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QTimer>
+#include <QtGui>
 
 #include "binRigs.h"
 #include "luaParseConf.h"
 
-class window
+class window: public QDialog
 {
+	Q_OBJECT
 public:
 	window();
 	~window();
@@ -19,6 +23,14 @@ public:
 	void init(const char* conf);
 
 	void show();
+
+signals:
+	void findNext(const QString &str, Qt::CaseSensitivity cs);
+	void findPrevious(const QString &str, Qt::CaseSensitivity cs);
+
+private slots:
+	void findClicked();
+	void enableFindButton(const QString &text);
 
 private:
 	typedef std::vector<QVBoxLayout*> tVecVBoxLayout;
@@ -41,6 +53,14 @@ private:
 
 	//settings from lua config
 	binSetting settins;
+
+	int m_timerId;
+
+	QTimer *timer;
+
+private slots:
+		void update();
+
 };
 
 #endif	//_WINDOW_H_
