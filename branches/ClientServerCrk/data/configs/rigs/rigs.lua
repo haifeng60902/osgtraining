@@ -1,6 +1,34 @@
 --number rig info in a row
 column=4;
 
+modes=
+{
+	{
+		coin="VTC(Vertcoin)";
+		miner="exeminer";
+		icon="icons/vertcoin-64x64.png";
+		pools={"stratum+tcp://vtc.poolz.net:3333","stratum+tcp://pool.verters.com:3333"};
+	},
+	{
+		coin="EXE(Execoin)";
+		miner="exeminer";
+		icon="icons/execoin-64x64.png";
+		pools={"stratum+tcp://exe.coinsprofit.com:3341","stratum+tcp://stratum-exe.poolz.net:3333"};
+	},
+	{
+		coin="CSC(Casinocoin)";
+		miner="cgminer";
+		icon="icons/casinocoin-64x64.png";
+		pools={"stratum+tcp://pool-eu.hash.so:1337","stratum+tcp://pool-us.hash.so:1337"};
+	},
+	{
+		coin="LTC(Litecoin)";
+		miner="cgminer";
+		icon="icons/litecoin-64x64.png";
+		pools={"stratum+tcp://united.wemineltc.com:3333","stratum+tcp://freedom.wemineltc.com:80"};
+	}
+}
+
 rigs=
 {
 	{
