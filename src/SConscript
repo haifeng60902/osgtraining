@@ -8,7 +8,6 @@ env.SConscript([
 	'PoolSwitcher/PoolSwitcher.scons',
 	'ServerTest/ServerTest.scons',
 	'ClientTest/ClientTest.scons',
-	'qt_simple/qt_simple.scons',
 	'find/find.scons',
 	'qt_server/qt_server.scons',
 	'qt_client/qt_client.scons'
