@@ -4,7 +4,7 @@ Import('env')
 
 #--------------------------------------#
 
-target = 'qt_simple'
+target = 'find'
 
 libs = ['edCore','qtmain','Qt5Widgets','Qt5Core','Qt5Gui','libEGL','libGLESv2','Qt5WinExtras']
 
@@ -33,7 +33,6 @@ env.edProgram(
 	not_linked_dependencies=not_linked_dependencies,
 
     CPPPATH = [
-		#env['SDK_DIR']+'qt',
 		GSDK_PATH+'/inc/qt/',
 		GSDK_PATH+'/inc/qt/QtWidgets',
 		GSDK_PATH+'/inc/qt/QtGui',

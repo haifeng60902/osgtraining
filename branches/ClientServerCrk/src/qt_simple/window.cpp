@@ -26,6 +26,17 @@ void window::init(const char* conf)
 	addGroups();
 
 	mainWindow->show();
+
+	timer=new QTimer;
+	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	timer->start();
+}
+
+void window::update()
+{
+	QWidget::update();
+	static int a=0;
+	a;
 }
 
 void window::addGroups()
