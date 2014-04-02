@@ -1,7 +1,7 @@
 systray=1;
 user="dbhec.7970w";
 pass="x";
-host="asmzx-pc";
+host="127.0.0.1";
 port=4028;
 
 miners=
