@@ -2,6 +2,7 @@
 #define RIG_CLIENT_H
 
 #include <vector>
+#include <map>
 
 #include <QDialog>
 #include <QSystemTrayIcon>
@@ -36,10 +37,31 @@ public:
 protected:
 	void closeEvent(QCloseEvent *event);
 private:
+	enum eNetMode
+	{
+		enTry2Connect,
+		enConnectSuccess
+	};
+
+	enum eMinerMode
+	{
+		enFirtMsg,
+		enSummary,
+		enPools,
+		enCoin,
+		enQuit
+	};
+
+	typedef std::map<eMinerMode, std::string> tMode2Str;
+
 	void createTrayIcon();
 	void createActions();
 	void setIcon();
 	void createTimer();
+	void fillMap();
+
+	//start miner
+	void startMiner(int i);
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
@@ -63,6 +85,12 @@ private:
 	std::vector<QIcon*> vIcon;
 
 	binClient client;
+
+	eNetMode netMode;
+	eMinerMode minerMode;
+	eMinerMode prevMinerMode;
+	int iSwitchCoin;
+	tMode2Str mode2Str;
 };
 
 #endif // RIG_CLIENT_H

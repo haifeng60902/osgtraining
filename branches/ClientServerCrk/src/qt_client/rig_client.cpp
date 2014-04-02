@@ -13,9 +13,12 @@
 
 #include "luaParseConf.h"
 
+#include <Windows.h>
+
 rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWidget *parent)
-	: host(h), req(r), conf(c), QDialog(parent)
+	: host(h), req(r), conf(c), QDialog(parent), netMode(enTry2Connect), minerMode(enFirtMsg), prevMinerMode(enFirtMsg)
 {
+	iSwitchCoin=-1;
 	luaParseConf luaConf;
 	luaConf.parse(conf.toStdString().c_str(), &client);
 
@@ -23,15 +26,16 @@ rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWi
 	createTrayIcon();
 	setIcon();
 	createTimer();
+	fillMap();
 
 	connect(&tcpClient, SIGNAL(connected()),this, SLOT(connected()));
 	connect(&tcpClient, SIGNAL(readyRead()),this, SLOT(readyRead()));
 	connect(&tcpClient, SIGNAL(hostFound()),this, SLOT(hostFound()));
 
-	trayIcon->show();
-	//trayIcon->hide();
-	bOk=true;
-	//ui.setupUi(this);
+	if(client.bShowSysTray)
+		trayIcon->show();
+	else
+		trayIcon->hide();
 }
 
 rig_client::~rig_client()
@@ -87,12 +91,13 @@ void rig_client::coinSelect()
 			vAction[i]->setChecked(false);
 		}
 	}
+
+	//switch to J coin
+	iSwitchCoin=j;
 }
 
 void rig_client::createTrayIcon()
 {
-
-
 	trayIconMenu = new QMenu(this);
 	for(int i=0;i<vAction.size();++i)
 		trayIconMenu->addAction(vAction[i]);
@@ -133,24 +138,46 @@ void rig_client::createTimer()
 
 void rig_client::timerTick()
 {
-	static int i=0;
-	setWindowTitle(QString::number(i));
-	trayIcon->setToolTip(QString::number(i));
-	
-	++i;
-
-	if (bOk)
+	if (iSwitchCoin>-1)
 	{
-		tcpClient.connectToHost(client.sHost.c_str(), client.iPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
-		bOk=false;
+		if (minerMode==enFirtMsg)
+		{
+			//start miner
+			startMiner(iSwitchCoin);
+
+			iSwitchCoin=-1;
+
+			return;
+		}
+		else
+		{
+			minerMode=enQuit;
+		}
 	}
-	else
-		setWindowTitle("ERROR timerTick");
+
+	if (netMode==enTry2Connect)
+		minerMode=enFirtMsg;
+
+	netMode=enTry2Connect;
+	tcpClient.connectToHost(client.sHost.c_str(), client.iPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 }
 
 void rig_client::connected()
 {
-	tcpClient.write(req.toStdString().c_str());
+	if (minerMode==enFirtMsg)
+		minerMode=(eMinerMode)((int)minerMode+1);
+	
+	std::string sReq=mode2Str[minerMode];
+	tcpClient.write(sReq.c_str());
+
+	if (minerMode==enQuit)
+		minerMode=enFirtMsg;
+	else
+	{
+		minerMode=(eMinerMode)((int)minerMode+1);
+		if(minerMode==enQuit)
+			minerMode=enSummary;
+	}	
 }
 
 void rig_client::readyRead()
@@ -158,10 +185,37 @@ void rig_client::readyRead()
 	QString sR= tcpClient.readAll();
 	setWindowTitle(sR);
 	tcpClient.disconnectFromHost();
-	bOk=true;
 }
 
 void rig_client::hostFound()
 {
-	int a=1;
+	netMode=enConnectSuccess;
+}
+
+void rig_client::startMiner(int i)
+{
+	//start miner
+	STARTUPINFOW si;
+
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory( &si, sizeof(si) );
+	si.cb = sizeof(si);
+	ZeroMemory( &pi, sizeof(pi) );
+
+	std::string sFull=" walletpassphrase ";
+
+	//if(!CreateProcess(sCrypto.c_str(), (LPSTR)sFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi))
+	{
+		
+	}
+}
+
+void rig_client::fillMap()
+{
+	mode2Str[enFirtMsg]="error";
+	mode2Str[enSummary]="summary";
+	mode2Str[enPools]="pools";
+	mode2Str[enCoin]="coin";
+	mode2Str[enQuit]="quit";
 }
