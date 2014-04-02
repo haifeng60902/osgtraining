@@ -24,16 +24,19 @@ struct binParam
 };
 
 //key - miner(cgminer,exeminer), value - settings
-typedef std::map<std::string, binParam> tMapMinerSetting;
+typedef std::map<std::string, binParam> tMapMiner;
 
 struct binClient
 {
-	binClient():bShowSysTray(true)
+	binClient():bShowSysTray(true),
+		iPort(4028)
 	{};
 	bool bShowSysTray;
 	std::string sUser;
 	std::string sPass;
-	tMapMinerSetting mSettings;
+	std::string sHost;
+	int iPort;
+	tMapMiner mMiners;
 	tVecCoin vCoins;
 };
 
