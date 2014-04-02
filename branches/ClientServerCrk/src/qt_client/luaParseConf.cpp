@@ -1,6 +1,6 @@
 #include "luaParseConf.h"
 
-#include "Lua_hlp.h"
+#include "Core/Lua/Lua_hlp.h"
 
 luaParseConf::luaParseConf()
 {
@@ -11,8 +11,7 @@ luaParseConf::~luaParseConf()
 {
 
 }
-/*
-void luaParseConf::parse(const char* conf, binSetting* settings)
+void luaParseConf::parse(const char* conf, binClient* client)
 {
 	//parse lua config to settings
 	lua_State* l=lua_open();
@@ -22,7 +21,7 @@ void luaParseConf::parse(const char* conf, binSetting* settings)
 
 	if (!config.dofile(conf))
 		return;
-
+	/*
 	settings->iColumn = config.get("column", 0);
 	if(config.open("rigs"))
 	{
@@ -36,7 +35,7 @@ void luaParseConf::parse(const char* conf, binSetting* settings)
 		config.iterate_end();
 		config.pop();
 	}
+	*/
 
 	lua_close(l);
 }
-*/
