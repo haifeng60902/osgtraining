@@ -4,7 +4,8 @@
 #include <QDialog>
 #include <QSystemTrayIcon>
 #include <QtNetwork>
-//#include "ui_rig_client.h"
+
+#include "binClient.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -57,6 +58,8 @@ private:
 	QString host;
 	QString req;
 	QString conf;
+
+	binClient client;
 };
 
 #endif // RIG_CLIENT_H

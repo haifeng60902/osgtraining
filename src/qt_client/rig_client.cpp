@@ -11,10 +11,14 @@
 #include <QtGui>
 #include <QTimer>
 
+#include "luaParseConf.h"
 
 rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWidget *parent)
 	: host(h), req(r), conf(c), QDialog(parent)
 {
+	luaParseConf luaConf;
+	luaConf.parse(conf.toStdString().c_str(), &client);
+
 	createActions();
 	createTrayIcon();
 	setIcon();
