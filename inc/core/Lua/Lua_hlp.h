@@ -38,6 +38,11 @@ namespace Lua
 		template<typename T>
 		T get(const char* path, const T& v) { T r(v); get(path); pop(&r); return r; }
 
+		template<typename T>
+		bool get(int key, T* v) { get(key); return pop(v); }
+
+		bool getStr(std::string* v);
+
 		bool pop(std::string*);
 		bool pop(bool*);
 		bool pop(int*);
