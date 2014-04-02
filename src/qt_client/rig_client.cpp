@@ -41,6 +41,18 @@ rig_client::~rig_client()
 
 void rig_client::createActions()
 {
+	for(int i=0;i<client.vCoins.size();++i)
+	{
+		QIcon* icon=new QIcon(client.vCoins[i].sIcon.c_str());
+		vIcon.push_back(icon);
+
+		QAction* action=new QAction(*icon, client.vCoins[i].sCoin.c_str(), this);
+		action->setCheckable(true);
+		
+		vAction.push_back(action);
+		connect(action, SIGNAL(triggered()), this, SLOT(coinSelect()));
+	}
+
 	minimizeAction = new QAction(tr("Mi&nimize"), this);
 	connect(minimizeAction, SIGNAL(triggered()), this, SLOT(hide()));
 
@@ -51,9 +63,41 @@ void rig_client::createActions()
 	connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 
+void rig_client::coinSelect()
+{
+	int j=0;
+	for(int i=0;i<vAction.size();++i)
+	{
+		bool b1=vAction[i]->isEnabled();
+		bool b2=vAction[i]->isChecked();
+		if ((b2)&&(b1))
+		{
+			j=i;
+			vAction[i]->setEnabled(false);
+			trayIcon->setIcon(*vIcon[i]);
+			setWindowIcon(*vIcon[i]);
+			break;
+		}
+	}
+	for(int i=0;i<vAction.size();++i)
+	{
+		if (i!=j)
+		{
+			vAction[i]->setEnabled(true);
+			vAction[i]->setChecked(false);
+		}
+	}
+}
+
 void rig_client::createTrayIcon()
 {
+
+
 	trayIconMenu = new QMenu(this);
+	for(int i=0;i<vAction.size();++i)
+		trayIconMenu->addAction(vAction[i]);
+
+	trayIconMenu->addSeparator();
 	trayIconMenu->addAction(minimizeAction);
 	trayIconMenu->addAction(restoreAction);
 	trayIconMenu->addSeparator();
@@ -65,10 +109,9 @@ void rig_client::createTrayIcon()
 
 void rig_client::setIcon()
 {
-	iconBad = new QIcon("images/bad.png");
-	iconHeart = new QIcon("images/heart.png");
-	trayIcon->setIcon(*iconHeart);
-	setWindowIcon(*iconHeart);
+	iconDef = new QIcon("icons/money.png");
+	trayIcon->setIcon(*iconDef);
+	setWindowIcon(*iconDef);
 	trayIcon->setToolTip(tr("0"));
 }
 
@@ -86,8 +129,6 @@ void rig_client::createTimer()
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
 	timer->start(1000);
-
-	//tcpClient.connectToHost(host, 4028, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 }
 
 void rig_client::timerTick()

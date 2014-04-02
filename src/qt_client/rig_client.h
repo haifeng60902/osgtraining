@@ -1,6 +1,8 @@
 #ifndef RIG_CLIENT_H
 #define RIG_CLIENT_H
 
+#include <vector>
+
 #include <QDialog>
 #include <QSystemTrayIcon>
 #include <QtNetwork>
@@ -26,6 +28,7 @@ private slots:
 	void connected();
 	void readyRead();
 	void hostFound();
+	void coinSelect();
 public:
 	rig_client(const QString& h, const QString& r, const QString& c, QWidget *parent = 0);
 	~rig_client();
@@ -38,7 +41,6 @@ private:
 	void setIcon();
 	void createTimer();
 
-	//Ui::rig_clientClass ui;
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
 
@@ -46,10 +48,8 @@ private:
 	QAction *restoreAction;
 	QAction *quitAction;
 
-	QIcon *iconBad;
-	QIcon *iconHeart;
-	QIcon *iconTrash;
-
+	QIcon *iconDef;
+	
 	QTimer *timer;
 
 	QTcpSocket tcpClient;
@@ -58,6 +58,9 @@ private:
 	QString host;
 	QString req;
 	QString conf;
+
+	std::vector<QAction*> vAction;
+	std::vector<QIcon*> vIcon;
 
 	binClient client;
 };
