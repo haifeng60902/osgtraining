@@ -141,7 +141,7 @@ void rig_client::timerTick()
 
 	if (bOk)
 	{
-		tcpClient.connectToHost(host, 4028, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
+		tcpClient.connectToHost(client.sHost.c_str(), client.iPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 		bOk=false;
 	}
 	else
