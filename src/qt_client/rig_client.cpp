@@ -12,6 +12,7 @@
 #include <QTimer>
 
 #include "luaParseConf.h"
+#include "winCreateProcess.h"
 
 #include <Windows.h>
 
@@ -143,7 +144,10 @@ void rig_client::timerTick()
 		if (minerMode==enFirtMsg)
 		{
 			//start miner
-			startMiner(iSwitchCoin);
+			winCreateProcess win;
+			bool bRes=win.create(iSwitchCoin, client);
+			if (!bRes)
+				processDoNotLaunch();
 
 			iSwitchCoin=-1;
 
@@ -160,6 +164,14 @@ void rig_client::timerTick()
 
 	netMode=enTry2Connect;
 	tcpClient.connectToHost(client.sHost.c_str(), client.iPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
+}
+
+void rig_client::processDoNotLaunch()
+{
+	vAction[iSwitchCoin]->setEnabled(true);
+	vAction[iSwitchCoin]->setChecked(false);
+	trayIcon->setIcon(*iconDef);
+	setWindowIcon(*iconDef);
 }
 
 void rig_client::connected()
@@ -190,25 +202,6 @@ void rig_client::readyRead()
 void rig_client::hostFound()
 {
 	netMode=enConnectSuccess;
-}
-
-void rig_client::startMiner(int i)
-{
-	//start miner
-	STARTUPINFOW si;
-
-	PROCESS_INFORMATION pi;
-
-	ZeroMemory( &si, sizeof(si) );
-	si.cb = sizeof(si);
-	ZeroMemory( &pi, sizeof(pi) );
-
-	std::string sFull=" walletpassphrase ";
-
-	//if(!CreateProcess(sCrypto.c_str(), (LPSTR)sFull.c_str(), NULL, NULL,FALSE, 0,NULL,NULL,&si,&pi))
-	{
-		
-	}
 }
 
 void rig_client::fillMap()

@@ -59,9 +59,7 @@ private:
 	void setIcon();
 	void createTimer();
 	void fillMap();
-
-	//start miner
-	void startMiner(int i);
+	void processDoNotLaunch();
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
