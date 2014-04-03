@@ -179,7 +179,8 @@ void rig_client::connected()
 	if (minerMode==enFirtMsg)
 		minerMode=(eMinerMode)((int)minerMode+1);
 	
-	std::string sReq=mode2Str[minerMode];
+	//std::string sReq=mode2Str[minerMode];
+	std::string sReq=mode2Str[enSummary];
 	tcpClient.write(sReq.c_str());
 
 	if (minerMode==enQuit)
@@ -195,6 +196,7 @@ void rig_client::connected()
 void rig_client::readyRead()
 {
 	QString sR= tcpClient.readAll();
+	feedback.decode(minerMode, sR.toStdString());
 	setWindowTitle(sR);
 	tcpClient.disconnectFromHost();
 }

@@ -2,13 +2,14 @@
 #define RIG_CLIENT_H
 
 #include <vector>
-#include <map>
 
 #include <QDialog>
 #include <QSystemTrayIcon>
 #include <QtNetwork>
 
 #include "binClient.h"
+#include "binMiner.h"
+#include "decodeFeedback.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -43,23 +44,15 @@ private:
 		enConnectSuccess
 	};
 
-	enum eMinerMode
-	{
-		enFirtMsg,
-		enSummary,
-		enPools,
-		enCoin,
-		enQuit
-	};
-
-	typedef std::map<eMinerMode, std::string> tMode2Str;
-
 	void createTrayIcon();
 	void createActions();
 	void setIcon();
 	void createTimer();
 	void fillMap();
 	void processDoNotLaunch();
+
+	//convert string to binary data
+	decodeFeedback feedback;
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
