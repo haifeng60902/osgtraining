@@ -9,7 +9,8 @@ public:
 	decodeFeedback();
 	~decodeFeedback();
 
-	void decode(eMinerMode mode, const std::string& msg);
+	//decode string to binary data
+	void parse(eMinerMode mode, const std::string& msg);
 
 private:
 	void decodeSummary(const std::string& msg);
@@ -24,11 +25,12 @@ private:
 	std::string GetStr(const std::string& msg, const std::string& param);
 	double GetDouble(const std::string& msg, const std::string& param);
 	bool BoolDetect(std::string sBool);
-
+	/*
 	tVecSummary vSummary;
 	tVecPools vPools;
 	tVecCoin vCoin;
 	tVecDevs vDevs;
+	*/
 };
 
 #endif	//_DECODE_FEEDBACK_H_

@@ -23,6 +23,9 @@ rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWi
 	luaParseConf luaConf;
 	luaConf.parse(conf.toStdString().c_str(), &client);
 
+	//set log path
+	save.setLogPath(client.sLogPath);
+
 	createActions();
 	createTrayIcon();
 	setIcon();
@@ -187,7 +190,13 @@ void rig_client::connected()
 void rig_client::readyRead()
 {
 	QString sR= tcpClient.readAll();
-	feedback.decode(minerMode, sR.toStdString());
+	
+	//decode string to binary data
+	decode.parse(minerMode, sR.toStdString());
+	
+	//save string to log
+	save.parse(mode2Str[minerMode], sR.toStdString());
+	
 	setWindowTitle(sR);
 	tcpClient.disconnectFromHost();
 
