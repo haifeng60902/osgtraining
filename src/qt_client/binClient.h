@@ -35,6 +35,7 @@ struct binClient
 	std::string sUser;
 	std::string sPass;
 	std::string sHost;
+	std::string sLogPath;
 	int iPort;
 	tMapMiner mMiners;
 	tVecLuaCoin vCoins;

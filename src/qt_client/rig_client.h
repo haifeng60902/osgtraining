@@ -10,6 +10,7 @@
 #include "binClient.h"
 #include "binMiner.h"
 #include "decodeFeedback.h"
+#include "saveFeedback.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -52,7 +53,8 @@ private:
 	void processDoNotLaunch();
 
 	//convert string to binary data
-	decodeFeedback feedback;
+	decodeFeedback decode;
+	saveFeedback save;
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;

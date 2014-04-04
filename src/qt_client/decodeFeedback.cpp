@@ -10,8 +10,9 @@ decodeFeedback::~decodeFeedback()
 
 }
 
-void decodeFeedback::decode(eMinerMode mode, const std::string& msg)
+void decodeFeedback::parse(eMinerMode mode, const std::string& msg)
 {
+	//decode string to binary data
 	switch (mode)
 	{
 	case enSummary:
@@ -69,7 +70,7 @@ void decodeFeedback::decodeSummary(const std::string& msg)
 		s.fPoolRejected=GetDouble(vStr[1],"Pool Rejected%=");
 		s.fPoolStale=GetDouble(vStr[1],"Pool Stale%=");
 
-		vSummary.push_back(s);
+		//vSummary.push_back(s);
 	}
 }
 
@@ -131,7 +132,7 @@ void decodeFeedback::decodePools(const std::string& msg)
 
 				ps.vPool.push_back(p);
 			}
-		vPools.push_back(ps);
+		//vPools.push_back(ps);
 	}
 }
 
@@ -157,7 +158,7 @@ void decodeFeedback::decodeCoin(const std::string& msg)
 		c.bLP=BoolDetect(sBool);
 		c.fNetworkDifficulty=GetDouble(vStr[1],"Network Difficulty=");
 
-		vCoin.push_back(c);
+		//vCoin.push_back(c);
 	}
 }
 
@@ -210,7 +211,7 @@ void decodeFeedback::decodeDevs(const std::string& msg)
 			d.vGpu.push_back(g);
 		}
 
-		vDevs.push_back(d);
+		//vDevs.push_back(d);
 	}
 }
 
