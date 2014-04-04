@@ -18,13 +18,6 @@ private:
 	void decodeCoin(const std::string& msg);
 	void decodeDevs(const std::string& msg);
 
-	//helper func: parse str to some substr separated by "|" 
-	void parseSubstr(const std::string& msg, tVecStr* vStr);
-
-	int GetInt(const std::string& msg, const std::string& param);
-	std::string GetStr(const std::string& msg, const std::string& param);
-	double GetDouble(const std::string& msg, const std::string& param);
-	bool BoolDetect(std::string sBool);
 	/*
 	tVecSummary vSummary;
 	tVecPools vPools;
