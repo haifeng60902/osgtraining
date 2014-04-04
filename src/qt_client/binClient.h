@@ -7,7 +7,7 @@
 
 typedef std::vector<std::string> tVecStr;
 
-struct binCoin
+struct binLuaCoin
 {
 	std::string sCoin;
 	std::string sMiner;
@@ -15,7 +15,7 @@ struct binCoin
 	tVecStr vPools;
 };
 
-typedef std::vector<binCoin> tVecCoin;
+typedef std::vector<binLuaCoin> tVecLuaCoin;
 
 struct binParam
 {
@@ -37,7 +37,7 @@ struct binClient
 	std::string sHost;
 	int iPort;
 	tMapMiner mMiners;
-	tVecCoin vCoins;
+	tVecLuaCoin vCoins;
 };
 
 #endif	//_BIN_CLIENT_H_
