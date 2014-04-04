@@ -3,6 +3,7 @@ user="dbhec.7970x2";
 pass="x";
 host="127.0.0.1";
 port=4028;
+log_path="g:/1/client/";
 
 miners=
 {
