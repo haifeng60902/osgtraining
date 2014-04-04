@@ -179,9 +179,17 @@ void rig_client::connected()
 	if (minerMode==enFirtMsg)
 		minerMode=(eMinerMode)((int)minerMode+1);
 	
-	//std::string sReq=mode2Str[minerMode];
-	std::string sReq=mode2Str[enSummary];
+	minerMode=enDevs;
+	std::string sReq=mode2Str[minerMode];
 	tcpClient.write(sReq.c_str());
+}
+
+void rig_client::readyRead()
+{
+	QString sR= tcpClient.readAll();
+	feedback.decode(minerMode, sR.toStdString());
+	setWindowTitle(sR);
+	tcpClient.disconnectFromHost();
 
 	if (minerMode==enQuit)
 		minerMode=enFirtMsg;
@@ -191,14 +199,6 @@ void rig_client::connected()
 		if(minerMode==enQuit)
 			minerMode=enSummary;
 	}	
-}
-
-void rig_client::readyRead()
-{
-	QString sR= tcpClient.readAll();
-	feedback.decode(minerMode, sR.toStdString());
-	setWindowTitle(sR);
-	tcpClient.disconnectFromHost();
 }
 
 void rig_client::hostFound()
@@ -212,5 +212,6 @@ void rig_client::fillMap()
 	mode2Str[enSummary]="summary";
 	mode2Str[enPools]="pools";
 	mode2Str[enCoin]="coin";
+	mode2Str[enDevs]="devs";
 	mode2Str[enQuit]="quit";
 }

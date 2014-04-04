@@ -32,14 +32,14 @@ void luaParseConf::parse(const char* conf, binClient* client)
 	lua_close(l);
 }
 
-void luaParseConf::extractCoins(Lua::Config* conf, tVecCoin* pCoins)
+void luaParseConf::extractCoins(Lua::Config* conf, tVecLuaCoin* pCoins)
 {
 	if (conf->open("coins"))
 	{
 		conf->iterate_begin();
 		while(conf->iterate_next())
 		{
-			binCoin coin;
+			binLuaCoin coin;
 			coin.sCoin = conf->get("coin", std::string(""));
 			coin.sMiner = conf->get("miner", std::string(""));
 			coin.sIcon = conf->get("icon", std::string(""));

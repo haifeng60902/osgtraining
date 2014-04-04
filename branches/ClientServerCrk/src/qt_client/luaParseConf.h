@@ -14,7 +14,7 @@ public:
 	void parse(const char* conf, binClient* client);
 
 private:
-	void extractCoins(Lua::Config* conf, tVecCoin* pCoins);
+	void extractCoins(Lua::Config* conf, tVecLuaCoin* pCoins);
 	void extractMiners(Lua::Config* conf, tMapMiner* pMiners);
 };
 

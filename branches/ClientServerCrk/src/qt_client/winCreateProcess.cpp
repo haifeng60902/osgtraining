@@ -18,7 +18,7 @@ bool winCreateProcess::create(int i, binClient& client)
 	char curdir[256];
 	GetCurrentDirectory(sizeof(curdir),curdir);
 
-	binCoin& coin=client.vCoins[i];
+	binLuaCoin& coin=client.vCoins[i];
 	binParam& param=client.mMiners[coin.sMiner];
 
 	//path from lua conf
