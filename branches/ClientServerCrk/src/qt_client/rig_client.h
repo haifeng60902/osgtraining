@@ -8,7 +8,7 @@
 #include <QtNetwork>
 
 #include "binClient.h"
-#include "binMiner.h"
+#include "core/Parse/binMiner.h"
 #include "decodeFeedback.h"
 #include "saveFeedback.h"
 #include "netFeedback.h"

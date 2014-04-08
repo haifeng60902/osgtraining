@@ -14,7 +14,9 @@ decodeFeedback::~decodeFeedback()
 void decodeFeedback::parse(eMinerMode mode, const std::string& msg)
 {
 	//decode string to binary data
-	switch (mode)
+	eMinerMode mode_ch=Parse::getMode(msg);
+
+	switch (mode_ch)
 	{
 	case enSummary:
 		decodeSummary(msg);

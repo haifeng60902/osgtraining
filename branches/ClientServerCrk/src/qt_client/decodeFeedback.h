@@ -1,7 +1,7 @@
 #ifndef _DECODE_FEEDBACK_H_
 #define _DECODE_FEEDBACK_H_
 
-#include "binMiner.h"
+#include "core/Parse/binMiner.h"
 
 class decodeFeedback
 {
