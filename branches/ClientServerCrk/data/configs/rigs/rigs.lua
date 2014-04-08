@@ -1,5 +1,6 @@
 --number rig info in a row
 column=4;
+port=9800;
 
 modes=
 {
