@@ -9,7 +9,6 @@
 
 #include "binClient.h"
 #include "core/Parse/binMiner.h"
-#include "decodeFeedback.h"
 #include "saveFeedback.h"
 #include "netFeedback.h"
 
@@ -53,9 +52,6 @@ private:
 	void fillMap();
 	void processDoNotLaunch();
 
-	//convert string to binary data
-	decodeFeedback decode;
-	
 	//save data from miner to log
 	saveFeedback save;
 
