@@ -71,6 +71,8 @@ void qt_rig::updateServer()
 	int bytesReceived = (int)tcpServerConnection->bytesAvailable();
 	QString sR = tcpServerConnection->readAll();
 
+	std::string sClient=tcpServerConnection->peerAddress().toString().toStdString();
+
 	std::string sRa=sR.toStdString();
 	setWindowTitle(sRa.c_str());
 
