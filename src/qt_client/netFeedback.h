@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QtNetwork>
 
-#include "binMiner.h"
+#include "core/Parse/binMiner.h"
 
 class netFeedback: public QObject
 {

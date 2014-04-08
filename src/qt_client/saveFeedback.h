@@ -2,7 +2,7 @@
 #define _SAVE_FEEDBACK_H_
 
 #include <string>
-#include "binMiner.h"
+#include "core/Parse/binMiner.h"
 
 class saveFeedback
 {
