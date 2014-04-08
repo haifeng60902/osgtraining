@@ -4,10 +4,19 @@
 #include <string>
 #include <vector>
 
+#include "binMiner.h"
+
 typedef std::vector<std::string> tVecStr;
 
 namespace Parse
 {
+	eMinerMode getMode(const std::string& msg);
+	
+	void getSummary(const std::string& msg, binSummary* s);
+	void getPools(const std::string& msg, binPools* ps);
+	void getCoin(const std::string& msg, binCoin* c);
+	void getDevs(const std::string& msg, binDevs* d);
+
 	//helper func: parse str to some substr separated by "|" 
 	void Substr(const std::string& msg, tVecStr* vStr);
 
