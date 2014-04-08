@@ -22,19 +22,20 @@ void netFeedback::init(const std::string& server, int port)
 //send to server
 void netFeedback::send(const std::string& msg)
 {
+	sMsg=msg;
 	tcpClientServer.connectToHost(sHostServer.c_str(), iPortServer, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 }
 
 void netFeedback::connected()
 {
-	std::string sReq("client");
-	tcpClientServer.write(sReq.c_str());
+	tcpClientServer.write(sMsg.c_str());
 }
 
 void netFeedback::readyRead()
 {
 	QString sR= tcpClientServer.readAll();
 
+	std::string sRa=sR.toStdString();
 	tcpClientServer.disconnectFromHost();
 }
 

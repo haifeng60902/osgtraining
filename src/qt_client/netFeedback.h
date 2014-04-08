@@ -31,6 +31,7 @@ private:
 
 	std::string sHostServer;
 	int iPortServer;
+	std::string sMsg;
 };
 
 #endif	//_NET_FEEDBACK_H_
