@@ -11,6 +11,7 @@
 #include "binMiner.h"
 #include "decodeFeedback.h"
 #include "saveFeedback.h"
+#include "netFeedback.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -54,7 +55,12 @@ private:
 
 	//convert string to binary data
 	decodeFeedback decode;
+	
+	//save data from miner to log
 	saveFeedback save;
+
+	//send data from miner to server
+	netFeedback net;
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
@@ -67,7 +73,7 @@ private:
 	
 	QTimer *timer;
 
-	QTcpSocket tcpClient;
+	QTcpSocket tcpClientMiner;
 	bool bOk;
 
 	QString host;
