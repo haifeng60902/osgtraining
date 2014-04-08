@@ -195,9 +195,6 @@ void rig_client::readyRead()
 {
 	QString sR= tcpClientMiner.readAll();
 	
-	//decode string to binary data
-	decode.parse(minerMode, sR.toStdString());
-	
 	//save string to log
 	save.parse(minerMode, sR.toStdString());
 
