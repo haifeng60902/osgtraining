@@ -22,6 +22,7 @@ void luaParseConf::parse(const char* conf, binSetting* settings)
 		return;
 
 	settings->iColumn = config.get("column", 0);
+	settings->iPort = config.get("port", 9800);
 	parseRigs(config, &settings->vRigs);
 	parseModes(config, &settings->vModes);
 

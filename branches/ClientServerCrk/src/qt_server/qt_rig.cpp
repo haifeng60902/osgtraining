@@ -23,10 +23,7 @@ qt_rig::qt_rig(const std::string sConf, QWidget *parent)
 	connect(&tcpServer, SIGNAL(newConnection()),
 		this, SLOT(acceptConnection()));
 
-	 if(!tcpServer.listen(QHostAddress::Any, 9800))
-	 {
-		 int a=1;
-	 }
+	tcpServer.listen(QHostAddress::Any, settings.iPort);
 }
 
 qt_rig::~qt_rig()
@@ -40,8 +37,8 @@ void qt_rig::addTabs()
 
 	mainLayout->addWidget(tabWidget);
 
-	rigInfo.Init(settings);
-	QWidget* rigInfoWidget=rigInfo.GetWidget();
+	rigInfo.init(settings);
+	QWidget* rigInfoWidget=rigInfo.getWidget();
 
 	rigSett.Init(settings);
 	QWidget* rigSettWidget=rigSett.GetWidget();
@@ -72,8 +69,11 @@ void qt_rig::updateServer()
 	QString sR = tcpServerConnection->readAll();
 
 	std::string sClient=tcpServerConnection->peerAddress().toString().toStdString();
-
 	std::string sRa=sR.toStdString();
+
+	//update gui info
+	rigInfo.update(sClient, sRa);
+
 	setWindowTitle(sRa.c_str());
 
 	std::string sReq("Success123!");
