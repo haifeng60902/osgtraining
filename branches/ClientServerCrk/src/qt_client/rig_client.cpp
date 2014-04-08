@@ -25,6 +25,10 @@ rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWi
 
 	//set log path
 	save.setLogPath(client.sLogPath);
+	save.setUser(client.sUser);
+	
+	//net init
+	net.init(client.sHostServer, client.iPortServer);
 
 	createActions();
 	createTrayIcon();
@@ -32,9 +36,9 @@ rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWi
 	createTimer();
 	fillMap();
 
-	connect(&tcpClient, SIGNAL(connected()),this, SLOT(connected()));
-	connect(&tcpClient, SIGNAL(readyRead()),this, SLOT(readyRead()));
-	connect(&tcpClient, SIGNAL(hostFound()),this, SLOT(hostFound()));
+	connect(&tcpClientMiner, SIGNAL(connected()),this, SLOT(connected()));
+	connect(&tcpClientMiner, SIGNAL(readyRead()),this, SLOT(readyRead()));
+	connect(&tcpClientMiner, SIGNAL(hostFound()),this, SLOT(hostFound()));
 
 	if(client.bShowSysTray)
 		trayIcon->show();
@@ -166,7 +170,7 @@ void rig_client::timerTick()
 		minerMode=enFirtMsg;
 
 	netMode=enTry2Connect;
-	tcpClient.connectToHost(client.sHost.c_str(), client.iPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
+	tcpClientMiner.connectToHost(client.sHostMiner.c_str(), client.iPortMiner, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 }
 
 void rig_client::processDoNotLaunch()
@@ -182,23 +186,26 @@ void rig_client::connected()
 	if (minerMode==enFirtMsg)
 		minerMode=(eMinerMode)((int)minerMode+1);
 	
-	minerMode=enSummary;
+	//minerMode=enSummary;
 	std::string sReq=mode2Str[minerMode];
-	tcpClient.write(sReq.c_str());
+	tcpClientMiner.write(sReq.c_str());
 }
 
 void rig_client::readyRead()
 {
-	QString sR= tcpClient.readAll();
+	QString sR= tcpClientMiner.readAll();
 	
 	//decode string to binary data
 	decode.parse(minerMode, sR.toStdString());
 	
 	//save string to log
 	save.parse(minerMode, sR.toStdString());
+
+	//send string
+	net.send(sR.toStdString());
 	
 	setWindowTitle(sR);
-	tcpClient.disconnectFromHost();
+	tcpClientMiner.disconnectFromHost();
 
 	if (minerMode==enQuit)
 		minerMode=enFirtMsg;

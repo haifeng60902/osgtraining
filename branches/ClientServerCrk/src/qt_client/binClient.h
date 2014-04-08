@@ -29,14 +29,16 @@ typedef std::map<std::string, binParam> tMapMiner;
 struct binClient
 {
 	binClient():bShowSysTray(true),
-		iPort(4028)
+		iPortMiner(4028),iPortServer(9800)
 	{};
 	bool bShowSysTray;
 	std::string sUser;
 	std::string sPass;
-	std::string sHost;
+	std::string sHostMiner;
+	int iPortMiner;
+	std::string sHostServer;
+	int iPortServer;
 	std::string sLogPath;
-	int iPort;
 	tMapMiner mMiners;
 	tVecLuaCoin vCoins;
 };
