@@ -14,15 +14,21 @@ public:
 	RigInfo();
 	~RigInfo();
 
-	void Init(const binSetting& settings);
+	void init(const binSetting& settings);
+
+	//update gui info
+	void update(const std::string& client, const std::string& msg);
 
 	//get custom widget
-	QWidget* GetWidget();
+	QWidget* getWidget();
 
 private:
 	typedef std::vector<QVBoxLayout*> tVecVBoxLayout;
 	typedef std::vector<QHBoxLayout*> tVecHBoxLayout;
 	typedef std::vector<QGroupBox*> tVecGroupbox;
+	
+	//key-client network address, value-worker name
+	typedef std::map<std::string, std::string> tMapClient2Worker;
 
 	struct  binRigLine
 	{
@@ -38,6 +44,9 @@ private:
 
 	QWidget* rigInfo;
 	QVBoxLayout* rigInfoLayout;
+
+	//for convert purpose
+	tMapClient2Worker mClt2Wrk;
 };
 
 #endif	//_RIG_INFO_H_

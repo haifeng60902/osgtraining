@@ -24,9 +24,11 @@ typedef std::vector<binMode> tVecMode;
 struct  binSetting
 {
 	binSetting():iColumn(0)
+		,iPort(9800)
 	{};
 
 	int iColumn;
+	int iPort;
 	tVecRig vRigs;
 	tVecMode vModes;
 };

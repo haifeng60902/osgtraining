@@ -10,7 +10,7 @@ RigInfo::~RigInfo()
 
 }
 
-void RigInfo::Init(const binSetting& settings)
+void RigInfo::init(const binSetting& settings)
 {
 	rigInfo=new QWidget;
 	rigInfoLayout=new QVBoxLayout;
@@ -54,7 +54,13 @@ void RigInfo::addGroups(const binSetting& settings)
 }
 
 //get custom widget
-QWidget* RigInfo::GetWidget()
+QWidget* RigInfo::getWidget()
 {
 	return rigInfo;
+}
+
+void RigInfo::update(const std::string& client, const std::string& msg)
+{
+	//update gui info
+
 }
