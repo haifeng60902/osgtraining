@@ -1,9 +1,11 @@
 systray=1;
 user="dbhec.7970x2";
 pass="x";
-host="127.0.0.1";
-port=4028;
-log_path="g:/1/client/";
+host_miner="127.0.0.1";
+port_miner=4028;
+host_server="asmzx-vaio";
+port_server=9800;
+log_path="c:/client/";
 
 miners=
 {
