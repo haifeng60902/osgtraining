@@ -2,6 +2,7 @@
 #define _SAVE_FEEDBACK_H_
 
 #include <string>
+#include "binMiner.h"
 
 class saveFeedback
 {
@@ -13,9 +14,14 @@ public:
 	void setLogPath(const std::string path){sLogPath=path;};
 
 	//save string to log
-	void parse(const std::string mode, const std::string msg);
+	void parse(eMinerMode mode, const std::string& msg);
 
 private:
+	void saveSummary(const std::string& msg);
+
+	//check directory exist
+	bool directoryExists(const char* dirName);
+
 	std::string sLogPath;
 };
 
