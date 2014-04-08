@@ -6,7 +6,7 @@ Import('env')
 
 target = 'qt_server'
 
-libs = ['edCore','qtmain','Qt5Widgets','Qt5Core','Qt5Gui','libEGL','libGLESv2','Qt5WinExtras']
+libs = ['edCore','qtmain','Qt5Widgets','Qt5Core','Qt5Gui','libEGL','libGLESv2','Qt5WinExtras','Qt5Network']
 
 not_linked_dependencies = []
 
@@ -38,6 +38,7 @@ env.edProgram(
 		GSDK_PATH+'/inc/qt/QtGui',
 		GSDK_PATH+'/inc/qt/QtANGLE',
 		GSDK_PATH+'/inc/qt/QtCore',
+		GSDK_PATH+'/inc/qt/QtNetwork'
 	],
 	
 	CPPDEFINES=[

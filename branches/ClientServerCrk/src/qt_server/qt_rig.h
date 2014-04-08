@@ -12,7 +12,9 @@
 #include <QGroupBox>
 #include <QTimer>
 
-//#include "ui_qt_rig.h"
+#include <QTcpServer>
+#include <QTcpSocket>
+
 #include "luaParseConf.h"
 #include "RigInfo.h"
 #include "RigSett.h"
@@ -27,6 +29,9 @@ public:
 
 private slots:
 	void timerTick();
+	void acceptConnection();
+	void updateServer();
+	void displayError(QAbstractSocket::SocketError socketError);
 
 private:
 	void addTabs();
@@ -50,6 +55,9 @@ private:
 
 	//settings from lua config
 	binSetting settings;
+
+	QTcpServer tcpServer;
+	QTcpSocket *tcpServerConnection;
 };
 
 #endif // QT_RIG_H
