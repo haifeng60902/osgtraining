@@ -182,7 +182,7 @@ void rig_client::connected()
 	if (minerMode==enFirtMsg)
 		minerMode=(eMinerMode)((int)minerMode+1);
 	
-	minerMode=enDevs;
+	minerMode=enSummary;
 	std::string sReq=mode2Str[minerMode];
 	tcpClient.write(sReq.c_str());
 }
@@ -195,7 +195,7 @@ void rig_client::readyRead()
 	decode.parse(minerMode, sR.toStdString());
 	
 	//save string to log
-	save.parse(mode2Str[minerMode], sR.toStdString());
+	save.parse(minerMode, sR.toStdString());
 	
 	setWindowTitle(sR);
 	tcpClient.disconnectFromHost();
