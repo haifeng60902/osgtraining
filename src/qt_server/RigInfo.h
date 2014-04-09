@@ -62,6 +62,9 @@ private:
 	void addGroups(const binSetting& settings);
 
 	void processPools(eMinerMode mode, const std::string& client, const std::string& msg);
+	void processSummary(eMinerMode mode, const std::string& client, const std::string& msg);
+	void processCoin(eMinerMode mode, const std::string& client, const std::string& msg);
+	void processDevs(eMinerMode mode, const std::string& client, const std::string& msg);
 
 	//fill main info
 	void fillPoolInfo(binInfo* info, const binPools& ps, const std::string& msg);
