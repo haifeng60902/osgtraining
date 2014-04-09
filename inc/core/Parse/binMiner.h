@@ -5,6 +5,8 @@
 #include <map>
 #include <vector>
 
+#define DISCONNECT_WAIT 10
+
 enum eMinerMode
 {
 	enFirtMsg,
