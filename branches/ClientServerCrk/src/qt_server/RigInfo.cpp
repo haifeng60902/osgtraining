@@ -73,30 +73,22 @@ void RigInfo::update(const std::string& client, const std::string& msg)
 	case enFirtMsg:
 		break;
 	case enSummary:
+		processSummary(mode, client, msg);
 		break;
 	case enPools:
 		processPools(mode, client, msg);
 		break;
 	case enCoin:
+		processCoin(mode, client, msg);
 		break;
 	case enDevs:
+		processDevs(mode, client, msg);
 		break;
 	case enQuit:
 		break;
 	default:
 		break;
 	}
-
-	tMapClient2Worker::iterator it=mClt2Wrk.find(client);
-	if (it!=mClt2Wrk.end())
-	{
-
-	}
-	else
-	{
-		
-	}
-	//
 }
 
 void RigInfo::processPools(eMinerMode mode, const std::string& client, const std::string& msg)
@@ -127,11 +119,14 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 		info->vLabel.push_back(new QLabel);//ST: 5  SS: 0 (0.0%)  NB: 348  PA: 0  PR: 45  LW: 9930  GF: 0  RF: 0
 		info->vLabel.push_back(new QLabel);//Connected to vtc.poolz.net diff 125 with stratum as user dbhec.7970x2
 		info->vLabel.push_back(new QLabel);//Block: f2ff73a0...  Diff:227  Started: [11:14:16]  Best share: 101K
+		info->vLabel.push_back(new QLabel);//------------------------------------------------------------
+		info->vLabel[4]->setText("**********************************************************");
 
 		info->lBox->addWidget(info->vLabel[0]);
 		info->lBox->addWidget(info->vLabel[1]);
 		info->lBox->addWidget(info->vLabel[2]);
 		info->lBox->addWidget(info->vLabel[3]);
+		info->lBox->addWidget(info->vLabel[4]);
 	}
 
 	int k=0;
@@ -140,10 +135,119 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 			k=i;
 
 	std::string sPoolInfo="Connected to "+ps.vPool[k].sStratumURL+" diff "+
-		std::to_string((int)ps.vPool[k].fLastShareDifficulty)+"with stratum as user "+ps.vPool[k].sUser;
+		std::to_string((int)ps.vPool[k].fLastShareDifficulty)+" with stratum as user "+ps.vPool[k].sUser;
 
 	//stratum url last share diff
 	info->vLabel[2]->setText(sPoolInfo.c_str());
+}
+
+void RigInfo::processSummary(eMinerMode mode, const std::string& client, const std::string& msg)
+{
+	binSummary s;
+	Parse::getSummary(msg,&s);
+	tMapClient2Worker::iterator it=mClt2Wrk.find(client);
+	if (it!=mClt2Wrk.end())
+	{
+		//record is present
+		std::string sWorker=it->second;
+
+		tMapInfo::iterator itW=mInfo.find(sWorker);
+		if (itW!=mInfo.end())
+		{
+			binInfo& info=itW->second;
+			info.iTick=DISCONNECT_WAIT;
+			if (info.vLabel.size()>1)
+			{
+				std::string sF="(5s):"+std::to_string((int)(s.fMHS5s*1000.0f))
+					+"K (avg):"+std::to_string((int)(s.fMHSav*1000.0f))
+					+"K/s | A:"+std::to_string((int)s.fDifficultyAccepted)
+					+" R:"+std::to_string((int)s.fDifficultyRejected)
+					+" HW:"+std::to_string((int)s.fDeviceRejected)
+					+" WU:"+std::to_string((int)s.fWorkUtility)+"/m";
+				info.vLabel[0]->setText(sF.c_str());
+
+				std::string sS="PR:"+std::to_string(s.iNetworkBlocks)
+					+" LW:"+std::to_string(s.iLocalWork)+" GF:"
+					+std::to_string(s.iGetFailures)+" RF:"
+					+std::to_string(s.iRemoteFailures);
+				info.vLabel[1]->setText(sS.c_str());
+			}
+		}
+	}
+}
+
+void RigInfo::processCoin(eMinerMode mode, const std::string& client, const std::string& msg)
+{
+	binCoin c;
+	Parse::getCoin(msg,&c);
+	tMapClient2Worker::iterator it=mClt2Wrk.find(client);
+	if (it!=mClt2Wrk.end())
+	{
+		//record is present
+		std::string sWorker=it->second;
+
+		tMapInfo::iterator itW=mInfo.find(sWorker);
+		if (itW!=mInfo.end())
+		{
+			binInfo& info=itW->second;
+			info.iTick=DISCONNECT_WAIT;
+			if (info.vLabel.size()>2)
+			{
+				//hash Diff:(netdiff) 
+				std::string sL="Block: "+c.sCurrentBlockHash.substr(0,9)+"... Diff:"
+					+std::to_string((int)c.fNetworkDifficulty);
+				info.vLabel[3]->setText(sL.c_str());
+			}
+		}
+	}
+}
+
+void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std::string& msg)
+{
+	binDevs d;
+	Parse::getDevs(msg,&d);
+	tMapClient2Worker::iterator it=mClt2Wrk.find(client);
+	if (it!=mClt2Wrk.end())
+	{
+		//record is present
+		std::string sWorker=it->second;
+
+		tMapInfo::iterator itW=mInfo.find(sWorker);
+		if (itW!=mInfo.end())
+		{
+			binInfo& info=itW->second;
+			info.iTick=DISCONNECT_WAIT;
+			if (info.vLabel.size()==5)
+			{
+				for (int i=0;i<d.vGpu.size();++i)
+				{
+					//GPU 0:  90.0C 2321RPM | 173.6K/187.4Kh/s | A:4673 R:0 HW:0 WU:172.2/m I:12
+					QLabel* l=new QLabel;
+					info.vLabel.push_back(l);
+					info.lBox->addWidget(l);
+				}
+			}
+			
+			if(info.vLabel.size()>5)
+			{
+				for (int i=0;i<d.vGpu.size();++i)
+				{
+					std::string sG="GPU "+std::to_string(d.vGpu[i].iGPU)+"("
+						+std::to_string((int)d.vGpu[i].iGPUClock)+"/"
+						+std::to_string((int)d.vGpu[i].iMemoryClock)+"): "
+						+std::to_string((int)d.vGpu[i].fTemperature)
+						+"C "+std::to_string(d.vGpu[i].iFanSpeed)+"RPM("+std::to_string(d.vGpu[i].iFanPercent)+"%)"
+						+" | "+std::to_string((int)(d.vGpu[i].fMHS5s*1000.0f))+"K/"
+						+std::to_string((int)(d.vGpu[i].fMHSav*1000.0f))+"Kh/s | A:"
+						+std::to_string((int)(d.vGpu[i].fDifficultyAccepted))+" R:"
+						+std::to_string((int)(d.vGpu[i].fDifficultyRejected))+" HW:"
+						+std::to_string((int)(d.vGpu[i].fDeviceRejected))+" I:"
+						+std::to_string(d.vGpu[i].iIntensity);
+					info.vLabel[5+i]->setText(sG.c_str());
+				}
+			}
+		}
+	}
 }
 
 void RigInfo::timerUpdate()
