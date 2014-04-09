@@ -1,4 +1,4 @@
---number rig info in a row
+--number workers info in a row
 column=4;
 port=9800;
 
@@ -30,66 +30,66 @@ modes=
 	}
 }
 
-rigs=
+workers=
 {
 	{
-		rig="fm0";
+		worker="dbhec.fm0";
 	},
 	{
-		rig="fm1";
+		worker="dbhec.fm1";
 	},
 	{
-		rig="fm2";
+		worker="dbhec.fm2";
 	},
 	{
-		rig="fm3";
+		worker="dbhec.fm3";
 	},
 	{
-		rig="fm4";
+		worker="dbhec.fm4";
 	},
 	{
-		rig="fm5";
+		worker="dbhec.fm5";
 	},
 	{
-		rig="fm6";
+		worker="dbhec.fm6";
 	},
 	{
-		rig="fm7";
+		worker="dbhec.fm7";
 	},
 	{
-		rig="fm8";
+		worker="dbhec.fm8";
 	},
 	{
-		rig="fm9";
+		worker="dbhec.fm9";
 	},
 	{
-		rig="fm10";
+		worker="dbhec.fm10";
 	},
 	{
-		rig="fm11";
+		worker="dbhec.fm11";
 	},
 	{
-		rig="fm12";
+		worker="dbhec.fm12";
 	},
 	{
-		rig="fm13";
+		worker="dbhec.fm13";
 	},
 	{
-		rig="fm14";
+		worker="dbhec.fm14";
 	},
 	{
-		rig="fm15";
+		worker="dbhec.fm15";
 	},
 	{
-		rig="7970w";
+		worker="dbhec.7970w";
 	},
 	{
-		rig="7970x2";
+		worker="dbhec.7970x2";
 	},
 	{
-		rig="6990";
+		worker="dbhec.6990";
 	},
 	{
-		rig="59701";
+		worker="dbhec.59701";
 	}
 }
