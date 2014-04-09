@@ -49,8 +49,7 @@ void qt_rig::addTabs()
 
 void qt_rig::timerTick()
 {
-	static int it=0;
-	++it;
+	rigInfo.timerUpdate();
 }
 
 void qt_rig::acceptConnection()

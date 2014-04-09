@@ -23,22 +23,22 @@ void luaParseConf::parse(const char* conf, binSetting* settings)
 
 	settings->iColumn = config.get("column", 0);
 	settings->iPort = config.get("port", 9800);
-	parseRigs(config, &settings->vRigs);
+	parseWorkers(config, &settings->vWorker);
 	parseModes(config, &settings->vModes);
 
 	lua_close(l);
 }
 
-void luaParseConf::parseRigs(Lua::Config& config, tVecRig *rigs)
+void luaParseConf::parseWorkers(Lua::Config& config, tVecWorker *workers)
 {
-	if(config.open("rigs"))
+	if(config.open("workers"))
 	{
 		config.iterate_begin();
 		while(config.iterate_next())
 		{
-			binRig rig;
-			rig.sRig=config.get("rig", std::string(""));
-			rigs->push_back(rig);			
+			binWorker worker;
+			worker.sWorker=config.get("worker", std::string(""));
+			workers->push_back(worker);			
 		}
 		config.iterate_end();
 		config.pop();

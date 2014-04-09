@@ -4,11 +4,11 @@
 #include <vector>
 #include <string>
 
-struct binRig
+struct binWorker
 {
-	std::string sRig;
+	std::string sWorker;
 };
-typedef std::vector<binRig> tVecRig;
+typedef std::vector<binWorker> tVecWorker;
 typedef std::vector<std::string> tVecString;
 
 struct binMode
@@ -29,7 +29,7 @@ struct  binSetting
 
 	int iColumn;
 	int iPort;
-	tVecRig vRigs;
+	tVecWorker vWorker;
 	tVecMode vModes;
 };
 
