@@ -14,7 +14,7 @@ public:
 	void parse(const char* conf, binSetting* settings);
 
 private:
-	void parseRigs(Lua::Config& config, tVecRig *rigs);
+	void parseWorkers(Lua::Config& config, tVecWorker *workers);
 	void parseModes(Lua::Config& config, tVecMode *modes);
 };
 

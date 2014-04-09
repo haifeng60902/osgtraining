@@ -3,7 +3,7 @@
 #include "qt_rig.h"
 #include <QtWidgets/QApplication>
 
-std::string sConf("rigs.lua");
+std::string sConf("workers.lua");
 
 int main(int argc, char *argv[])
 {
