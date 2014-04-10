@@ -78,9 +78,9 @@ void RigInfo::update(const std::string& client, const std::string& msg)
 	case enPools:
 		processPools(mode, client, msg);
 		break;
-	case enCoin:
-		processCoin(mode, client, msg);
-		break;
+	//case enCoin:
+	//	processCoin(mode, client, msg);
+	//	break;
 	case enDevs:
 		processDevs(mode, client, msg);
 		break;
@@ -113,20 +113,17 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 {
 	//fill main info
 	info->iTick=DISCONNECT_WAIT;
-	if (info->vLabel.size()<4)
+	if (info->vLabel.size()<2)
 	{
 		info->vLabel.push_back(new QLabel);//(5s):540.2K (avg):521.2Kh/s | A:38000  R:0  HW:0  WU:497.6/m
-		info->vLabel.push_back(new QLabel);//ST: 5  SS: 0 (0.0%)  NB: 348  PA: 0  PR: 45  LW: 9930  GF: 0  RF: 0
+		//info->vLabel.push_back(new QLabel);//ST: 5  SS: 0 (0.0%)  NB: 348  PA: 0  PR: 45  LW: 9930  GF: 0  RF: 0
 		info->vLabel.push_back(new QLabel);//Connected to vtc.poolz.net diff 125 with stratum as user dbhec.7970x2
-		info->vLabel.push_back(new QLabel);//Block: f2ff73a0...  Diff:227  Started: [11:14:16]  Best share: 101K
-		info->vLabel.push_back(new QLabel);//------------------------------------------------------------
-		info->vLabel[4]->setText("**************");
+		//info->vLabel.push_back(new QLabel);//Block: f2ff73a0...  Diff:227  Started: [11:14:16]  Best share: 101K
+		//info->vLabel.push_back(new QLabel);//------------------------------------------------------------
+		//info->vLabel[4]->setText("**************");
 
 		info->lBox->addWidget(info->vLabel[0]);
 		info->lBox->addWidget(info->vLabel[1]);
-		info->lBox->addWidget(info->vLabel[2]);
-		info->lBox->addWidget(info->vLabel[3]);
-		info->lBox->addWidget(info->vLabel[4]);
 	}
 
 	int k=0;
@@ -138,7 +135,7 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 		std::to_string((int)ps.vPool[k].fLastShareDifficulty)+" user "+ps.vPool[k].sUser;
 
 	//stratum url last share diff
-	info->vLabel[2]->setText(sPoolInfo.c_str());
+	info->vLabel[1]->setText(sPoolInfo.c_str());
 }
 
 void RigInfo::processSummary(eMinerMode mode, const std::string& client, const std::string& msg)
@@ -166,11 +163,13 @@ void RigInfo::processSummary(eMinerMode mode, const std::string& client, const s
 					+" WU:"+std::to_string((int)s.fWorkUtility)+"/m";
 				info.vLabel[0]->setText(sF.c_str());
 
+				/*
 				std::string sS="PR:"+std::to_string(s.iNetworkBlocks)
 					+" LW:"+std::to_string(s.iLocalWork)+" GF:"
 					+std::to_string(s.iGetFailures)+" RF:"
 					+std::to_string(s.iRemoteFailures);
 				info.vLabel[1]->setText(sS.c_str());
+				*/
 			}
 		}
 	}
@@ -217,6 +216,7 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 		{
 			binInfo& info=itW->second;
 			info.iTick=DISCONNECT_WAIT;
+			/*
 			if (info.vLabel.size()==5)
 			{
 				for (int i=0;i<d.vGpu.size();++i)
@@ -227,11 +227,20 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 					info.lBox->addWidget(l);
 				}
 			}
+			*/
 			
-			if(info.vLabel.size()>5)
+			//if(info.vLabel.size()>5)
 			{
 				for (int i=0;i<d.vGpu.size();++i)
 				{
+					int ind=2+i;
+					if (info.vLabel.size()<=ind)
+					{
+						QLabel* l=new QLabel;
+						info.vLabel.push_back(l);
+						info.lBox->addWidget(l);
+					}
+
 					std::string sG="GPU "+std::to_string(d.vGpu[i].iGPU)+"("
 						+std::to_string((int)d.vGpu[i].iGPUClock)+"/"
 						+std::to_string((int)d.vGpu[i].iMemoryClock)+"): "
@@ -243,7 +252,7 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 						+std::to_string((int)(d.vGpu[i].fDifficultyRejected))+" HW:"
 						+std::to_string((int)(d.vGpu[i].fDeviceRejected))+" I:"
 						+std::to_string(d.vGpu[i].iIntensity);
-					info.vLabel[5+i]->setText(sG.c_str());
+					info.vLabel[2+i]->setText(sG.c_str());
 				}
 			}
 		}
