@@ -73,7 +73,7 @@ void qt_rig::updateServer()
 	//update gui info
 	rigInfo.update(sClient, sRa);
 
-	setWindowTitle(sRa.c_str());
+	//setWindowTitle(sRa.c_str());
 
 	std::string sReq("Success123!");
 	tcpServerConnection->write(sReq.c_str());
