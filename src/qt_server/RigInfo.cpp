@@ -248,7 +248,10 @@ void RigInfo::timerUpdate()
 			//worker is disconnected
 			info.iTick=0;
 			for (int i=0;i<info.vLabel.size();++i)
+			{
 				info.lBox->removeWidget(info.vLabel[i]);
+				delete info.vLabel[i];
+			}
 			info.vLabel.clear();
 			
 			//delete record from map
