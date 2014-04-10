@@ -42,6 +42,7 @@ private:
 			lBox(NULL)
 		{};
 		int iTick;
+		QGroupBox* gBox;
 		QVBoxLayout* lBox;
 		tVecLabel vLabel;
 	};

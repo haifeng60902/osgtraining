@@ -47,6 +47,7 @@ void RigInfo::addGroups(const binSetting& settings)
 			line.lineLayout->addWidget(box);
 
 			mInfo[settings.vWorker[k].sWorker].lBox=layoutBox;
+			mInfo[settings.vWorker[k].sWorker].gBox=box;
 
 			++k;
 
@@ -116,12 +117,8 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 	if (info->vLabel.size()<2)
 	{
 		info->vLabel.push_back(new QLabel);//(5s):540.2K (avg):521.2Kh/s | A:38000  R:0  HW:0  WU:497.6/m
-		//info->vLabel.push_back(new QLabel);//ST: 5  SS: 0 (0.0%)  NB: 348  PA: 0  PR: 45  LW: 9930  GF: 0  RF: 0
 		info->vLabel.push_back(new QLabel);//Connected to vtc.poolz.net diff 125 with stratum as user dbhec.7970x2
-		//info->vLabel.push_back(new QLabel);//Block: f2ff73a0...  Diff:227  Started: [11:14:16]  Best share: 101K
-		//info->vLabel.push_back(new QLabel);//------------------------------------------------------------
-		//info->vLabel[4]->setText("**************");
-
+		
 		info->lBox->addWidget(info->vLabel[0]);
 		info->lBox->addWidget(info->vLabel[1]);
 	}
@@ -162,14 +159,6 @@ void RigInfo::processSummary(eMinerMode mode, const std::string& client, const s
 					+" HW:"+std::to_string((int)s.fDeviceRejected)
 					+" WU:"+std::to_string((int)s.fWorkUtility)+"/m";
 				info.vLabel[0]->setText(sF.c_str());
-
-				/*
-				std::string sS="PR:"+std::to_string(s.iNetworkBlocks)
-					+" LW:"+std::to_string(s.iLocalWork)+" GF:"
-					+std::to_string(s.iGetFailures)+" RF:"
-					+std::to_string(s.iRemoteFailures);
-				info.vLabel[1]->setText(sS.c_str());
-				*/
 			}
 		}
 	}
@@ -216,20 +205,7 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 		{
 			binInfo& info=itW->second;
 			info.iTick=DISCONNECT_WAIT;
-			/*
-			if (info.vLabel.size()==5)
-			{
-				for (int i=0;i<d.vGpu.size();++i)
-				{
-					//GPU 0:  90.0C 2321RPM | 173.6K/187.4Kh/s | A:4673 R:0 HW:0 WU:172.2/m I:12
-					QLabel* l=new QLabel;
-					info.vLabel.push_back(l);
-					info.lBox->addWidget(l);
-				}
-			}
-			*/
 			
-			//if(info.vLabel.size()>5)
 			{
 				for (int i=0;i<d.vGpu.size();++i)
 				{
@@ -287,6 +263,14 @@ void RigInfo::timerUpdate()
 				else
 					++itW;
 			}
+
+			std::string sTi=it->first;
+			info.gBox->setTitle(sTi.c_str());
+		}
+		else
+		{
+			std::string sTi=it->first+"|"+std::to_string(info.iTick);
+			info.gBox->setTitle(sTi.c_str());
 		}
 	}
 }
