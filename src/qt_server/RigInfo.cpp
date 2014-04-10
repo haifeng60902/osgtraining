@@ -120,7 +120,7 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 		info->vLabel.push_back(new QLabel);//Connected to vtc.poolz.net diff 125 with stratum as user dbhec.7970x2
 		info->vLabel.push_back(new QLabel);//Block: f2ff73a0...  Diff:227  Started: [11:14:16]  Best share: 101K
 		info->vLabel.push_back(new QLabel);//------------------------------------------------------------
-		info->vLabel[4]->setText("**********************************************************");
+		info->vLabel[4]->setText("**************");
 
 		info->lBox->addWidget(info->vLabel[0]);
 		info->lBox->addWidget(info->vLabel[1]);
@@ -134,8 +134,8 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 		if (ps.vPool[i].iPriority==0)
 			k=i;
 
-	std::string sPoolInfo="Connected to "+ps.vPool[k].sStratumURL+" diff "+
-		std::to_string((int)ps.vPool[k].fLastShareDifficulty)+" with stratum as user "+ps.vPool[k].sUser;
+	std::string sPoolInfo=ps.vPool[k].sStratumURL+" diff "+
+		std::to_string((int)ps.vPool[k].fLastShareDifficulty)+" user "+ps.vPool[k].sUser;
 
 	//stratum url last share diff
 	info->vLabel[2]->setText(sPoolInfo.c_str());
