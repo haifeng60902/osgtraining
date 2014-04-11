@@ -51,6 +51,7 @@ private:
 	void createTimer();
 	void fillMap();
 	void processDoNotLaunch();
+	void processNetInfo(eMinerMode minerMode, const std::string& str);
 
 	//save data from miner to log
 	saveFeedback save;
@@ -86,6 +87,9 @@ private:
 	eMinerMode prevMinerMode;
 	int iSwitchCoin;
 	tMode2Str mode2Str;
+
+	int iSendServ;
+	int iRecvServ;
 };
 
 #endif // RIG_CLIENT_H
