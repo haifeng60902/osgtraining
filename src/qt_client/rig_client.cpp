@@ -222,8 +222,8 @@ void rig_client::processNetInfo(eMinerMode mode, const std::string& str)
 	int iSend, iRecv;
 	net.send(str, &iSend, &iRecv);
 
-	iSendServ+=iSend;
-	iRecvServ+=iRecv;
+	iSendServ=iSend;
+	iRecvServ=iRecv;
 
 	std::string sTo=std::to_string(iSendServ)+"/"+std::to_string(iRecvServ);
 
