@@ -44,6 +44,9 @@ rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWi
 		trayIcon->show();
 	else
 		trayIcon->hide();
+
+	iSendServ=0;
+	iRecvServ=0;
 }
 
 rig_client::~rig_client()
@@ -195,14 +198,10 @@ void rig_client::readyRead()
 {
 	QString sR= tcpClientMiner.readAll();
 	
-	//save string to log
-	save.parse(minerMode, sR.toStdString());
-
-	//send string
-	net.send(sR.toStdString());
-	
 	setWindowTitle(sR);
 	tcpClientMiner.disconnectFromHost();
+
+	processNetInfo(minerMode, sR.toStdString());
 
 	if (minerMode==enQuit)
 		minerMode=enFirtMsg;
@@ -212,6 +211,23 @@ void rig_client::readyRead()
 		if(minerMode==enQuit)
 			minerMode=enSummary;
 	}	
+}
+
+void rig_client::processNetInfo(eMinerMode mode, const std::string& str)
+{
+	//save string to log
+	save.parse(mode, str);
+
+	//send string
+	int iSend, iRecv;
+	net.send(str, &iSend, &iRecv);
+
+	iSendServ+=iSend;
+	iRecvServ+=iRecv;
+
+	std::string sTo=std::to_string(iSendServ)+"/"+std::to_string(iRecvServ);
+
+	trayIcon->setToolTip(sTo.c_str());
 }
 
 void rig_client::hostFound()

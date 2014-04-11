@@ -2,7 +2,8 @@
 
 netFeedback::netFeedback()
 {
-
+	iSend=0;
+	iRecv=0;
 }
 
 netFeedback::~netFeedback()
@@ -20,15 +21,23 @@ void netFeedback::init(const std::string& server, int port)
 }
 
 //send to server
-void netFeedback::send(const std::string& msg)
+void netFeedback::send(const std::string& msg, int* send, int* recv)
 {
+	iSend=0;
+	iRecv=0;
 	sMsg=msg;
 	tcpClientServer.connectToHost(sHostServer.c_str(), iPortServer, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+	if(!tcpClientServer.waitForConnected(900))
+		tcpClientServer.disconnectFromHost();
+
+	(*send)=iSend;
+	(*recv)=iRecv;
 }
 
 void netFeedback::connected()
 {
-	tcpClientServer.write(sMsg.c_str());
+	iSend=tcpClientServer.write(sMsg.c_str());
 }
 
 void netFeedback::readyRead()
@@ -36,7 +45,10 @@ void netFeedback::readyRead()
 	QString sR= tcpClientServer.readAll();
 
 	std::string sRa=sR.toStdString();
-	tcpClientServer.disconnectFromHost();
+	tcpClientServer.close();
+
+	//iRecv=sRa.size();
+	iRecv=1;
 }
 
 void netFeedback::hostFound()

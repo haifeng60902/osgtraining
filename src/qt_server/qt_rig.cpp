@@ -70,15 +70,16 @@ void qt_rig::updateServer()
 	std::string sClient=tcpServerConnection->peerAddress().toString().toStdString();
 	std::string sRa=sR.toStdString();
 
-	//update gui info
-	rigInfo.update(sClient, sRa);
-
 	//setWindowTitle(sRa.c_str());
 
 	std::string sReq("Success123!");
 	tcpServerConnection->write(sReq.c_str());
 
-	tcpServerConnection->close();
+	//tcpServerConnection->close();
+	tcpServerConnection->disconnectFromHost();
+
+	//update gui info
+	rigInfo.update(sClient, sRa);
 }
 
 void qt_rig::displayError(QAbstractSocket::SocketError socketError)

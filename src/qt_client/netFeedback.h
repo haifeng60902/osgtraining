@@ -24,7 +24,7 @@ public:
 	void init(const std::string& server, int port);
 
 	//send to server
-	void send(const std::string& msg);
+	void send(const std::string& msg, int* send, int* recv);
 
 private:
 	QTcpSocket tcpClientServer;
@@ -32,6 +32,9 @@ private:
 	std::string sHostServer;
 	int iPortServer;
 	std::string sMsg;
+
+	int iSend;
+	int iRecv;
 };
 
 #endif	//_NET_FEEDBACK_H_
