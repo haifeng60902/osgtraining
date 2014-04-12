@@ -1,7 +1,7 @@
 #ifndef _QT_DIAG_H_
 #define _QT_DIAG_H_
 
-#include <vector>
+#include <map>
 #include <string>
 
 #include <QDialog>
@@ -29,13 +29,20 @@ private:
 	struct binClient
 	{
 		binClient():clientLabel(NULL),
-			tcpClientSocket(NULL)
+			iMsgSize(0),
+			iMsgClue(0),
+			iMsgRead(0)
 		{};
 		QLabel* clientLabel;
-		QTcpSocket *tcpClientSocket;
 		std::string sClient;
+		int iMsgSize;
+		int iMsgRead;
+		int iMsgClue;
 	};
-	typedef std::vector<binClient> tVecClient;
+	typedef std::map<QTcpSocket*, binClient> tMapClient;
+
+	//fill string random char
+	void getRandStr(std::string* s);
 
 	QTimer *timer;
 	QVBoxLayout* diagLayout;
@@ -43,7 +50,7 @@ private:
 
 	QTcpServer tcpServer;
 
-	tVecClient vClient;
+	tMapClient mClient;
 };
 
 #endif	//_QT_DIAG_H_
