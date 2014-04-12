@@ -1,6 +1,7 @@
 Import('env')
 
 env.SConscript([
-	'src/SConscript'
+	'src/SConscript',
+	'test/SConscript'
 ])
 

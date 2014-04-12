@@ -1,0 +1,5 @@
+Import('env')
+
+env.SConscript([
+	'qt_test_server/qt_test_server.scons'
+])
