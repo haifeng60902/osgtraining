@@ -16,7 +16,7 @@ qt_diag::qt_diag(QWidget *parent):QDialog(parent)
 	connect(&tcpServer, SIGNAL(newConnection()),
 		this, SLOT(acceptConnection()));
 
-	tcpServer.listen(QHostAddress::Any, 9800);
+	tcpServer.listen(QHostAddress::Any, 9900);
 
 }
 
