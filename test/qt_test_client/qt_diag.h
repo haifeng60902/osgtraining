@@ -17,6 +17,10 @@ class qt_diag: public QDialog
 
 private slots:
 	void timerTick();
+	void connectedClient();
+	void readyReadClient();
+	void hostFoundClient();
+	void disconnectedClient();
 
 public:
 	qt_diag(QWidget *parent=NULL);
@@ -24,12 +28,20 @@ public:
 
 private:
 
-	//fill string random char
-	void getRandStr(std::string* s);
+	typedef std::vector<char> tVecChar;
+
+	//fill random string
+	quint16 getRndStr(tVecChar* s);
+
+	void writeMsg();
 
 	QTimer *timer;
 	QVBoxLayout* diagLayout;
 	QLabel* summaryLabel;
+
+	QTcpSocket tcpClientServer;
+	bool bConnect;
+	bool bConn2Host;
 };
 
 #endif	//_QT_DIAG_H_
