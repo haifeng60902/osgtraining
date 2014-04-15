@@ -39,6 +39,7 @@ void qt_diag::timerTick()
 	{
 		++i;
 		sC="Yes";
+		std::string sLocal=tcpClientServer.localAddress().toString().toStdString();
 		writeMsg();
 	}
 
