@@ -72,7 +72,8 @@ void qt_diag::updateServer()
 
 		c.iMsgClue=0;
 
-		std::string sReq("Success123!");
+		std::string sReq("Success=");
+		sReq=sReq+std::to_string(c.iMsgSize);
 		tcpSocket->write(sReq.c_str());
 	}
 }

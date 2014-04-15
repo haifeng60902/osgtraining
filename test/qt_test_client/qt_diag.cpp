@@ -39,7 +39,7 @@ void qt_diag::timerTick()
 		writeMsg();
 	}
 
-	sC=sC+":"+std::to_string(i);
+	sC=sC+":"+std::to_string(i)+"|"+sRead;
 	summaryLabel->setText(sC.c_str());
 
 	if (!bConn2Host)
@@ -63,7 +63,17 @@ void qt_diag::writeMsg()
 
 void qt_diag::readyReadClient()
 {
+	int bytesReceived = (int)tcpClientServer.bytesAvailable();
+	if (bytesReceived<2)
+		return;
 
+	QByteArray a=tcpClientServer.readAll();
+	char* ad=a.data();
+	quint16 s=*((quint16*)ad);
+	if (s==bytesReceived)
+	{
+		sRead=std::string(&ad[2], s-2);
+	}
 }
 
 void qt_diag::hostFoundClient()

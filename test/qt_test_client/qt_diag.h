@@ -38,6 +38,7 @@ private:
 	QTimer *timer;
 	QVBoxLayout* diagLayout;
 	QLabel* summaryLabel;
+	std::string sRead;
 
 	QTcpSocket tcpClientServer;
 	bool bConnect;
