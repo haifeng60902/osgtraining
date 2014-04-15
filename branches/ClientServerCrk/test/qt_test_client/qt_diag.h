@@ -31,7 +31,7 @@ private:
 	typedef std::vector<char> tVecChar;
 
 	//fill random string
-	quint16 getRndStr(tVecChar* s);
+	quint16 getRndStr(std::string* s);
 
 	void writeMsg();
 

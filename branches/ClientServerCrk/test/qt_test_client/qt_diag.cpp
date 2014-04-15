@@ -1,5 +1,7 @@
 #include "qt_diag.h"
 
+#include "QtHlp/QtHlp.h"
+
 qt_diag::qt_diag(QWidget *parent):QDialog(parent)
 {
 	diagLayout=new QVBoxLayout;
@@ -56,24 +58,14 @@ void qt_diag::connectedClient()
 
 void qt_diag::writeMsg()
 {
-	tVecChar sS;
-	quint16 iSize=getRndStr(&sS);
-	tcpClientServer.write(&sS[0],iSize);
+	std::string sS;
+	getRndStr(&sS);
+	QtHlp::WriteStr(&tcpClientServer, sS);
 }
 
 void qt_diag::readyReadClient()
 {
-	int bytesReceived = (int)tcpClientServer.bytesAvailable();
-	if (bytesReceived<2)
-		return;
-
-	QByteArray a=tcpClientServer.readAll();
-	char* ad=a.data();
-	quint16 s=*((quint16*)ad);
-	if (s==bytesReceived)
-	{
-		sRead=std::string(&ad[2], s-2);
-	}
+	QtHlp::GetStr(&tcpClientServer,&sRead);
 }
 
 void qt_diag::hostFoundClient()
@@ -88,12 +80,11 @@ void qt_diag::disconnectedClient()
 }
 
 //fill random string
-quint16 qt_diag::getRndStr(tVecChar* s)
+quint16 qt_diag::getRndStr(std::string* s)
 {
 	quint16 iSize=1024+1024*(float)rand()/(float)RAND_MAX;
 	s->resize(iSize);
-	*(quint16*)(&((*s)[0]))=iSize;
-	for (int i=2;i< iSize;++i)
+	for (int i=0;i< iSize;++i)
 		s->at(i)=64+24*(float)rand()/(float)RAND_MAX;
 
 	return iSize;
