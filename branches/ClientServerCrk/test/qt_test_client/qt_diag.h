@@ -39,6 +39,7 @@ private:
 	QVBoxLayout* diagLayout;
 	QLabel* summaryLabel;
 	std::string sRead;
+	std::string sLocHost;
 
 	QTcpSocket tcpClientServer;
 	bool bConnect;

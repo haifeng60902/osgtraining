@@ -11,6 +11,8 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
+#define WAIT_DISCONECT 10
+
 class qt_diag: public QDialog
 {
 	Q_OBJECT
@@ -31,13 +33,15 @@ private:
 		binClient():clientLabel(NULL),
 			iMsgSize(0),
 			iMsgClue(0),
-			iMsgRead(0)
+			iMsgRead(0),
+			iWait(WAIT_DISCONECT)
 		{};
 		QLabel* clientLabel;
 		std::string sClient;
 		int iMsgSize;
 		int iMsgRead;
 		int iMsgClue;
+		int iWait;
 	};
 	typedef std::map<QTcpSocket*, binClient> tMapClient;
 
