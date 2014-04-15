@@ -1,8 +1,9 @@
 #include "QtHlp/QtHlp.h"
 
 #include <vector>
+#include <QHostAddress>
 
-bool QtHlp::GetStr(QTcpSocket* sock, std::string* s)
+bool QtHlp::GetStr(QTcpSocket* sock, std::string* str, std::string* loc)
 {
 	bool bRes=false;
 	int bytesReceived = (int)sock->bytesAvailable();
@@ -14,7 +15,11 @@ bool QtHlp::GetStr(QTcpSocket* sock, std::string* s)
 	quint16 si=*((quint16*)ad);
 	if (si==bytesReceived)
 	{
-		*s=std::string(&ad[2], si-2);
+		char sL=ad[2];
+		std::string s;
+		*loc=std::string(&ad[3], sL);
+	
+		*str=std::string(&ad[3+sL], si-3-sL);
 		bRes=true;
 	}
 
@@ -24,8 +29,13 @@ bool QtHlp::GetStr(QTcpSocket* sock, std::string* s)
 void QtHlp::WriteStr(QTcpSocket* sock, const std::string& s)
 {
 	std::vector<char> data;
-	data.resize(s.size()+2);
-	*(quint16*)(&data[0])=s.size()+2;
-	memcpy(&data[2],&s[0],s.size());
+	std::string sLoc=sock->localAddress().toString().toStdString();
+	data.resize(s.size()+2+sLoc.size()+1);
+	*(quint16*)(&data[0])=s.size()+2+sLoc.size()+1;
+	data[2]=sLoc.size();
+	memcpy(&data[3],&sLoc[0],sLoc.size());
+
+
+	memcpy(&data[3+sLoc.size()],&s[0],s.size());
 	sock->write(&data[0],data.size());
 }
