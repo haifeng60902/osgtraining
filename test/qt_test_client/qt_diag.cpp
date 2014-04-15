@@ -39,11 +39,10 @@ void qt_diag::timerTick()
 	{
 		++i;
 		sC="Yes";
-		std::string sLocal=tcpClientServer.localAddress().toString().toStdString();
 		writeMsg();
 	}
 
-	sC=sC+":"+std::to_string(i)+"|"+sRead;
+	sC=sC+":"+std::to_string(i)+"|"+sRead+"("+sLocHost+")";
 	summaryLabel->setText(sC.c_str());
 
 	if (!bConn2Host)
@@ -67,7 +66,7 @@ void qt_diag::writeMsg()
 
 void qt_diag::readyReadClient()
 {
-	QtHlp::GetStr(&tcpClientServer,&sRead);
+	QtHlp::GetStr(&tcpClientServer,&sRead,&sLocHost);
 }
 
 void qt_diag::hostFoundClient()

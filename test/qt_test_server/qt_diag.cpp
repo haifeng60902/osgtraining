@@ -32,6 +32,22 @@ void qt_diag::timerTick()
 	static int i=0;
 	summaryLabel->setText(std::to_string(i).c_str());
 	++i;
+
+	tMapClient::iterator it=mClient.begin();
+	while (it!=mClient.end())
+	{
+		--it->second.iWait;
+		if (it->second.iWait<1)
+		{
+			it->first->deleteLater();
+
+			diagLayout->removeWidget(it->second.clientLabel);
+			delete it->second.clientLabel;
+			it=mClient.erase(it);
+		}
+		else
+			++it;
+	}
 }
 
 void qt_diag::acceptConnection()
@@ -39,7 +55,7 @@ void qt_diag::acceptConnection()
 	QTcpSocket* tcpClientSocket = tcpServer.nextPendingConnection();
 	binClient& c=mClient[tcpClientSocket];
 
-	c.sClient=tcpClientSocket->peerAddress().toString().toStdString()+"("+tcpClientSocket->localAddress().toString().toStdString()+")";
+	c.sClient=tcpClientSocket->peerAddress().toString().toStdString();
 	
 	c.clientLabel=new QLabel;
 	diagLayout->addWidget(c.clientLabel);
@@ -59,13 +75,14 @@ void qt_diag::updateServer()
 
 	++c.iMsgClue;
 
-	std::string sS;
-	if(QtHlp::GetStr(tcpSocket,&sS))
+	std::string sStr,sLocHost;
+	if(QtHlp::GetStr(tcpSocket,&sStr,&sLocHost))
 	{
-		c.iMsgSize=sS.size();
+		c.iWait=WAIT_DISCONECT;
+		c.iMsgSize=sStr.size();
 		++c.iMsgRead;
 
-		std::string sSt=c.sClient+":"+std::to_string(c.iMsgRead)+","+std::to_string(c.iMsgClue)+","+std::to_string(c.iMsgSize);
+		std::string sSt=c.sClient+"("+sLocHost+"):"+std::to_string(c.iMsgRead)+","+std::to_string(c.iMsgClue)+","+std::to_string(c.iMsgSize);
 		c.clientLabel->setText(sSt.c_str());
 
 		c.iMsgClue=0;
