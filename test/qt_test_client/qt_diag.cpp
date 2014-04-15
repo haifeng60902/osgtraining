@@ -2,7 +2,8 @@
 
 #include "QtHlp/QtHlp.h"
 
-qt_diag::qt_diag(QWidget *parent):QDialog(parent)
+qt_diag::qt_diag(const std::string& sHost, QWidget *parent):QDialog(parent),
+	host(sHost)
 {
 	diagLayout=new QVBoxLayout;
 	setLayout(diagLayout);
@@ -22,7 +23,7 @@ qt_diag::qt_diag(QWidget *parent):QDialog(parent)
 	connect(&tcpClientServer, SIGNAL(hostFound()),this, SLOT(hostFoundClient()));
 	connect(&tcpClientServer, SIGNAL(disconnected()),this, SLOT(disconnectedClient()));
 
-	tcpClientServer.connectToHost("192.168.1.2", 9900, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
+	tcpClientServer.connectToHost(host.c_str(), 9900, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 }
 
 qt_diag::~qt_diag()
@@ -46,7 +47,7 @@ void qt_diag::timerTick()
 
 	if (!bConn2Host)
 	{
-		tcpClientServer.connectToHost("192.168.1.2", 9900, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
+		tcpClientServer.connectToHost(host.c_str(), 9900, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 		bConn2Host=true;
 	}
 }
