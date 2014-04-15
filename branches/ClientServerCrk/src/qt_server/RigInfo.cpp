@@ -1,6 +1,7 @@
 #include "RigInfo.h"
 
 #include "core/Parse/parse.h"
+#include "QtHlp/QtHlp.h"
 
 RigInfo::RigInfo()
 {
@@ -64,6 +65,66 @@ QWidget* RigInfo::getWidget()
 	return rigInfo;
 }
 
+void RigInfo::acceptConnection(QTcpSocket* tcpClientSocket)
+{
+	//accept new connection
+	mClient[tcpClientSocket];
+}
+
+void RigInfo::clientWrite(QTcpSocket* tcpClientSocket)
+{
+	//read message from client
+	tMapClient::iterator itClient = mClient.find(tcpClientSocket);
+	if (itClient!=mClient.end())
+	{
+		binClient& cl=itClient->second;
+		++cl.iMsgClue;
+	
+		std::string sMsg,sClient;
+		if(QtHlp::GetStr(tcpClientSocket,&sMsg,&sClient))
+		{
+			cl.iWait=DISCONNECT_WAIT;
+			cl.iMsgSize=sMsg.size();
+			++cl.iMsgRead;
+
+			//update gui info
+			update(sClient,sMsg);
+
+			cl.iMsgClue=0;
+
+			std::string sResp("ok=");
+			sResp=sResp+std::to_string(cl.iMsgSize);
+			QtHlp::WriteStr(tcpClientSocket,sResp);
+		}
+	}
+}
+
+void RigInfo::clientDisconnected(QTcpSocket* tcpClientSocket)
+{
+	//client disconnected
+	tMapClient::iterator itClient = mClient.find(tcpClientSocket);
+	if (itClient!=mClient.end())
+	{
+		binClient& cl=itClient->second;
+		tMapInfo::iterator itInfo=mInfo.find(cl.sClient);
+		if (itInfo!=mInfo.end())
+		{
+			//remove all labels from GroupBox
+			binInfo& info=itInfo->second;
+
+			info.iTick=0;
+			for (int i=0;i<info.vLabel.size();++i)
+			{
+				info.lBox->removeWidget(info.vLabel[i]);
+				delete info.vLabel[i];
+			}
+			info.vLabel.clear();
+		}
+
+		mClient.erase(itClient);
+	}
+}
+
 void RigInfo::update(const std::string& client, const std::string& msg)
 {
 	//update gui info
@@ -99,11 +160,11 @@ void RigInfo::processPools(eMinerMode mode, const std::string& client, const std
 	if (!ps.vPool.empty())
 	{
 		//for convert purpose
-		std::string sWorker=ps.vPool[0].sUser;
-		mClt2Wrk[client]=sWorker;
+		//std::string sWorker=ps.vPool[0].sUser;
+		//mClt2Wrk[client]=sWorker;
 		
 		//find out info box
-		tMapInfo::iterator it=mInfo.find(sWorker);
+		tMapInfo::iterator it=mInfo.find(client);
 		if (it!=mInfo.end())
 			//fill main info
 			fillPoolInfo(&it->second, ps, msg);
@@ -139,27 +200,21 @@ void RigInfo::processSummary(eMinerMode mode, const std::string& client, const s
 {
 	binSummary s;
 	Parse::getSummary(msg,&s);
-	tMapClient2Worker::iterator it=mClt2Wrk.find(client);
-	if (it!=mClt2Wrk.end())
-	{
-		//record is present
-		std::string sWorker=it->second;
 
-		tMapInfo::iterator itW=mInfo.find(sWorker);
-		if (itW!=mInfo.end())
+	tMapInfo::iterator itW=mInfo.find(client);
+	if (itW!=mInfo.end())
+	{
+		binInfo& info=itW->second;
+		info.iTick=DISCONNECT_WAIT;
+		if (info.vLabel.size()>1)
 		{
-			binInfo& info=itW->second;
-			info.iTick=DISCONNECT_WAIT;
-			if (info.vLabel.size()>1)
-			{
-				std::string sF="(5s):"+std::to_string((int)(s.fMHS5s*1000.0f))
-					+"K (avg):"+std::to_string((int)(s.fMHSav*1000.0f))
-					+"K/s | A:"+std::to_string((int)s.fDifficultyAccepted)
-					+" R:"+std::to_string((int)s.fDifficultyRejected)
-					+" HW:"+std::to_string((int)s.fDeviceRejected)
-					+" WU:"+std::to_string((int)s.fWorkUtility)+"/m";
-				info.vLabel[0]->setText(sF.c_str());
-			}
+			std::string sF="(5s):"+std::to_string((int)(s.fMHS5s*1000.0f))
+				+"K (avg):"+std::to_string((int)(s.fMHSav*1000.0f))
+				+"K/s | A:"+std::to_string((int)s.fDifficultyAccepted)
+				+" R:"+std::to_string((int)s.fDifficultyRejected)
+				+" HW:"+std::to_string((int)s.fDeviceRejected)
+				+" WU:"+std::to_string((int)s.fWorkUtility)+"/m";
+			info.vLabel[0]->setText(sF.c_str());
 		}
 	}
 }
@@ -168,24 +223,18 @@ void RigInfo::processCoin(eMinerMode mode, const std::string& client, const std:
 {
 	binCoin c;
 	Parse::getCoin(msg,&c);
-	tMapClient2Worker::iterator it=mClt2Wrk.find(client);
-	if (it!=mClt2Wrk.end())
-	{
-		//record is present
-		std::string sWorker=it->second;
 
-		tMapInfo::iterator itW=mInfo.find(sWorker);
-		if (itW!=mInfo.end())
+	tMapInfo::iterator itW=mInfo.find(client);
+	if (itW!=mInfo.end())
+	{
+		binInfo& info=itW->second;
+		info.iTick=DISCONNECT_WAIT;
+		if (info.vLabel.size()>2)
 		{
-			binInfo& info=itW->second;
-			info.iTick=DISCONNECT_WAIT;
-			if (info.vLabel.size()>2)
-			{
-				//hash Diff:(netdiff) 
-				std::string sL="Block: "+c.sCurrentBlockHash.substr(0,9)+"... Diff:"
-					+std::to_string((int)c.fNetworkDifficulty);
-				info.vLabel[3]->setText(sL.c_str());
-			}
+			//hash Diff:(netdiff) 
+			std::string sL="Block: "+c.sCurrentBlockHash.substr(0,9)+"... Diff:"
+				+std::to_string((int)c.fNetworkDifficulty);
+			info.vLabel[3]->setText(sL.c_str());
 		}
 	}
 }
@@ -194,43 +243,35 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 {
 	binDevs d;
 	Parse::getDevs(msg,&d);
-	tMapClient2Worker::iterator it=mClt2Wrk.find(client);
-	if (it!=mClt2Wrk.end())
+	
+	tMapInfo::iterator itW=mInfo.find(client);
+	if (itW!=mInfo.end())
 	{
-		//record is present
-		std::string sWorker=it->second;
-
-		tMapInfo::iterator itW=mInfo.find(sWorker);
-		if (itW!=mInfo.end())
-		{
-			binInfo& info=itW->second;
-			info.iTick=DISCONNECT_WAIT;
+		binInfo& info=itW->second;
+		info.iTick=DISCONNECT_WAIT;
 			
+		for (int i=0;i<d.vGpu.size();++i)
+		{
+			int ind=2+i;
+			if (info.vLabel.size()<=ind)
 			{
-				for (int i=0;i<d.vGpu.size();++i)
-				{
-					int ind=2+i;
-					if (info.vLabel.size()<=ind)
-					{
-						QLabel* l=new QLabel;
-						info.vLabel.push_back(l);
-						info.lBox->addWidget(l);
-					}
-
-					std::string sG="GPU "+std::to_string(d.vGpu[i].iGPU)+"("
-						+std::to_string((int)d.vGpu[i].iGPUClock)+"/"
-						+std::to_string((int)d.vGpu[i].iMemoryClock)+"): "
-						+std::to_string((int)d.vGpu[i].fTemperature)
-						+"C "+std::to_string(d.vGpu[i].iFanSpeed)+"RPM("+std::to_string(d.vGpu[i].iFanPercent)+"%)"
-						+" | "+std::to_string((int)(d.vGpu[i].fMHS5s*1000.0f))+"K/"
-						+std::to_string((int)(d.vGpu[i].fMHSav*1000.0f))+"Kh/s | A:"
-						+std::to_string((int)(d.vGpu[i].fDifficultyAccepted))+" R:"
-						+std::to_string((int)(d.vGpu[i].fDifficultyRejected))+" HW:"
-						+std::to_string((int)(d.vGpu[i].fDeviceRejected))+" I:"
-						+std::to_string(d.vGpu[i].iIntensity);
-					info.vLabel[2+i]->setText(sG.c_str());
-				}
+				QLabel* l=new QLabel;
+				info.vLabel.push_back(l);
+				info.lBox->addWidget(l);
 			}
+
+			std::string sG="GPU "+std::to_string(d.vGpu[i].iGPU)+"("
+				+std::to_string((int)d.vGpu[i].iGPUClock)+"/"
+				+std::to_string((int)d.vGpu[i].iMemoryClock)+"): "
+				+std::to_string((int)d.vGpu[i].fTemperature)
+				+"C "+std::to_string(d.vGpu[i].iFanSpeed)+"RPM("+std::to_string(d.vGpu[i].iFanPercent)+"%)"
+				+" | "+std::to_string((int)(d.vGpu[i].fMHS5s*1000.0f))+"K/"
+				+std::to_string((int)(d.vGpu[i].fMHSav*1000.0f))+"Kh/s | A:"
+				+std::to_string((int)(d.vGpu[i].fDifficultyAccepted))+" R:"
+				+std::to_string((int)(d.vGpu[i].fDifficultyRejected))+" HW:"
+				+std::to_string((int)(d.vGpu[i].fDeviceRejected))+" I:"
+				+std::to_string(d.vGpu[i].iIntensity);
+			info.vLabel[2+i]->setText(sG.c_str());
 		}
 	}
 }
@@ -238,10 +279,10 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 void RigInfo::timerUpdate()
 {
 	//detect disconnect workers
-	tMapInfo::iterator it=mInfo.begin();
-	for (;it!=mInfo.end();++it)
+	tMapInfo::iterator itInfo=mInfo.begin();
+	for (;itInfo!=mInfo.end();++itInfo)
 	{
-		binInfo& info=it->second;
+		binInfo& info=itInfo->second;
 		--info.iTick;
 		if (info.iTick<1)
 		{
@@ -254,26 +295,28 @@ void RigInfo::timerUpdate()
 			}
 			info.vLabel.clear();
 			
-			//delete record from map
-			tMapClient2Worker::iterator itW=mClt2Wrk.begin();
-			while (itW!=mClt2Wrk.end())
-			{
-				if (itW->second==it->first)
-				{
-					mClt2Wrk.erase(itW);
-					itW=mClt2Wrk.end();
-				}
-				else
-					++itW;
-			}
-
-			std::string sTi=it->first;
+			std::string sTi=itInfo->first;
 			info.gBox->setTitle(sTi.c_str());
 		}
 		else
 		{
-			std::string sTi=it->first+"|"+std::to_string(info.iTick);
+			std::string sTi=itInfo->first+"|"+std::to_string(info.iTick);
 			info.gBox->setTitle(sTi.c_str());
 		}
+	}
+
+	//clean up sockets
+	tMapClient::iterator itClient=mClient.begin();
+	while (itClient!=mClient.end())
+	{
+		--itClient->second.iWait;
+		if (itClient->second.iWait<1)
+		{
+			itClient->first->deleteLater();
+
+			itClient=mClient.erase(itClient);
+		}
+		else
+			++itClient;
 	}
 }

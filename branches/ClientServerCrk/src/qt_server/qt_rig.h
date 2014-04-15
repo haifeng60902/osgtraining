@@ -30,8 +30,8 @@ public:
 private slots:
 	void timerTick();
 	void acceptConnection();
-	void updateServer();
-	void displayError(QAbstractSocket::SocketError socketError);
+	void clientWrite();
+	void clientDisconnected();
 
 private:
 	void addTabs();
@@ -57,7 +57,6 @@ private:
 	binSetting settings;
 
 	QTcpServer tcpServer;
-	QTcpSocket *tcpServerConnection;
 };
 
 #endif // QT_RIG_H

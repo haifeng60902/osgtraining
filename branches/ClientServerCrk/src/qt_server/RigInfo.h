@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QTcpSocket>
 
 #include "core/Parse/binMiner.h"
 #include "binRigs.h"
@@ -21,8 +22,14 @@ public:
 
 	void init(const binSetting& settings);
 
-	//update gui info
-	void update(const std::string& client, const std::string& msg);
+	//accept new connection
+	void acceptConnection(QTcpSocket* tcpClientSocket);
+
+	//read message from client
+	void clientWrite(QTcpSocket* tcpClientSocket);
+
+	//client disconnected
+	void clientDisconnected(QTcpSocket* tcpClientSocket);
 
 	//detect disconnect workers
 	void timerUpdate();
@@ -49,8 +56,20 @@ private:
 	//key-worker
 	typedef std::map<std::string, binInfo> tMapInfo;
 	
-	//key-client network address, value-worker name
-	typedef std::map<std::string, std::string> tMapClient2Worker;
+	struct binClient
+	{
+		binClient():iMsgSize(0),
+			iMsgClue(0),
+			iMsgRead(0),
+			iWait(DISCONNECT_WAIT)
+		{};
+		std::string sClient;
+		int iMsgSize;
+		int iMsgRead;
+		int iMsgClue;
+		int iWait;
+	};
+	typedef std::map<QTcpSocket*, binClient> tMapClient;
 
 	struct  binRigLine
 	{
@@ -67,6 +86,9 @@ private:
 	void processCoin(eMinerMode mode, const std::string& client, const std::string& msg);
 	void processDevs(eMinerMode mode, const std::string& client, const std::string& msg);
 
+	//update gui info
+	void update(const std::string& client, const std::string& msg);
+
 	//fill main info
 	void fillPoolInfo(binInfo* info, const binPools& ps, const std::string& msg);
 
@@ -75,11 +97,11 @@ private:
 	QWidget* rigInfo;
 	QVBoxLayout* rigInfoLayout;
 
-	//for convert purpose
-	tMapClient2Worker mClt2Wrk;
-
 	//worker info
 	tMapInfo mInfo;
+
+	//active clients
+	tMapClient mClient;
 };
 
 #endif	//_RIG_INFO_H_

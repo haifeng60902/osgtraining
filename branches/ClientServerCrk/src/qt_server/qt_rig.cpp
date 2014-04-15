@@ -14,8 +14,7 @@ qt_rig::qt_rig(const std::string sConf, QWidget *parent)
 	setLayout(mainLayout);
 	
 	addTabs();
-	//addGroups();
-
+	
 	timer = new QTimer(this);
 	timer->start(1000);
 	connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
@@ -54,42 +53,37 @@ void qt_rig::timerTick()
 
 void qt_rig::acceptConnection()
 {
-	tcpServerConnection = tcpServer.nextPendingConnection();
+	QTcpSocket* tcpClientSocket = tcpServer.nextPendingConnection();
 	
-	connect(tcpServerConnection, SIGNAL(readyRead()),
-		this, SLOT(updateServer()));
-	connect(tcpServerConnection, SIGNAL(error(QAbstractSocket::SocketError)),
-		this, SLOT(displayError(QAbstractSocket::SocketError)));
+	//accept new connection
+	rigInfo.acceptConnection(tcpClientSocket);
+
+	connect(tcpClientSocket, SIGNAL(readyRead()),
+		this, SLOT(clientWrite()));
+	connect(tcpClientSocket, SIGNAL(disconnected()), 
+		this, SLOT(clientDisconnected()));
 }
 
-void qt_rig::updateServer()
+void qt_rig::clientWrite()
 {
-	int bytesReceived = (int)tcpServerConnection->bytesAvailable();
-	QString sR = tcpServerConnection->readAll();
-
-	std::string sClient=tcpServerConnection->peerAddress().toString().toStdString();
-	std::string sRa=sR.toStdString();
-
-	//setWindowTitle(sRa.c_str());
-
-	std::string sReq("Success123!");
-	tcpServerConnection->write(sReq.c_str());
-
-	//tcpServerConnection->close();
-	tcpServerConnection->disconnectFromHost();
-
 	//update gui info
-	rigInfo.update(sClient, sRa);
-}
+	QTcpSocket *client= qobject_cast<QTcpSocket *>(sender());
 
-void qt_rig::displayError(QAbstractSocket::SocketError socketError)
-{
-	if (socketError == QTcpSocket::RemoteHostClosedError)
+	if (!client)
 		return;
 
-	QMessageBox::information(this, tr("Network error"),
-		tr("The following error occurred: %1.")
-		.arg(tcpServerConnection->errorString()));
+	rigInfo.clientWrite(client);
+}
 
-	tcpServer.close();
+void qt_rig::clientDisconnected()
+{
+	//client disconnected
+	QTcpSocket *client = qobject_cast<QTcpSocket *>(sender());
+
+	if (!client)
+		return;
+
+	rigInfo.clientDisconnected(client);
+
+	client->deleteLater();
 }
