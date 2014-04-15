@@ -6,7 +6,8 @@
 
 namespace QtHlp
 {
-	bool ChkStr(QTcpSocket* sock, std::string* s);
+	bool GetStr(QTcpSocket* sock, std::string* s);
+	void WriteStr(QTcpSocket* sock, const std::string& s);
 }
 
 #endif	//_QT_HLP_H_
