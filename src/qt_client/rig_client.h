@@ -28,9 +28,11 @@ class rig_client : public QDialog
 
 private slots:
 	void timerTick();
-	void connected();
-	void readyRead();
-	void hostFound();
+	void connectedClient();
+	void readyReadClient();
+	void hostFoundClient();
+	void disconnectedClient();
+
 	void coinSelect();
 public:
 	rig_client(const QString& h, const QString& r, const QString& c, QWidget *parent = 0);

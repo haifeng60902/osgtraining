@@ -36,9 +36,10 @@ rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWi
 	createTimer();
 	fillMap();
 
-	connect(&tcpClientMiner, SIGNAL(connected()),this, SLOT(connected()));
-	connect(&tcpClientMiner, SIGNAL(readyRead()),this, SLOT(readyRead()));
-	connect(&tcpClientMiner, SIGNAL(hostFound()),this, SLOT(hostFound()));
+	connect(&tcpClientMiner, SIGNAL(connected()),this, SLOT(connectedClient()));
+	connect(&tcpClientMiner, SIGNAL(readyRead()),this, SLOT(readyReadClient()));
+	connect(&tcpClientMiner, SIGNAL(hostFound()),this, SLOT(hostFoundClient()));
+	connect(&tcpClientMiner, SIGNAL(disconnected()),this, SLOT(disconnectedClient()));
 
 	if(client.bShowSysTray)
 		trayIcon->show();
@@ -184,7 +185,7 @@ void rig_client::processDoNotLaunch()
 	setWindowIcon(*iconDef);
 }
 
-void rig_client::connected()
+void rig_client::connectedClient()
 {
 	if (minerMode==enFirtMsg)
 		minerMode=(eMinerMode)((int)minerMode+1);
@@ -194,7 +195,7 @@ void rig_client::connected()
 	tcpClientMiner.write(sReq.c_str());
 }
 
-void rig_client::readyRead()
+void rig_client::readyReadClient()
 {
 	QString sR= tcpClientMiner.readAll();
 	
@@ -230,9 +231,14 @@ void rig_client::processNetInfo(eMinerMode mode, const std::string& str)
 	trayIcon->setToolTip(sTo.c_str());
 }
 
-void rig_client::hostFound()
+void rig_client::hostFoundClient()
 {
 	netMode=enConnectSuccess;
+}
+
+void rig_client::disconnectedClient()
+{
+
 }
 
 void rig_client::fillMap()
