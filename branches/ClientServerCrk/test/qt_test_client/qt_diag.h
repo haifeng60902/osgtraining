@@ -23,7 +23,7 @@ private slots:
 	void disconnectedClient();
 
 public:
-	qt_diag(QWidget *parent=NULL);
+	qt_diag(const std::string& sHost, QWidget *parent=NULL);
 	~qt_diag();
 
 private:
@@ -43,6 +43,8 @@ private:
 	QTcpSocket tcpClientServer;
 	bool bConnect;
 	bool bConn2Host;
+
+	std::string host;
 };
 
 #endif	//_QT_DIAG_H_
