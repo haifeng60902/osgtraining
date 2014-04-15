@@ -41,11 +41,16 @@ void qt_diag::timerTick()
 		sC="Yes";
 		writeMsg();
 	}
+	else
+	{
+		sRead.clear();
+		sLocHost.clear();
+	}
 
 	sC=sC+":"+std::to_string(i)+"|"+sRead+"("+sLocHost+")";
 	summaryLabel->setText(sC.c_str());
 
-	if (!bConn2Host)
+	if ((!bConn2Host)||(!bConnect))
 	{
 		tcpClientServer.connectToHost(host.c_str(), 9900, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 		bConn2Host=true;
@@ -71,7 +76,7 @@ void qt_diag::readyReadClient()
 
 void qt_diag::hostFoundClient()
 {
-	
+
 }
 
 void qt_diag::disconnectedClient()
