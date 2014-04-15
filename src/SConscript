@@ -2,6 +2,7 @@ Import('env')
 
 env.SConscript([
 	'Core/SConscript.edge',
+	'QtHlp/SConscript.edge',
 	'Server/Server.scons',
 	'Client/Client.scons',
 	'Proxy/Proxy.scons',

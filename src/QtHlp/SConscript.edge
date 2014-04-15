@@ -1,0 +1,44 @@
+import os
+
+Import('env')
+
+
+#--------------------------------------#
+
+target = 'QtHlp'
+
+libs = []
+
+external_libs = ['lua']
+
+CPPDEFINES = []
+
+#--------------------------------------#
+
+sources = env.RGlob("*.cpp") + env.RGlob('*.c')
+headers = env.RGlob(env['TOP_DIR'] + 'inc/QtHlp/*.h')
+ 
+#--------------------------------------#
+
+GSDK_PATH = env.environ.get('GSDK_DIR', '$TOP_DIR') 
+
+env.edStaticLibrary(
+	target = target,
+	source = sources,
+	header = headers,
+	libs = libs,
+	external_libs = external_libs,
+	
+	CPPPATH = [
+		os.path.join(env['TOP_DIR'], 'inc'),
+		os.path.join(env['TOP_DIR'], 'inc', 'Core'),
+		GSDK_PATH+'/inc/qt/',
+		GSDK_PATH+'/inc/qt/QtWidgets',
+		GSDK_PATH+'/inc/qt/QtGui',
+		GSDK_PATH+'/inc/qt/QtANGLE',
+		GSDK_PATH+'/inc/qt/QtCore',
+		GSDK_PATH+'/inc/qt/QtNetwork'
+	],
+
+	CPPDEFINES = CPPDEFINES,
+) 
