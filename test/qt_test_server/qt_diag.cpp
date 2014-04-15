@@ -39,7 +39,7 @@ void qt_diag::acceptConnection()
 	QTcpSocket* tcpClientSocket = tcpServer.nextPendingConnection();
 	binClient& c=mClient[tcpClientSocket];
 
-	c.sClient=tcpClientSocket->peerAddress().toString().toStdString()+"("+tcpClientSocket->peerName().toStdString()+")";
+	c.sClient=tcpClientSocket->peerAddress().toString().toStdString()+"("+tcpClientSocket->localAddress().toString().toStdString()+")";
 	
 	c.clientLabel=new QLabel;
 	diagLayout->addWidget(c.clientLabel);
