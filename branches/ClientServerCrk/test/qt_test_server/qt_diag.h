@@ -11,7 +11,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
-#define WAIT_DISCONECT 5
+#define WAIT_DISCONECT 30
 
 class qt_diag: public QDialog
 {
@@ -24,7 +24,7 @@ private slots:
 	void clientDisconnected();
 
 public:
-	qt_diag(QWidget *parent=NULL);
+	qt_diag(int iWait, QWidget *parent=NULL);
 	~qt_diag();
 
 private:
@@ -55,6 +55,7 @@ private:
 	QTcpServer tcpServer;
 
 	tMapClient mClient;
+	int iWAIT;
 };
 
 #endif	//_QT_DIAG_H_

@@ -2,8 +2,9 @@
 
 #include "QtHlp/QtHlp.h"
 
-qt_diag::qt_diag(QWidget *parent):QDialog(parent)
+qt_diag::qt_diag(int iWait, QWidget *parent):QDialog(parent)
 {
+	iWAIT=iWait;
 	diagLayout=new QVBoxLayout;
 	setLayout(diagLayout);
 	setVisible(true);
@@ -60,6 +61,7 @@ void qt_diag::acceptConnection()
 	QTcpSocket* tcpClientSocket = tcpServer.nextPendingConnection();
 	binClient& c=mClient[tcpClientSocket];
 
+	c.iWait=iWAIT;
 	c.sClient=tcpClientSocket->peerAddress().toString().toStdString();
 	
 	c.clientLabel=new QLabel;
@@ -86,7 +88,7 @@ void qt_diag::updateServer()
 
 			++c.iMsgClue;
 
-			c.iWait=WAIT_DISCONECT;
+			c.iWait=iWAIT;
 			c.iMsgSize=sStr.size();
 			++c.iMsgRead;
 
