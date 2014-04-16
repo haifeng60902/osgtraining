@@ -4,6 +4,7 @@
 #include "qt_diag.h"
 
 std::string sHost("192.168.1.2");
+int iTick=3000;
 
 int main(int argc, char *argv[])
 {
@@ -16,8 +17,15 @@ int main(int argc, char *argv[])
 			sHost=QString(argv[i]).toStdString();
 
 		}
+		else if (strcmp(argv[i], "-tick") == 0)
+		{
+			i++; if (i >= argc) break;
+			std::string sTick=QString(argv[i]).toStdString();
+			iTick=atoi(sTick.c_str());
+
+		}
 	}
 	QApplication a(argc, argv);
-	qt_diag w(sHost);
+	qt_diag w(sHost,iTick);
 	return a.exec();
 }
