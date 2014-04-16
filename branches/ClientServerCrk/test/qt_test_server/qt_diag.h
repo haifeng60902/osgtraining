@@ -11,7 +11,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
-#define WAIT_DISCONECT 10
+#define WAIT_DISCONECT 5
 
 class qt_diag: public QDialog
 {

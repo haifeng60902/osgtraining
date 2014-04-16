@@ -15,7 +15,7 @@ qt_diag::qt_diag(const std::string& sHost, QWidget *parent):QDialog(parent),
 	diagLayout->addWidget(summaryLabel);
 
 	timer = new QTimer(this);
-	timer->start(1000);
+	timer->start(3000);
 	connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
 
 	connect(&tcpClientServer, SIGNAL(connected()),this, SLOT(connectedClient()));
@@ -83,6 +83,7 @@ void qt_diag::disconnectedClient()
 {
 	bConnect=false;
 	bConn2Host=false;
+	tcpClientServer.close();
 }
 
 //fill random string
