@@ -23,7 +23,7 @@ private slots:
 	void disconnectedClient();
 
 public:
-	qt_diag(const std::string& sHost, QWidget *parent=NULL);
+	qt_diag(const std::string& sHost, int iTick,QWidget *parent=NULL);
 	~qt_diag();
 
 private:

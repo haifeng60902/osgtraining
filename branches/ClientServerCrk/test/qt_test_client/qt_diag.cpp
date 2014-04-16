@@ -2,7 +2,7 @@
 
 #include "QtHlp/QtHlp.h"
 
-qt_diag::qt_diag(const std::string& sHost, QWidget *parent):QDialog(parent),
+qt_diag::qt_diag(const std::string& sHost, int iTick, QWidget *parent):QDialog(parent),
 	host(sHost)
 {
 	diagLayout=new QVBoxLayout;
@@ -15,7 +15,7 @@ qt_diag::qt_diag(const std::string& sHost, QWidget *parent):QDialog(parent),
 	diagLayout->addWidget(summaryLabel);
 
 	timer = new QTimer(this);
-	timer->start(3000);
+	timer->start(iTick);
 	connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
 
 	connect(&tcpClientServer, SIGNAL(connected()),this, SLOT(connectedClient()));
