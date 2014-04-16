@@ -30,7 +30,8 @@ qt_diag::~qt_diag()
 void qt_diag::timerTick()
 {
 	static int i=0;
-	summaryLabel->setText(std::to_string(i).c_str());
+	std::string sTi=std::to_string(i)+"|"+std::to_string(mClient.size());
+	summaryLabel->setText(sTi.c_str());
 	++i;
 
 	tMapClient::iterator it=mClient.begin();

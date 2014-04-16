@@ -83,7 +83,7 @@ void qt_diag::disconnectedClient()
 {
 	bConnect=false;
 	bConn2Host=false;
-	tcpClientServer.close();
+	//tcpClientServer.close();
 }
 
 //fill random string
