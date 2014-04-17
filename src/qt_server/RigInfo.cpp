@@ -24,6 +24,8 @@ void RigInfo::init(const binSetting& settings)
 
 void RigInfo::addGroups(const binSetting& settings)
 {
+	iWAIT=settings.iWait;
+
 	int row=settings.vWorker.size()/settings.iColumn;
 	int last=settings.vWorker.size()%settings.iColumn;
 	if (last>0)
@@ -83,7 +85,7 @@ void RigInfo::clientWrite(QTcpSocket* tcpClientSocket)
 		std::string sMsg,sClient;
 		if(QtHlp::GetStr(tcpClientSocket,&sMsg,&sClient))
 		{
-			cl.iWait=DISCONNECT_WAIT;
+			cl.iWait=iWAIT;
 			cl.iMsgSize=sMsg.size();
 			++cl.iMsgRead;
 
@@ -174,7 +176,7 @@ void RigInfo::processPools(eMinerMode mode, const std::string& client, const std
 void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string& msg)
 {
 	//fill main info
-	info->iTick=DISCONNECT_WAIT;
+	info->iTick=iWAIT;
 	if (info->vLabel.size()<2)
 	{
 		info->vLabel.push_back(new QLabel);//(5s):540.2K (avg):521.2Kh/s | A:38000  R:0  HW:0  WU:497.6/m
@@ -205,7 +207,7 @@ void RigInfo::processSummary(eMinerMode mode, const std::string& client, const s
 	if (itW!=mInfo.end())
 	{
 		binInfo& info=itW->second;
-		info.iTick=DISCONNECT_WAIT;
+		info.iTick=iWAIT;
 		if (info.vLabel.size()>1)
 		{
 			std::string sF="(5s):"+std::to_string((int)(s.fMHS5s*1000.0f))
@@ -228,7 +230,7 @@ void RigInfo::processCoin(eMinerMode mode, const std::string& client, const std:
 	if (itW!=mInfo.end())
 	{
 		binInfo& info=itW->second;
-		info.iTick=DISCONNECT_WAIT;
+		info.iTick=iWAIT;
 		if (info.vLabel.size()>2)
 		{
 			//hash Diff:(netdiff) 
@@ -248,7 +250,7 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 	if (itW!=mInfo.end())
 	{
 		binInfo& info=itW->second;
-		info.iTick=DISCONNECT_WAIT;
+		info.iTick=iWAIT;
 			
 		for (int i=0;i<d.vGpu.size();++i)
 		{

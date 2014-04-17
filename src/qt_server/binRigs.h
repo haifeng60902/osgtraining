@@ -25,10 +25,12 @@ struct  binSetting
 {
 	binSetting():iColumn(0)
 		,iPort(9800)
+		,iWait(30)
 	{};
 
 	int iColumn;
 	int iPort;
+	int iWait;
 	tVecWorker vWorker;
 	tVecMode vModes;
 };

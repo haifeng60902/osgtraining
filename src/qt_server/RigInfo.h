@@ -102,6 +102,8 @@ private:
 
 	//active clients
 	tMapClient mClient;
+
+	int iWAIT;
 };
 
 #endif	//_RIG_INFO_H_
