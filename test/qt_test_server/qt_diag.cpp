@@ -48,7 +48,7 @@ void qt_diag::timerTick()
 
 			diagLayout->removeWidget(clientLabel);
 			delete clientLabel;
-			//tcpClientSocket->deleteLater();
+
 			tcpClientSocket->disconnectFromHost();
 		}
 		else
