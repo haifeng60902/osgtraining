@@ -23,6 +23,7 @@ void luaParseConf::parse(const char* conf, binSetting* settings)
 
 	settings->iColumn = config.get("column", 0);
 	settings->iPort = config.get("port", 9800);
+	settings->iWait = config.get("wait", 30);
 	parseWorkers(config, &settings->vWorker);
 	parseModes(config, &settings->vModes);
 

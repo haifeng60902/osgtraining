@@ -39,3 +39,16 @@ void QtHlp::WriteStr(QTcpSocket* sock, const std::string& s)
 	memcpy(&data[3+sLoc.size()],&s[0],s.size());
 	sock->write(&data[0],data.size());
 }
+
+bool QtHlp::GetStrs(QTcpSocket* sock, std::vector<std::string>* vs)
+{
+
+	return true;
+}
+
+void QtHlp::WriteStrs(QTcpSocket* sock, const std::vector<std::string>& vs)
+{
+	int iSize=4+vs.size()*2;
+	for (int i=0;i<vs.size();++i)
+		iSize+=vs[i].size();
+}
