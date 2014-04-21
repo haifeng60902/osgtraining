@@ -10,6 +10,9 @@ int iTick=3000;
 
 int main(int argc, char *argv[])
 {
+	test_hlp hlp;
+	hlp.check();
+
 	//имя конфига
 	for(int i=1; i<argc; i++)
 	{
