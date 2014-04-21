@@ -61,7 +61,7 @@ bool QtHlp::GetStrs(int bytesReceived, char* data, std::vector<std::string>* vs)
 		int iOffset=4+num_rec*2;
 		for (int i=0;i<num_rec;++i)
 		{
-			memcpy( &(*vs)[i], &data[iOffset],vs->at(i).size());
+			memcpy( &(*vs)[i][0], &data[iOffset],vs->at(i).size());
 			iOffset+=vs->at(i).size();
 		}
 	}
@@ -92,7 +92,7 @@ void QtHlp::WriteStrs(const std::vector<std::string>& vs, std::vector<char>& dat
 	int iOffset=4+vs.size()*2;
 	for (int i=0;i<vs.size();++i)
 	{
-		memcpy(&data[iOffset],&vs[i],vs[i].size());
+		memcpy(&data[iOffset], &vs[i][0],vs[i].size());
 		iOffset+=vs[i].size();
 	}
 }
@@ -101,7 +101,7 @@ void QtHlp::WriteStrs(const std::vector<std::string>& vs, std::vector<char>& dat
 void QtHlp::rndStr(std::string* str, int len_from, int len_to)
 {
 	quint16 iSize=len_from+(len_to-len_from)*(float)rand()/(float)RAND_MAX;
-	str->resize(iSize);
+	//str->resize(iSize);
 	for (int i=0;i< iSize;++i)
-		str->at(i)=64+24*(float)rand()/(float)RAND_MAX;
+		str->push_back(64+24*(float)rand()/(float)RAND_MAX);
 }
