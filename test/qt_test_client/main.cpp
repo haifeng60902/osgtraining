@@ -3,6 +3,8 @@
 #include <QtWidgets/QApplication>
 #include "qt_diag.h"
 
+#include "test_hlp.h"
+
 std::string sHost("192.168.1.2");
 int iTick=3000;
 
