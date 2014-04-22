@@ -19,9 +19,9 @@ eMinerMode Parse::getMode(const std::string& msg)
 		case 7:
 			mode=enPools;
 			break;
-		case 78:
-			mode=enCoin;
-			break;
+	//	case 78:
+	//		mode=enCoin;
+	//		break;
 		case 9:
 			mode=enDevs;
 			break;
