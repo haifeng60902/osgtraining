@@ -12,7 +12,6 @@ enum eMinerMode
 	enFirtMsg,
 	enSummary,
 	enPools,
-	enCoin,
 	enDevs,
 	enQuit
 };
