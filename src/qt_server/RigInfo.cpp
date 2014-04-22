@@ -82,21 +82,37 @@ void RigInfo::clientWrite(QTcpSocket* tcpClientSocket)
 		binClient& cl=itClient->second;
 		++cl.iMsgClue;
 	
-		std::string sMsg,sClient;
-		if(QtHlp::GetStr(tcpClientSocket,&sMsg,&sClient))
+		int bytesReceived = (int)tcpClientSocket->bytesAvailable();
+		QByteArray a=tcpClientSocket->readAll();
+		char* ad=a.data();
+		
+		std::vector<std::string> msg;
+
+		if(QtHlp::GetStrs(bytesReceived,ad, &msg))
 		{
 			cl.iWait=iWAIT;
-			cl.iMsgSize=sMsg.size();
+			cl.iMsgSize=msg.size();
 			++cl.iMsgRead;
 
-			//update gui info
-			update(sClient,sMsg);
+			for (int i=1;i<msg.size();++i)
+				//update gui info
+				update(msg[0],msg[i]);
 
 			cl.iMsgClue=0;
 
 			std::string sResp("ok=");
 			sResp=sResp+std::to_string(cl.iMsgSize);
-			QtHlp::WriteStr(tcpClientSocket,sResp);
+
+			msg.clear();
+			msg.push_back(sResp);
+
+			std::vector<char> data;
+
+			//convert from vector strings to char data
+			QtHlp::WriteStrs(msg, data);
+
+			//send to network
+			tcpClientSocket->write(&data[0],data.size());
 		}
 	}
 }
@@ -161,10 +177,6 @@ void RigInfo::processPools(eMinerMode mode, const std::string& client, const std
 	Parse::getPools(msg,&ps);
 	if (!ps.vPool.empty())
 	{
-		//for convert purpose
-		//std::string sWorker=ps.vPool[0].sUser;
-		//mClt2Wrk[client]=sWorker;
-		
 		//find out info box
 		tMapInfo::iterator it=mInfo.find(client);
 		if (it!=mInfo.end())

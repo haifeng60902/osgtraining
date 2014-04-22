@@ -28,7 +28,7 @@ rig_client::rig_client(const QString& h, const QString& r, const QString& c, QWi
 	save.setUser(client.sUser);
 	
 	//net init
-	net.init(client.sHostServer, client.iPortServer);
+	net.init(client.sHostServer, client.iPortServer, client.sUser);
 
 	createActions();
 	createTrayIcon();

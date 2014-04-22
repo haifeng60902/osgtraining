@@ -2,7 +2,7 @@
 
 #include "QtHlp/QtHlp.h"
 
-#define MAX_MSG 3
+#define MAX_MSG 4
 
 netFeedback::netFeedback()
 {
@@ -18,10 +18,12 @@ netFeedback::~netFeedback()
 
 }
 
-void netFeedback::init(const std::string& server, int port)
+void netFeedback::init(const std::string& server, int port, const std::string& user)
 {
 	sHostServer=server;
 	iPortServer=port;
+	sUser=user;
+	vMsgOut.push_back(sUser);
 
 	connect(&tcpClientServer, SIGNAL(connected()),this, SLOT(connectedClient()));
 	connect(&tcpClientServer, SIGNAL(readyRead()),this, SLOT(readyReadClient()));
@@ -76,7 +78,11 @@ void netFeedback::push_msg(const std::string& msg)
 	//store message for late processing
 	vMsgOut.push_back(msg);
 	if (vMsgOut.size()>MAX_MSG)
-		vMsgOut.erase(vMsgOut.begin());
+	{
+		std::vector<std::string>::iterator it=vMsgOut.begin();
+		++it;
+		vMsgOut.erase(it);
+	}
 }
 
 void netFeedback::disconnectedClient()
