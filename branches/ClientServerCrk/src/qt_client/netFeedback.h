@@ -23,7 +23,7 @@ public:
 	netFeedback();
 	~netFeedback();
 
-	void init(const std::string& server, int port);
+	void init(const std::string& server, int port, const std::string& user);
 
 	bool process();
 
@@ -38,7 +38,7 @@ private:
 
 	std::string sHostServer;
 	int iPortServer;
-	std::string sMsg;
+	std::string sUser;
 
 	int iSend;
 	int iRecv;

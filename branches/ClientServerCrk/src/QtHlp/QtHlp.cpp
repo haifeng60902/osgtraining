@@ -50,6 +50,7 @@ bool QtHlp::GetStrs(int bytesReceived, char* data, std::vector<std::string>* vs)
 	quint16 size=*((quint16*)data);
 	if (size==bytesReceived)
 	{
+		bRes=true;
 		quint16 num_rec=*((quint16*)&data[2]);
 		vs->resize(num_rec);
 		for (int i=0;i<num_rec;++i)
