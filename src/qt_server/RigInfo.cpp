@@ -285,7 +285,8 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 				+std::to_string((int)(d.vGpu[i].fDifficultyRejected))+" HW:"
 				+std::to_string((int)(d.vGpu[i].fDeviceRejected))+" I:"
 				+std::to_string(d.vGpu[i].iIntensity);
-			info.vLabel[2+i]->setText(sG.c_str());
+			if (info.vLabel.size()>2+i)
+				info.vLabel[2+i]->setText(sG.c_str());
 		}
 	}
 }
