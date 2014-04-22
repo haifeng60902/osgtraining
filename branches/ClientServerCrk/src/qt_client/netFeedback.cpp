@@ -38,6 +38,11 @@ void netFeedback::init(const std::string& server, int port, const std::string& u
 
 bool netFeedback::process()
 {
+	static int pass=0;
+	++pass;
+	if (pass%3)
+		return false;
+
 	bool bRes=false;
 	if(bConnect)
 	{
@@ -103,4 +108,5 @@ void netFeedback::writeMsg()
 
 	//empty message vector
 	vMsgOut.clear();
+	vMsgOut.push_back(sUser);
 }
