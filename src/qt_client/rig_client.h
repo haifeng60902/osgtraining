@@ -55,6 +55,8 @@ private:
 	void processDoNotLaunch();
 	void processNetInfo(eMinerMode minerMode, const std::string& str);
 
+	void systrayLogic();
+
 	//save data from miner to log
 	saveFeedback save;
 

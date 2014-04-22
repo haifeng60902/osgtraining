@@ -6,7 +6,7 @@ Import('env')
 
 target = 'qt_client'
 
-libs = ['edCore','qtmain','Qt5Widgets','Qt5Core','Qt5Gui','libEGL','libGLESv2','Qt5WinExtras','Qt5Network']
+libs = ['edCore','QtHlp','qtmain','Qt5Widgets','Qt5Core','Qt5Gui','libEGL','libGLESv2','Qt5WinExtras','Qt5Network']
 
 not_linked_dependencies = []
 

@@ -2,6 +2,7 @@
 #define _NET_FEEDBACK_H_
 
 #include <string>
+#include <vector>
 
 #include <QObject>
 #include <QtNetwork>
@@ -13,9 +14,10 @@ class netFeedback: public QObject
 	Q_OBJECT
 
 private slots:
-	void connected();
-	void readyRead();
-	void hostFound();
+	void connectedClient();
+	void readyReadClient();
+	void hostFoundClient();
+	void disconnectedClient();
 
 public:
 	netFeedback();
@@ -23,10 +25,15 @@ public:
 
 	void init(const std::string& server, int port);
 
-	//send to server
-	void send(const std::string& msg, int* send, int* recv);
+	bool process();
+
+	//store message for late processing
+	void push_msg(const std::string& msg);
 
 private:
+
+	void writeMsg();
+
 	QTcpSocket tcpClientServer;
 
 	std::string sHostServer;
@@ -35,6 +42,11 @@ private:
 
 	int iSend;
 	int iRecv;
+	bool bConnect;
+	bool bConn2Host;
+
+	std::vector<std::string> vMsgOut;
+	std::vector<std::string> vMsgIn;
 };
 
 #endif	//_NET_FEEDBACK_H_

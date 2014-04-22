@@ -26,9 +26,9 @@ void saveFeedback::parse(eMinerMode mode, const std::string& msg)
 	case enPools:
 		saveMsg(msg, "pools");
 		break;
-	case enCoin:
-		saveMsg(msg, "coin");
-		break;
+//	case enCoin:
+//		saveMsg(msg, "coin");
+//		break;
 	case enDevs:
 		saveMsg(msg, "devs");
 		break;
