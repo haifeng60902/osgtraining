@@ -150,28 +150,25 @@ void rig_client::createTimer()
 
 void rig_client::timerTick()
 {
-	if (iSwitchCoin>-1)
-	{
-		if (minerMode==enFirtMsg)
-		{
-			//start miner
-			winCreateProcess win;
-			bool bRes=win.create(iSwitchCoin, client);
-			if (!bRes)
-				processDoNotLaunch();
+	systrayLogic();
 
-			iSwitchCoin=-1;
+	bool bServer=net.process();
 
-			return;
-		}
-		else
-		{
-			minerMode=enQuit;
-		}
-	}
+	std::string sTip="Server:";
+	if (bServer)
+		sTip+="Yes|";
+	else
+		sTip+="No|";
 
 	if (netMode==enTry2Connect)
+	{
+		sTip+="Client:No";
 		minerMode=enFirtMsg;
+	}
+	else
+		sTip+="Client:Yes";
+
+	trayIcon->setToolTip(sTip.c_str());
 
 	netMode=enTry2Connect;
 	tcpClientMiner.connectToHost(client.sHostMiner.c_str(), client.iPortMiner, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
@@ -219,16 +216,8 @@ void rig_client::processNetInfo(eMinerMode mode, const std::string& str)
 	//save string to log
 	save.parse(mode, str);
 
-	//send string
-	int iSend, iRecv;
-	net.send(str, &iSend, &iRecv);
-
-	iSendServ=iSend;
-	iRecvServ=iRecv;
-
-	std::string sTo=std::to_string(iSendServ)+"/"+std::to_string(iRecvServ);
-
-	trayIcon->setToolTip(sTo.c_str());
+	//store message for late processing
+	net.push_msg(str);
 }
 
 void rig_client::hostFoundClient()
@@ -246,7 +235,30 @@ void rig_client::fillMap()
 	mode2Str[enFirtMsg]="error";
 	mode2Str[enSummary]="summary";
 	mode2Str[enPools]="pools";
-	mode2Str[enCoin]="coin";
+//	mode2Str[enCoin]="coin";
 	mode2Str[enDevs]="devs";
 	mode2Str[enQuit]="quit";
+}
+
+void rig_client::systrayLogic()
+{
+	if (iSwitchCoin>-1)
+	{
+		if (minerMode==enFirtMsg)
+		{
+			//start miner
+			winCreateProcess win;
+			bool bRes=win.create(iSwitchCoin, client);
+			if (!bRes)
+				processDoNotLaunch();
+
+			iSwitchCoin=-1;
+
+			return;
+		}
+		else
+		{
+			minerMode=enQuit;
+		}
+	}
 }
