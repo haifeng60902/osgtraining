@@ -28,6 +28,7 @@ void luaParseConf::parse(const char* conf, binClient* client)
 	client->sHostServer = config.get("host_server", std::string(""));
 	client->iPortServer = config.get("port_server", 9800);
 	client->sLogPath = config.get("log_path", std::string(""));
+	client->iWait = config.get("wait", 3);
 	
 	extractCoins(&config, &client->vCoins);
 	extractMiners(&config, &client->mMiners);

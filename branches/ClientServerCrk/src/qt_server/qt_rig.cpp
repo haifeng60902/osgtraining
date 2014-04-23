@@ -48,7 +48,8 @@ void qt_rig::addTabs()
 
 void qt_rig::timerTick()
 {
-	rigInfo.timerUpdate();
+	std::string sTitle=rigInfo.timerUpdate();
+	setWindowTitle(sTitle.c_str());
 }
 
 void qt_rig::acceptConnection()

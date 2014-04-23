@@ -32,7 +32,7 @@ public:
 	void clientDisconnected(QTcpSocket* tcpClientSocket);
 
 	//detect disconnect workers
-	void timerUpdate();
+	std::string timerUpdate();
 
 	//get custom widget
 	QWidget* getWidget();
@@ -61,13 +61,15 @@ private:
 		binClient():iMsgSize(0),
 			iMsgClue(0),
 			iMsgRead(0),
-			iWait(DISCONNECT_WAIT)
+			iWait(DISCONNECT_WAIT),
+			iHash(0)
 		{};
 		std::string sClient;
 		int iMsgSize;
 		int iMsgRead;
 		int iMsgClue;
 		int iWait;
+		int iHash;
 	};
 	typedef std::map<QTcpSocket*, binClient> tMapClient;
 
@@ -82,12 +84,12 @@ private:
 	void addGroups(const binSetting& settings);
 
 	void processPools(eMinerMode mode, const std::string& client, const std::string& msg);
-	void processSummary(eMinerMode mode, const std::string& client, const std::string& msg);
+	void processSummary(eMinerMode mode, const std::string& client, const std::string& msg, int* hash);
 	void processCoin(eMinerMode mode, const std::string& client, const std::string& msg);
 	void processDevs(eMinerMode mode, const std::string& client, const std::string& msg);
 
 	//update gui info
-	void update(const std::string& client, const std::string& msg);
+	void update(const std::string& client, const std::string& msg, int* hash);
 
 	//fill main info
 	void fillPoolInfo(binInfo* info, const binPools& ps, const std::string& msg);

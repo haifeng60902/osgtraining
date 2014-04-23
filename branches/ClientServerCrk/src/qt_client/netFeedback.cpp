@@ -11,6 +11,8 @@ netFeedback::netFeedback()
 
 	bConnect=false;
 	bConn2Host=false;
+	bProcess=false;
+	iWait=1;
 }
 
 netFeedback::~netFeedback()
@@ -18,11 +20,12 @@ netFeedback::~netFeedback()
 
 }
 
-void netFeedback::init(const std::string& server, int port, const std::string& user)
+void netFeedback::init(const std::string& server, int port, const std::string& user, int wait)
 {
 	sHostServer=server;
 	iPortServer=port;
 	sUser=user;
+	iWait=wait;
 	vMsgOut.push_back(sUser);
 
 	connect(&tcpClientServer, SIGNAL(connected()),this, SLOT(connectedClient()));
@@ -40,13 +43,13 @@ bool netFeedback::process()
 {
 	static int pass=0;
 	++pass;
-	if (pass%3)
-		return false;
+	if (pass%iWait)
+		return bProcess;
 
-	bool bRes=false;
+	bProcess=false;
 	if(bConnect)
 	{
-		bRes=true;
+		bProcess=true;
 		writeMsg();
 
 	}
@@ -56,7 +59,7 @@ bool netFeedback::process()
 		bConn2Host=true;
 	}
 
-	return bRes;
+	return bProcess;
 }
 
 void netFeedback::connectedClient()

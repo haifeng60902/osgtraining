@@ -96,7 +96,7 @@ void RigInfo::clientWrite(QTcpSocket* tcpClientSocket)
 
 			for (int i=1;i<msg.size();++i)
 				//update gui info
-				update(msg[0],msg[i]);
+				update(msg[0],msg[i], &cl.iHash);
 
 			cl.iMsgClue=0;
 
@@ -143,7 +143,7 @@ void RigInfo::clientDisconnected(QTcpSocket* tcpClientSocket)
 	}
 }
 
-void RigInfo::update(const std::string& client, const std::string& msg)
+void RigInfo::update(const std::string& client, const std::string& msg, int* hash)
 {
 	//update gui info
 	eMinerMode mode=Parse::getMode(msg);
@@ -153,7 +153,7 @@ void RigInfo::update(const std::string& client, const std::string& msg)
 	case enFirtMsg:
 		break;
 	case enSummary:
-		processSummary(mode, client, msg);
+		processSummary(mode, client, msg, hash);
 		break;
 	case enPools:
 		processPools(mode, client, msg);
@@ -210,7 +210,7 @@ void RigInfo::fillPoolInfo(binInfo* info, const binPools& ps, const std::string&
 	info->vLabel[1]->setText(sPoolInfo.c_str());
 }
 
-void RigInfo::processSummary(eMinerMode mode, const std::string& client, const std::string& msg)
+void RigInfo::processSummary(eMinerMode mode, const std::string& client, const std::string& msg, int* hash)
 {
 	binSummary s;
 	Parse::getSummary(msg,&s);
@@ -220,6 +220,7 @@ void RigInfo::processSummary(eMinerMode mode, const std::string& client, const s
 	{
 		binInfo& info=itW->second;
 		info.iTick=iWAIT;
+		(*hash)=s.fMHS5s*1000.0f;
 		if (info.vLabel.size()>1)
 		{
 			std::string sF="(5s):"+std::to_string((int)(s.fMHS5s*1000.0f))
@@ -291,7 +292,7 @@ void RigInfo::processDevs(eMinerMode mode, const std::string& client, const std:
 	}
 }
 
-void RigInfo::timerUpdate()
+std::string RigInfo::timerUpdate()
 {
 	//detect disconnect workers
 	tMapInfo::iterator itInfo=mInfo.begin();
@@ -321,6 +322,7 @@ void RigInfo::timerUpdate()
 	}
 
 	//clean up sockets
+	int iHash=0;
 	tMapClient::iterator itClient=mClient.begin();
 	while (itClient!=mClient.end())
 	{
@@ -332,6 +334,12 @@ void RigInfo::timerUpdate()
 			itClient=mClient.erase(itClient);
 		}
 		else
+		{
+			iHash=itClient->second.iHash;
 			++itClient;
+		}
 	}
+
+	std::string sTitle=std::to_string(mClient.size())+"|"+std::to_string(iHash);
+	return sTitle;
 }
