@@ -335,7 +335,7 @@ std::string RigInfo::timerUpdate()
 		}
 		else
 		{
-			iHash=itClient->second.iHash;
+			iHash+=itClient->second.iHash;
 			++itClient;
 		}
 	}
