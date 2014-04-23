@@ -23,7 +23,7 @@ public:
 	netFeedback();
 	~netFeedback();
 
-	void init(const std::string& server, int port, const std::string& user);
+	void init(const std::string& server, int port, const std::string& user, int wait);
 
 	bool process();
 
@@ -44,6 +44,9 @@ private:
 	int iRecv;
 	bool bConnect;
 	bool bConn2Host;
+	bool bProcess;
+
+	int iWait;
 
 	std::vector<std::string> vMsgOut;
 	std::vector<std::string> vMsgIn;
