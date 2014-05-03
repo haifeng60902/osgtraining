@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QTime>
 
 class qt_diag: public QDialog
 {
@@ -35,6 +36,7 @@ private:
 
 	void writeMsg();
 
+	QTime myTimer;
 	QTimer *timer;
 	QVBoxLayout* diagLayout;
 	QLabel* summaryLabel;
@@ -46,6 +48,7 @@ private:
 	bool bConn2Host;
 
 	std::string host;
+	int nMilliseconds;
 };
 
 #endif	//_QT_DIAG_H_
