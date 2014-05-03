@@ -10,6 +10,7 @@ qt_diag::qt_diag(const std::string& sHost, int iTick, QWidget *parent):QDialog(p
 	setVisible(true);
 	bConnect=false;
 	bConn2Host=true;
+	nMilliseconds=0;
 
 	summaryLabel=new QLabel;
 	diagLayout->addWidget(summaryLabel);
@@ -34,6 +35,7 @@ qt_diag::~qt_diag()
 void qt_diag::timerTick()
 {
 	static int i=0;
+	static int iConn=0;
 	std::string sC="No";
 	if (bConnect)
 	{
@@ -43,17 +45,19 @@ void qt_diag::timerTick()
 	}
 	else
 	{
+		nMilliseconds=0;
 		sRead.clear();
 		sLocHost.clear();
 	}
 
-	sC=sC+":"+std::to_string(i)+"|"+sRead+"("+sLocHost+")";
+	sC=sC+":"+std::to_string(nMilliseconds)+"["+std::to_string(iConn)+"]|"+sRead+"("+sLocHost+")";
 	summaryLabel->setText(sC.c_str());
 
 	if ((!bConn2Host)||(!bConnect))
 	{
 		tcpClientServer.connectToHost(host.c_str(), 9900, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 		bConn2Host=true;
+		++iConn;
 	}
 }
 
@@ -66,12 +70,17 @@ void qt_diag::writeMsg()
 {
 	std::string sS;
 	getRndStr(&sS);
+
+	myTimer.start();
 	QtHlp::WriteStr(&tcpClientServer, sS);
 }
 
 void qt_diag::readyReadClient()
 {
-	QtHlp::GetStr(&tcpClientServer,&sRead,&sLocHost);
+	if (QtHlp::GetStr(&tcpClientServer,&sRead,&sLocHost))
+	{
+		nMilliseconds = myTimer.elapsed();
+	}
 }
 
 void qt_diag::hostFoundClient()
@@ -83,7 +92,7 @@ void qt_diag::disconnectedClient()
 {
 	bConnect=false;
 	bConn2Host=false;
-	//tcpClientServer.close();
+	nMilliseconds=0;
 }
 
 //fill random string
