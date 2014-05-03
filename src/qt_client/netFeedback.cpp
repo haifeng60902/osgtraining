@@ -109,6 +109,8 @@ void netFeedback::writeMsg()
 	//send to network
 	tcpClientServer.write(&data[0],data.size());
 
+	tcpClientServer.waitForBytesWritten();
+
 	//empty message vector
 	vMsgOut.clear();
 	vMsgOut.push_back(sUser);
