@@ -113,6 +113,8 @@ void RigInfo::clientWrite(QTcpSocket* tcpClientSocket)
 
 			//send to network
 			tcpClientSocket->write(&data[0],data.size());
+
+			tcpClientSocket->waitForBytesWritten();
 		}
 	}
 }
