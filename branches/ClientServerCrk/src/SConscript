@@ -11,5 +11,6 @@ env.SConscript([
 	'ClientTest/ClientTest.scons',
 	'find/find.scons',
 	'qt_server/qt_server.scons',
-	'qt_client/qt_client.scons'
+	'qt_client/qt_client.scons',
+	'qt_server2/qt_server2.scons'
 ])
