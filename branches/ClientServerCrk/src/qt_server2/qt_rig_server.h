@@ -18,6 +18,8 @@
 #include "binRigs.h"
 #include "luaParseConfServer.h"
 
+#include "RigInfo2.h"
+
 class qt_rig_server : public QDialog
 {
 	Q_OBJECT
@@ -48,6 +50,8 @@ private:
 	binSetting settings;
 
 	QTcpServer tcpServer;
+
+	RigInfo2 rigInfo2;
 };
 
 #endif // QT_RIG_H
