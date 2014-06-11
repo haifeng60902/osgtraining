@@ -35,16 +35,25 @@ void qt_rig_server::addTabs()
 	tabWidget = new QTabWidget(this);
 
 	mainLayout->addWidget(tabWidget);
+
+	rigInfo2.init(settings);
+	QWidget* rigInfoWidget=rigInfo2.getWidget();
+
+	tabWidget->addTab(rigInfoWidget, tr("Rigs info"));
 }
 
 void qt_rig_server::timerTick()
 {
-	setWindowTitle("tick");
+	std::string sTitle=rigInfo2.timerUpdate();
+	setWindowTitle(sTitle.c_str());
 }
 
 void qt_rig_server::acceptConnection()
 {
 	QTcpSocket* tcpClientSocket = tcpServer.nextPendingConnection();
+
+	//accept new connection
+	rigInfo2.acceptConnection(tcpClientSocket);
 
 	connect(tcpClientSocket, SIGNAL(readyRead()),
 		this, SLOT(clientWrite()));
@@ -59,6 +68,8 @@ void qt_rig_server::clientWrite()
 
 	if (!client)
 		return;
+
+	rigInfo2.clientWrite(client);
 }
 
 void qt_rig_server::clientDisconnected()
@@ -68,4 +79,8 @@ void qt_rig_server::clientDisconnected()
 
 	if (!client)
 		return;
+
+	rigInfo2.clientDisconnected(client);
+
+	client->deleteLater();
 }
