@@ -182,8 +182,9 @@ void rig_client::connectedClient()
 	if (minerMode==enFirtMsg)
 		minerMode=(eMinerMode)((int)minerMode+1);
 	
-	//minerMode=enSummary;
+	minerMode=enSummary;
 	std::string sReq=mode2Str[minerMode];
+
 	tcpClientMiner.write(sReq.c_str());
 }
 

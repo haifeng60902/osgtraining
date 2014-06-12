@@ -13,6 +13,8 @@ netFeedback::netFeedback()
 	bConn2Host=false;
 	bProcess=false;
 	iWait=1;
+
+	vMsgOut.resize(2);
 }
 
 netFeedback::~netFeedback()
@@ -26,7 +28,8 @@ void netFeedback::init(const std::string& server, int port, const std::string& u
 	iPortServer=port;
 	sUser=user;
 	iWait=wait;
-	vMsgOut.push_back(sUser);
+	vMsgOut[0]=sUser;
+	vMsgOut[1]=sUser;
 
 	connect(&tcpClientServer, SIGNAL(connected()),this, SLOT(connectedClient()));
 	connect(&tcpClientServer, SIGNAL(readyRead()),this, SLOT(readyReadClient()));
@@ -84,13 +87,7 @@ void netFeedback::hostFoundClient()
 void netFeedback::push_msg(const std::string& msg)
 {
 	//store message for late processing
-	vMsgOut.push_back(msg);
-	if (vMsgOut.size()>MAX_MSG)
-	{
-		std::vector<std::string>::iterator it=vMsgOut.begin();
-		++it;
-		vMsgOut.erase(it);
-	}
+	vMsgOut[1]=msg;
 }
 
 void netFeedback::disconnectedClient()
@@ -110,8 +107,4 @@ void netFeedback::writeMsg()
 	tcpClientServer.write(&data[0],data.size());
 
 	tcpClientServer.waitForBytesWritten();
-
-	//empty message vector
-	vMsgOut.clear();
-	vMsgOut.push_back(sUser);
 }
