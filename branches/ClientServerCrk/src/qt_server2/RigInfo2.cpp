@@ -172,12 +172,16 @@ void RigInfo2::processSummary(eMinerMode mode, const std::string& client, const 
 			info.lBox->addWidget(l);
 		}
 
+		int iAcc=s.fDifficultyAccepted>s.iAccepted?s.fDifficultyAccepted:s.iAccepted;
+		int iRej=s.fDifficultyRejected>s.iRejected?s.fDifficultyRejected:s.iRejected;
+		int iHw=s.fDeviceRejected>s.iHardwareErrors?s.fDeviceRejected:s.iHardwareErrors;
+
 		std::string sF="(5s):"+std::to_string((int)(s.fMHS5s*1000.0f))
 			+"K (avg):"+std::to_string((int)(s.fMHSav*1000.0f))
-			+"K/s | A:"+std::to_string((int)s.fDifficultyAccepted)
-			+" R:"+std::to_string((int)s.fDifficultyRejected)
-			+" HW:"+std::to_string((int)s.fDeviceRejected)
-			+" WU:"+std::to_string((int)s.fWorkUtility)+"/m";
+			+"K/s | A:"+std::to_string(iAcc)
+			+" R:"+std::to_string(iRej)
+			+" HW:"+std::to_string(iHw)
+			+" WU:"+std::to_string(s.fWorkUtility)+"/m";
 		
 		info.vLabel[0]->setText(sF.c_str());
 	}
